@@ -27,6 +27,8 @@ jobs:
 
       - name: Install requirements
         run: poetry install --with dev --all-extras --no-root
+        working-directory: python-package
 
       - name: Test (python-${{ matrix.python-version }}, ${{ matrix.os }})
         run: poetry run pytest
+        working-directory: python-package
