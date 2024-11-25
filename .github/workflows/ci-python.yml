@@ -1,4 +1,3 @@
-
 name: Test Python package
 
 on:
@@ -14,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -29,5 +28,5 @@ jobs:
       - name: Install requirements
         run: poetry install --with dev --all-extras --no-root
 
-      - name: Test (python-${{ matrix.python-version }}, ${{ matrix.os }}))
+      - name: Test (python-${{ matrix.python-version }}, ${{ matrix.os }})
         run: poetry run pytest
