@@ -51,8 +51,13 @@ all = ["gql", "pandavro", "requests-toolbelt"]
 avro = ["pandavro"]
 upload = ["gql", "requests-toolbelt"]
 
-[pytest]
-addopts = "-p no:warnings"
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = [
+    "--ignore=tests/outdated",
+    "-p no:warnings",
+]
+
 
 [build-system]
 requires = ["setuptools"]
