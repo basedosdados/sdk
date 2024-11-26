@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
+        id: python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -25,8 +26,8 @@ jobs:
       - name: Install poetry
         run: pipx install poetry
 
-      - name: Set env
-        run: poetry env use 3.10
+      - name: Set Poetry environment
+        run: poetry env use '${{ steps.python.outputs.python-path }}'
         working-directory: python-package
 
       - name: Install package
