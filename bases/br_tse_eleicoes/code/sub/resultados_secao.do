@@ -22,29 +22,30 @@ local ufs_2016	AC AL AM AP BA    CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO
 local ufs_2018	AC AL AM AP BA BR CE DF ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO	
 local ufs_2020	AC AL AM AP BA    CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
 local ufs_2022	AC AL AM AP BA BR CE DF ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
+local ufs_2024	AC AL AM AP BA    CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
 
 //------------------------//
 // loops
 //------------------------//
 
-import delimited "input/br_bd_diretorios_brasil_municipio.csv", clear varn(1) case(preserve) //stringcols(_all)
+import delimited "input/br_bd_diretorios_brasil_municipio.csv", clear varn(1) case(preserve)
 keep id_municipio id_municipio_tse
 tempfile diretorio
 save `diretorio'
 
-import delimited "input/br_bd_diretorios_brasil_municipio.csv", clear varn(1) case(preserve) //stringcols(_all)
+import delimited "input/br_bd_diretorios_brasil_municipio.csv", clear varn(1) case(preserve)
 keep id_municipio_tse sigla_uf
 tempfile diretorio_ufs
 save `diretorio_ufs'
 
-foreach ano of numlist 1994(2)2022 {
+foreach ano of numlist 1994(2)2024 {
 	
 	foreach uf in `ufs_`ano'' {
 		
 		di "`ano'_`uf'"
 		
-		cap import delimited "input/votacao_secao/votacao_secao_`ano'_`uf'/votacao_secao_`ano'_`uf'.txt", delim(";") varn(nonames) stringcols(_all) clear //rowr(1:10000)
-		cap import delimited "input/votacao_secao/votacao_secao_`ano'_`uf'/votacao_secao_`ano'_`uf'.csv", delim(";") varn(nonames) stringcols(_all) clear //rowr(1:10000)
+		cap import delimited "input/votacao_secao/votacao_secao_`ano'_`uf'/votacao_secao_`ano'_`uf'.txt", delim(";") varn(nonames) stringcols(_all) clear
+		cap import delimited "input/votacao_secao/votacao_secao_`ano'_`uf'/votacao_secao_`ano'_`uf'.csv", delim(";") varn(nonames) stringcols(_all) clear
 		
 		if (`ano' == 1998 & "`uf'" == "BR") | (`ano' == 2008 & "`uf'" == "TO") { // schema antigo, nao foi atualizado no site do TSE
 			

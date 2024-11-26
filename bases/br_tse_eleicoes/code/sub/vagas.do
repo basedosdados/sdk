@@ -22,6 +22,7 @@ local ufs_2016	AC AL AM AP BA CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR
 local ufs_2018	AC AL AM AP BA CE DF ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
 local ufs_2020	AC AL AM AP BA CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
 local ufs_2022	AC AL AM AP BA CE DF ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
+local ufs_2024	AC AL AM AP BA CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
 
 //------------------------//
 // loops
@@ -32,7 +33,7 @@ keep id_municipio id_municipio_tse
 tempfile diretorio
 save `diretorio'
 
-foreach ano of numlist 1994(2)2022 {
+foreach ano of numlist 1994(2)2024 {
 	
 	foreach uf in `ufs_`ano'' {
 		

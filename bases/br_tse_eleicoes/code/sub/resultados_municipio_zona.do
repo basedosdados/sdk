@@ -22,6 +22,7 @@ local ufs_2016_candidato	AC AL AM AP BA        CE    ES GO MA MG MS MT PA PB PE 
 local ufs_2018_candidato	AC AL AM AP BA BR     CE DF ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
 local ufs_2020_candidato	AC AL AM AP BA        CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO	
 local ufs_2022_candidato	AC AL AM AP BA BR     CE DF ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
+local ufs_2024_candidato	AC AL AM AP BA        CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO	
 
 local ufs_1994_partido		AC AL AM AP BA BR              GO MA    MS       PB PE PI          RO RR RS SC SE SP TO
 local ufs_1996_partido		AC AL AM AP BA        CE    ES GO MA MG MS    PA PB PE PI       RN RO RR RS    SE SP TO
@@ -38,6 +39,7 @@ local ufs_2016_partido		AC AL AM AP BA        CE    ES GO MA MG MS MT PA PB PE P
 local ufs_2018_partido		AC AL AM AP BA BR     CE DF ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO	
 local ufs_2020_partido		AC AL AM AP BA        CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
 local ufs_2022_partido		AC AL AM AP BA BR     CE DF ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
+local ufs_2024_partido		AC AL AM AP BA        CE    ES GO MA MG MS MT PA PB PE PI PR RJ RN RO RR RS SC SE SP TO
 
 //------------------------//
 // loops
@@ -53,7 +55,7 @@ keep id_municipio_tse sigla_uf
 tempfile diretorio_ufs
 save `diretorio_ufs'
 
-foreach ano of numlist 1994(2)2022 {
+foreach ano of numlist 1994(2)2024 {
 	
 	foreach tipo in candidato partido { // 
 		
@@ -105,11 +107,11 @@ foreach ano of numlist 1994(2)2022 {
 					ren v11 sigla_uf
 					ren v14 id_municipio_tse
 					ren v16 zona
+					ren v18 cargo
 					ren v19 sequencial_candidato
 					ren v20 numero_candidato
 					ren v21 nome_candidato
 					ren v22 nome_urna_candidato
-					ren v18 cargo
 					ren v29 numero_partido
 					ren v30 sigla_partido
 					ren v36 resultado
@@ -139,6 +141,31 @@ foreach ano of numlist 1994(2)2022 {
 					ren v30 sigla_partido
 					ren v42 votos
 					ren v44 resultado
+					
+				}
+				else if (`ano' >= 2024) {
+					
+					drop in 1
+					
+					keep v3 v6 v7 v8 v9 v11 v14 v16 v18 v19 v20 v21 v22 v35 v36 v46 v50
+					
+					ren v3  ano
+					ren v6  turno
+					ren v7  id_eleicao
+					ren v8  tipo_eleicao
+					ren v9  data_eleicao
+					ren v11 sigla_uf
+					ren v14 id_municipio_tse
+					ren v16 zona
+					ren v18 cargo
+					ren v19 sequencial_candidato
+					ren v20 numero_candidato
+					ren v21 nome_candidato
+					ren v22 nome_urna_candidato
+					ren v35 numero_partido
+					ren v36 sigla_partido
+					ren v46 votos
+					ren v50 resultado
 					
 				}
 				

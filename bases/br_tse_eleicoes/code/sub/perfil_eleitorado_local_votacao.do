@@ -12,7 +12,7 @@ save `diretorio'
 // loops
 //------------------------//
 
-foreach ano of numlist 2010(2)2022 {
+foreach ano of numlist 2010(2)2024 {
 	
 	cap import delimited "input/perfil_eleitorado_local_votacao/eleitorado_local_votacao_`ano'/eleitorado_local_votacao_`ano'.txt", delim(";") stringcols(_all) varn(nonames) clear
 	cap import delimited "input/perfil_eleitorado_local_votacao/eleitorado_local_votacao_`ano'/eleitorado_local_votacao_`ano'.csv", delim(";") stringcols(_all) varn(nonames) clear
@@ -77,7 +77,7 @@ foreach ano of numlist 2010(2)2022 {
 *
 
 use `perfil2010'
-foreach ano of numlist 2012(2)2022 {
+foreach ano of numlist 2012(2)2024 {
 	append using `perfil`ano''
 }
 
