@@ -291,7 +291,7 @@ class Backend(metaclass=SingletonMeta):
         if dataset_id:
             variables = {"dataset_id": dataset_id}
             response = self._execute_query(query=query, variables=variables)
-            return self._simplify_graphql_response(response).get("allDataset")[0]
+            return self._simplify_response(response).get("allDataset")[0]
         else:
             return {}
 
@@ -345,7 +345,7 @@ class Backend(metaclass=SingletonMeta):
         if table_id:
             variables = {"table_id": table_id}
             response = self._execute_query(query=query, variables=variables)
-            return self._simplify_graphql_response(response).get("allTable")[0]
+            return self._simplify_response(response).get("allTable")[0]
         else:
             return {}
 
@@ -368,7 +368,7 @@ class Backend(metaclass=SingletonMeta):
 
         variables = {"gcp_dataset_id": gcp_dataset_id}
         response = self._execute_query(query=query, variables=variables)
-        r = {} if response is None else self._simplify_graphql_response(response)
+        r = {} if response is None else self._simplify_response(response)
         if r.get("allCloudtable", []) != []:
             return r.get("allCloudtable")[0].get("table").get("dataset").get("_id")
         msg = f"{gcp_dataset_id} not found. Please create the metadata first in {self.graphql_url}"
@@ -397,7 +397,7 @@ class Backend(metaclass=SingletonMeta):
             }
 
             response = self._execute_query(query=query, variables=variables)
-            r = {} if response is None else self._simplify_graphql_response(response)
+            r = {} if response is None else self._simplify_response(response)
             if r.get("allCloudtable", []) != []:
                 return r.get("allCloudtable")[0].get("table").get("_id")
         msg = f"No table {gcp_table_id} found in {gcp_dataset_id}. Please create in {self.graphql_url}"
