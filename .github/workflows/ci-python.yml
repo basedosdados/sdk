@@ -27,6 +27,7 @@ jobs:
 
       - name: Install package
         run: poetry install
+        working-directory: python-package
 
       - name: Install requirements
         run: poetry install --with dev --all-extras --no-root
