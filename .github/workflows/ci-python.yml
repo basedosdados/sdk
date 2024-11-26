@@ -25,9 +25,6 @@ jobs:
       - name: Install poetry
         run: pipx install poetry
 
-      - name: Enable env
-        run: poetry shell
-
       - name: Install requirements
         run: poetry install --with dev --all-extras --no-root
         working-directory: python-package
