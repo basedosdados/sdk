@@ -25,6 +25,9 @@ jobs:
       - name: Install poetry
         run: pipx install poetry
 
+      - name: Install package
+        run: poetry install
+
       - name: Install requirements
         run: poetry install --with dev --all-extras --no-root
         working-directory: python-package
