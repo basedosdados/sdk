@@ -25,6 +25,10 @@ jobs:
       - name: Install poetry
         run: pipx install poetry
 
+      - name: Set env
+        run: poetry env use 3.10
+        working-directory: python-package
+
       - name: Install package
         run: poetry install
         working-directory: python-package
