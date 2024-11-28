@@ -7,8 +7,8 @@ classifiers = [
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-homepage = "https://github.com/basedosdados/mais"
-repository = "https://github.com/basedosdados/mais"
+homepage = "https://github.com/basedosdados/sdk"
+repository = "https://github.com/basedosdados/sdk"
 license = "MIT"
 packages = [
     {include = "basedosdados"},
