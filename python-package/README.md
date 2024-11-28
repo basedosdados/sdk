@@ -1,42 +1,58 @@
 # Python Package
 
-## Desenvolvimento Linux e Mac:
+## Requisitos
 
-Clone o repositório principal:
+- `pyenv`: Para gerenciar versões do python
+- `poetry`: Gerenciador de dependências
+
+## Setup
+
+Clone o repositório:
 
 ```sh
-git clone https://github.com/basedosdados/mais.git
+git clone git@github.com:basedosdados/sdk.git
 ```
-Entre na pasta local do repositório usando `cd mais/` e suba o ambiente localmente:
+
+Entre na pasta local do repositório usando `cd sdk/python-package` e faça o setup do ambiente de desenvolvimento:
+
+Ative a versão do python:
 
 ```sh
-make create-env
-. .mais/bin/activate
-cd python-package/
-python setup.py develop
+pyenv shell 3.10
 ```
 
-### Desenvolva uma nova feature
+Crie a env:
+
+```sh
+poetry env use 3.10
+```
+
+> Se a env já existe, ative com `poetry shell`
+
+Instale as dependências para desenvolvimento:
+
+```sh
+poetry install --with dev --all-extras --no-root
+```
+
+## Desenvolva uma nova feature
 
 1. Abra uma branch com o nome issue-<X>
 2. Faça as modificações necessárias
 3. Suba o Pull Request apontando para a branch `python-next-minor` ou `python-next-patch`.
-    Sendo, minor e patch referentes ao bump da versão: v1.5.7 --> v\<major>.\<minor>.\<patch>.
+   Sendo, minor e patch referentes ao bump da versão: v1.5.7 --> v\<major>.\<minor>.\<patch>.
 4. O nome do PR deve seguir o padrão
-    `[infra] <titulo explicativo>`
+   `[infra] <titulo explicativo>`
 
-
-### O que uma modificação precisa ter
-
+## O que uma modificação precisa ter
 
 - Resolver o problema
 - Lista de modificações efetuadas
-    1. Mudei a função X para fazer Y
-    2. Troquei o nome da variavel Z
+  1. Mudei a função X para fazer Y
+  2. Troquei o nome da variavel Z
 - Referência aos issues atendidos
 - Documentação e Docstrings
 - Testes
-
 
 ## Versionamento
 
@@ -44,67 +60,45 @@ python setup.py develop
 
 1. Fazer o pull da branch:
 
-    ```bash
-    git pull origin [python-version]
-    ```
+   ```bash
+   git pull origin [python-version]
+   ```
 
-    Onde `[python-version]` é a branch da nova versão do pacote.
+   Onde `[python-version]` é a branch da nova versão do pacote.
 
-2. Se necessario adicionar novas dependências:
-    ```bash
-      poetry add <package-name>
-    ```
+2. Editar `pyproject.toml`:
 
-3. Gerar novo `requirements-dev.txt`
+   O arquivo `pyproject.toml` contém, entre outras informações, a versão do pacote em python da **BD**. Segue excerto do arquivo:
 
-    ```bash
-    poetry export -f requirements.txt --output requirements-dev.txt --without-hashes
-    ```
+   ```toml
+   description = "Organizar e facilitar o acesso a dados brasileiros através de tabelas públicas no BigQuery."
+   homepage = "https://github.com/base-dos-dados/bases"
+   license = "MIT"
+   name = "basedosdados"
+   packages = [
+     {include = "basedosdados"},
+   ]
+   readme = "README.md"
+   repository = "https://github.com/base-dos-dados/bases"
+   version = "1.6.1-beta.2"
+   ```
 
-4. Editar `pyproject.toml`:
+   O campo `version` deve ser alterado para o número da versão sendo lançada.
 
-    O arquivo `pyproject.toml` contém, entre outras informações, a versão do pacote em python da **BD**. Segue excerto do arquivo:
+3. Push para branch:
 
-    ```toml
-    description = "Organizar e facilitar o acesso a dados brasileiros através de tabelas públicas no BigQuery."
-    homepage = "https://github.com/base-dos-dados/bases"
-    license = "MIT"
-    name = "basedosdados"
-    packages = [
-      {include = "basedosdados"},
-    ]
-    readme = "README.md"
-    repository = "https://github.com/base-dos-dados/bases"
-    version = "1.6.1-beta.2"
-    ```
+   ```sh
+   git push origin [python-version]
+   ```
 
-    O campo `version` deve ser alterado para o número da versão sendo lançada.
-
-5. Editar `basedosdados/__init__.py`:
-
-    O arquivo `basedosdados/__init__.py` contém a versão do pacote em python da **BD**. Exemplo:
-
-    ```python
-    __version__ = "1.6.1-beta.2"
-    ```
-
-   O atributo `__version__` também deve ser alterado para o número da versão sendo lançada.
-
-6. Push para branch:
-
-    ```bash
-    git push origin [python-version]
-    ```
-
-7. Publicação do pacote no PyPI (exige usuário e senha):
+4. Publicação do pacote no PyPI (exige usuário e senha):
    Para publicar o pacote no PyPI, use:
 
-    Para publicar o pacote no PyPI, use:
-
-    ```bash
-    poetry version [python-version]
-    poetry publish --build
+   ```sh
+   poetry version [python-version]
+   poetry publish --build
    ```
-8. Faz merge da branch para a master
-9. Faz release usando a UI do GitHub
-10. Atualizar versão do pacote usada internamente
+
+5. Faz merge da branch para a master
+6. Faz release usando a UI do GitHub
+7. Atualizar versão do pacote usada internamente
