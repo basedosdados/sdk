@@ -1,6 +1,7 @@
 """
 Module for interacting with the backend.
 """
+
 from typing import Any, Dict
 
 from loguru import logger
@@ -70,33 +71,37 @@ class Backend(metaclass=SingletonMeta):
         query = """
             query ($first: Int!, $offset: Int!) {
                 allDataset(first: $first, offset: $offset) {
-                    edges {
-                        node {
-                            slug
-                            name
-                            description
-                            organization {
-                                name
-                            }
-                            tags {
-                                edges {
-                                    node {
-                                        name
-                                    }
-                                }
-                            }
-                            themes {
-                                edges {
-                                    node {
-                                        name
-                                    }
-                                }
-                            }
-                            createdAt
-                            updatedAt
-                        }
-                    }
-                    totalCount
+                	edges {
+      							node {
+      							  slug
+      							  name
+      							  description
+      							  organizations {
+      							    edges {
+      							      node {
+      							        name
+      							      }
+      							    }
+      							  }
+      							  tags {
+      							    edges {
+      							      node {
+      							        name
+      							      }
+      							    }
+      							  }
+      							  themes {
+      							    edges {
+      							      node {
+      							        name
+      							      }
+      							    }
+      							  }
+      							  createdAt
+      							  updatedAt
+  								    }
+  								  }
+  							  totalCount
                 }
             }
         """
