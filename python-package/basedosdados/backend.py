@@ -99,9 +99,9 @@ class Backend(metaclass=SingletonMeta):
       					  }
       					  createdAt
       					  updatedAt
-  						    }
-  						  }
-  					  totalCount
+  						}
+  					}
+  				    totalCount
                 }
             }
         """
