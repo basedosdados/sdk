@@ -72,36 +72,36 @@ class Backend(metaclass=SingletonMeta):
             query ($first: Int!, $offset: Int!) {
                 allDataset(first: $first, offset: $offset) {
                 	edges {
-      							node {
-      							  slug
-      							  name
-      							  description
-      							  organizations {
-      							    edges {
-      							      node {
-      							        name
-      							      }
-      							    }
-      							  }
-      							  tags {
-      							    edges {
-      							      node {
-      							        name
-      							      }
-      							    }
-      							  }
-      							  themes {
-      							    edges {
-      							      node {
-      							        name
-      							      }
-      							    }
-      							  }
-      							  createdAt
-      							  updatedAt
-  								    }
-  								  }
-  							  totalCount
+      					node {
+      					  slug
+      					  name
+      					  description
+      					  organizations {
+      					    edges {
+      					      node {
+      					        name
+      					      }
+      					    }
+      					  }
+      					  tags {
+      					    edges {
+      					      node {
+      					        name
+      					      }
+      					    }
+      					  }
+      					  themes {
+      					    edges {
+      					      node {
+      					        name
+      					      }
+      					    }
+      					  }
+      					  createdAt
+      					  updatedAt
+  						    }
+  						  }
+  					  totalCount
                 }
             }
         """
