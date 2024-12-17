@@ -123,9 +123,6 @@ def test_search_output_with_input():
     backend = Backend()
 
     out = metadata.search(q='data', backend=backend)
-    print(out[0])
-    print(len(out))
-    print(out[0].keys())
     assert isinstance(out, list)
     assert isinstance(out[0], dict)
     assert 'slug' in out[0].keys()
