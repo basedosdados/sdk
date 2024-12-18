@@ -1,7 +1,3 @@
-
-import pandas as pd
-import pytest
-
 from basedosdados.backend import Backend
 from basedosdados.download import metadata
 
