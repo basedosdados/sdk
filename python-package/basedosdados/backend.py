@@ -284,8 +284,12 @@ class Backend(metaclass=SingletonMeta):
                                     }
                                 }
                             }
-                            organization {
-                                namePt
+                            organizations {
+                                edges {
+                                    node {
+                                        namePt
+                                    }
+                                }
                             }
                         }
                     }
@@ -296,7 +300,7 @@ class Backend(metaclass=SingletonMeta):
         if dataset_id:
             variables = {"dataset_id": dataset_id}
             response = self._execute_query(query=query, variables=variables)
-            return self._simplify_response(response).get("allDataset")[0]
+            return self._simplify_response(response).get("allDataset")["items"][0]
         else:
             return {}
 
@@ -311,35 +315,39 @@ class Backend(metaclass=SingletonMeta):
         """
 
         query = """
-            query ($table_id: ID!){
+            query ($table_id: ID!) {
                 allTable(id: $table_id) {
                     edges {
                         node {
                             slug
                             dataset {
                                 slug
-                                organization {
-                                    slug
+                                organizations {
+                                  edges {
+                                    node {
+                                      slug
+                                    }
+                                  }
                                 }
                             }
                             namePt
                             descriptionPt
                             columns {
-                            edges {
-                                node {
-                                    name
-                                    isInStaging
-                                    isPartition
-                                    descriptionPt
-                                    observations
-                                    bigqueryType {
+                                edges {
+                                    node {
                                         name
+                                        isInStaging
+                                        isPartition
+                                        descriptionPt
+                                        observations
+                                        bigqueryType {
+                                            name
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
                 }
             }
         """
@@ -350,7 +358,7 @@ class Backend(metaclass=SingletonMeta):
         if table_id:
             variables = {"table_id": table_id}
             response = self._execute_query(query=query, variables=variables)
-            return self._simplify_response(response).get("allTable")[0]
+            return self._simplify_response(response).get("allTable")["items"][0]
         else:
             return {}
 
