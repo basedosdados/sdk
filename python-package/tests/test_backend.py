@@ -101,6 +101,33 @@ def test_search_with_input():
     assert len(out) != 0
     assert out["page_size"] >= 10
 
+def test_get_dataset_config():
+    """
+    Test get_dataset_config output
+    """
+    backend = Backend()
+
+    out = backend.get_dataset_config(dataset_id='br_me_rais')
+    assert isinstance(out, dict)
+    assert len(out) > 0
+    assert out != ""
+    assert out != "None" or "null" or "NaN" or "inf" or "-inf" or "nan"
+
+def test_get_table_config():
+    """
+    Test get_dataset_config output
+    """
+    backend = Backend()
+
+    out = backend.get_table_config(dataset_id='br_me_rais', table_id='microdados_estabelecimentos')
+    print(out)
+    print(len(out))
+    print(type(out))
+    assert isinstance(out, dict)
+    assert len(out) > 0
+    assert out != ""
+    assert out != "None" or "null" or "NaN" or "inf" or "-inf" or "nan"
+
 def test_get_dataset_id_from_name():
  """
    Test get dataset id from name
