@@ -26,6 +26,7 @@ jobs:
       - name: Install poetry
         run: pipx install poetry
 
+      # https://github.com/python-poetry/poetry/issues/2117
       - name: Set Poetry environment
         run: poetry env use '${{ steps.python.outputs.python-path }}'
         working-directory: python-package
@@ -37,6 +38,12 @@ jobs:
       - name: Install requirements
         run: poetry install --with dev --all-extras --no-root
         working-directory: python-package
+
+      - name: Setup config
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        working-directory: python-package
+        run: poetry run python ../.github/scripts/setup-config.py
 
       - name: Test (python-${{ matrix.python-version }}, ${{ matrix.os }})
         run: poetry run pytest
