@@ -105,6 +105,7 @@ def test_read_sql_no_billing_project_id():
     with pytest.raises(BaseDosDadosNoBillingProjectIDException) as excinfo:
         read_sql(
             query="select * from `basedosdados.br_ibge_pib.municipio` limit 10",
+            from_file=True
         )
 
     assert "We are not sure which Google Cloud project should be billed." in str(
