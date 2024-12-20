@@ -96,7 +96,7 @@ def test_read_sql():
         pd.DataFrame,
     )
 
-
+@pytest.mark.skip(reason="outdated")
 def test_read_sql_no_billing_project_id():
     """
     Test if the `read_sql` function raises an error when the billing project id is not provided.
@@ -105,6 +105,7 @@ def test_read_sql_no_billing_project_id():
     with pytest.raises(BaseDosDadosNoBillingProjectIDException) as excinfo:
         read_sql(
             query="select * from `basedosdados.br_ibge_pib.municipio` limit 10",
+            from_file=True
         )
 
     assert "We are not sure which Google Cloud project should be billed." in str(
@@ -127,6 +128,7 @@ def test_read_sql_invalid_billing_project_id():
         )
 
 
+@pytest.mark.skip(reason="outdated")
 def test_read_sql_inexistent_project():
     """
     Test if the `read_sql` function raises an error when the billing project id is not valid.

@@ -85,7 +85,7 @@ class Dataset(Base):
         for m in self._loop_modes(mode):
             dataset = m["client"].get_dataset(m["id"])
             entries = dataset.access_entries
-            # TODO https://github.com/basedosdados/mais/pull/1020
+            # TODO https://github.com/basedosdados/sdk/pull/1020
             # TODO if staging dataset is private, the prod view can't acess it: if dataset_is_public and "staging" not in dataset.dataset_id:
             if dataset_is_public:
                 if "staging" not in dataset.dataset_id:
