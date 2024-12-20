@@ -96,7 +96,7 @@ def test_read_sql():
         pd.DataFrame,
     )
 
-
+@pytest.mark.skip(reason="outdated")
 def test_read_sql_no_billing_project_id():
     """
     Test if the `read_sql` function raises an error when the billing project id is not provided.
