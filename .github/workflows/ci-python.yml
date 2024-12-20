@@ -41,7 +41,7 @@ jobs:
 
       - name: Setup config
         env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_BD_PROD }}
         working-directory: python-package
         run: poetry run python ../.github/scripts/setup-config.py
 
