@@ -13,7 +13,7 @@ from basedosdados import download, read_sql, read_table
 from basedosdados.exceptions import (
     BaseDosDadosException,
     BaseDosDadosInvalidProjectIDException,
-    BaseDosDadosNoBillingProjectIDException,
+    BaseDosDadosAccessDeniedException,
 )
 
 TEST_PROJECT_ID = "basedosdados-dev"
@@ -96,22 +96,6 @@ def test_read_sql():
         pd.DataFrame,
     )
 
-@pytest.mark.skip(reason="outdated")
-def test_read_sql_no_billing_project_id():
-    """
-    Test if the `read_sql` function raises an error when the billing project id is not provided.
-    """
-
-    with pytest.raises(BaseDosDadosNoBillingProjectIDException) as excinfo:
-        read_sql(
-            query="select * from `basedosdados.br_ibge_pib.municipio` limit 10",
-            from_file=True
-        )
-
-    assert "We are not sure which Google Cloud project should be billed." in str(
-        excinfo.value
-    )
-
 
 def test_read_sql_invalid_billing_project_id():
     """
@@ -127,19 +111,22 @@ def test_read_sql_invalid_billing_project_id():
             from_file=True,
         )
 
-
-@pytest.mark.skip(reason="outdated")
+@pytest.mark.skip(reason="TODO: Refactor the exceptions that are thrown in read_sql")
 def test_read_sql_inexistent_project():
     """
     Test if the `read_sql` function raises an error when the billing project id is not valid.
     """
 
+    # this is the exception throw BaseDosDadosAccessDeniedException 
     with pytest.raises(GenericGBQException) as excinfo:
         read_sql(
             query="select * from `asedosdados.br_ibge_pib.municipio` limit 10",
             billing_project_id=TEST_PROJECT_ID,
             from_file=True,
         )
+
+    # print('Exec Info Type Name: ')
+    # print(excinfo.typename)
 
     assert "Reason: 404 Not found: Project" in str(excinfo.value)
 
