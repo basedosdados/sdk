@@ -30,6 +30,7 @@ pydata-google-auth = "^1.8"
 requests-toolbelt = { version = "^1", optional = true }
 tomlkit = "^0.11"
 tqdm = "^4"
+numpy = "<2.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.3.3"
