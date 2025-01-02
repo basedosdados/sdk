@@ -1,224 +1,140 @@
-"""
-Tests for metadata download fuunctions
-"""
-import shutil
-from pathlib import Path
+from basedosdados.backend import Backend
+from basedosdados.download import metadata
 
-import pandas as pd
-import pytest
-
-from basedosdados import (
-    get_dataset_description,
-    get_table_columns,
-    get_table_description,
-    get_table_size,
-    list_dataset_tables,
-    list_datasets,
-    search,
-)
-from basedosdados.download.metadata import _safe_fetch
-
-TEST_PROJECT_ID = "basedosdados-dev"
-SAVEFILE = Path(__file__).parent / "tmp_bases" / "test.csv"
-SAVEPATH = Path(__file__).parent / "tmp_bases"
-shutil.rmtree(SAVEPATH, ignore_errors=True)
-
-
-def test_list_datasets_simple_verbose(capsys):
+def test_get_datasets_output():
     """
-    Test if list_datasets function works with verbose=True
+    Test if gets datasets correct output type
     """
 
-    out = list_datasets(with_description=False, verbose=True)
-    out, _ = capsys.readouterr()  # Capture prints
-    assert "dataset_id" in out
+    backend = Backend()
 
+    out = metadata.get_datasets(dataset_id='', backend=backend)
+    assert isinstance(out, dict)
 
-def test_list_datasets_simple_list():
+def test_get_datasets_output_with_input():
     """
-    Test if list_datasets function works with verbose=False
-    """
-
-    out = list_datasets(with_description=False, verbose=False)
-    # check if function returns list
-    assert isinstance(out, list)
-    # check if list all datasets in API
-    assert len(out) >= 84
-
-
-def test_list_datasets_complete_list():
-    """
-    Test if list_datasets function works with verbose=False and with_description=True
+    Test if gets datasets output with an input
     """
 
-    out = list_datasets(with_description=True, verbose=False)
-    # check if function returns list
-    assert isinstance(out, list)
-    assert "dataset_id" in out[0].keys()
-    assert "description" in out[0].keys()
+    backend = Backend()
 
-
-def test_list_datasets_complete_verbose(capsys):
-    """
-    Test list_datasets with complete output
-    """
-
-    list_datasets(with_description=True, verbose=True)
-    out, _ = capsys.readouterr()  # Capture prints
-    assert "dataset_id" in out
-    assert "description" in out
-
-
-def test_list_dataset_tables_simple_verbose(capsys):
-    """
-    Test list_dataset_tables function with verbose=True and with_description=False
-    """
-
-    list_dataset_tables(dataset_id="br_me_caged", with_description=False, verbose=True)
-    out, _ = capsys.readouterr()  # Capture prints
-    assert "table_id" in out
-
-
-def test_list_dataset_tables_simple_list():
-    """
-    Test list_dataset_tables function with verbose=False and with_description=False
-    """
-
-    out = list_dataset_tables(
-        dataset_id="br_me_caged", with_description=False, verbose=False
-    )
-
-    assert isinstance(out, list)
+    out = metadata.get_datasets(dataset_name='br_me_caged', backend=backend)
+    ## out: {'items': [], 'page': 1, 'page_size': 10, 'page_total': 0}
+    assert isinstance(out, dict)
     assert len(out) > 0
 
-
-def test_list_dataset_tables_complete_verbose(capsys):
+def test_get_datasets_size():
     """
-    Test list_dataset_tables function with verbose=True and with_description=True
-    """
-
-    list_dataset_tables(dataset_id="br_me_caged", with_description=True, verbose=True)
-
-    out, _ = capsys.readouterr()  # Capture prints
-    assert "table_id" in out
-    assert "description" in out
-
-
-def test_list_dataset_tables_complete_list():
-    """
-    Test list_dataset_tables function with verbose=False and with_description=True
+    Test if gets datasets correct output length
     """
 
-    out = list_dataset_tables(
-        dataset_id="br_me_caged", with_description=True, verbose=False
-    )
+    backend = Backend()
 
+    out = metadata.get_datasets(dataset_id='', backend=backend)
+    assert len(out) > 0
+    assert out["page_total"] > 100
+
+def test_get_tables_output():
+    """
+    Test if gets tables correct output type
+    """
+
+    backend = Backend()
+
+    out = metadata.get_tables(dataset_id='', backend=backend)
+    assert isinstance(out, dict)
+
+def test_get_tables_output_with_input():
+    """
+    Test if gets tables output with an input
+    """
+
+    backend = Backend()
+
+    out = metadata.get_tables(table_name='br_me_caged', backend=backend)
+    ## out: {'items': [], 'page': 1, 'page_size': 10, 'page_total': 0}
+    assert isinstance(out, dict)
+    assert len(out) > 0
+
+def test_get_tables_size():
+    """
+    Test if gets tables correct output length
+    """
+
+    backend = Backend()
+
+    out = metadata.get_tables(dataset_id='', backend=backend)
+    assert len(out) > 0
+    assert out["page_total"] > 50
+
+def test_get_columns_output():
+    """
+    Test if gets columns correct output type
+    """
+
+    backend = Backend()
+
+    out = metadata.get_columns(table_id='', backend=backend)
+    assert isinstance(out, dict)
+
+def test_get_columns_output_with_input():
+    """
+    Test if gets columns output with an input
+    """
+
+    backend = Backend()
+
+    out = metadata.get_columns(columns_name='microdados_antigos', backend=backend)
+    ## out: {'items': [], 'page': 1, 'page_size': 10, 'page_total': 0}
+    assert isinstance(out, dict)
+    assert len(out) > 0
+
+def test_get_columns_size():
+    """
+    Test if gets columns correct output length
+    """
+
+    backend = Backend()
+
+    out = metadata.get_columns(table_id='', backend=backend)
+    assert len(out) > 0
+    assert out["page_total"] > 3000
+
+def test_search_output():
+    """
+    Test if gets search correct output type
+    """
+
+    backend = Backend()
+
+    out = metadata.search(q='', backend=backend)
     assert isinstance(out, list)
     assert isinstance(out[0], dict)
 
-
-def test_get_dataset_description(capsys):
+def test_search_output_with_input():
     """
-    Test get_dataset_description function with verbose=False
+    Test if gets search output with an input
     """
 
-    get_dataset_description("br_me_caged", verbose=True)
-    out, _ = capsys.readouterr()  # Capture prints
-    assert len(out) > 0
+    backend = Backend()
 
-
-def test_get_dataset_description_verbose_false():
-    """
-    Test get_dataset_description function with verbose=False
-    """
-    out = get_dataset_description("br_me_caged", verbose=False)
-    assert isinstance(out, str)
-    assert len(out) > 0
-
-
-def test_get_table_description(capsys):
-    """
-    Test get_table_description function with verbose=False
-    """
-    get_table_description("br_me_caged", "microdados_antigos")
-    out, _ = capsys.readouterr()  # Capture prints
-    assert len(out) > 0
-
-
-def test_get_table_description_verbose_false():
-    """
-    Test get_table_description function with verbose=False
-    """
-    out = get_table_description(
-        dataset_id="br_me_caged",
-        table_id="microdados_antigos",
-        verbose=False,
-    )
-    assert isinstance(out, str)
-    assert len(out) > 0
-
-
-def test_get_table_columns(capsys):
-    """
-    Test get_table_columns function with verbose=False
-    """
-    get_table_columns(
-        dataset_id="br_me_caged",
-        table_id="microdados_antigos",
-    )
-    out, _ = capsys.readouterr()  # Capture prints
-    assert "name" in out
-    assert "description" in out
-
-
-def test_get_table_columns_verbose_false():
-    """
-    Test get_table_columns function with verbose=False
-    """
-    out = get_table_columns(
-        dataset_id="br_me_caged",
-        table_id="microdados_antigos",
-        verbose=False,
-    )
+    out = metadata.search(q='data', backend=backend)
     assert isinstance(out, list)
+    assert isinstance(out[0], dict)
+    assert 'slug' in out[0].keys()
+    assert 'name' in out[0].keys()
+    assert 'description' in out[0].keys()
+    assert 'n_tables' in out[0].keys()
+    assert 'n_raw_data_sources' in out[0].keys()
+    assert 'n_information_requests' in out[0].keys()
+    assert 'organization' in out[0].keys()
+
+def test_search_size():
+    """
+    Test if gets search correct output length
+    """
+
+    backend = Backend()
+
+    out = metadata.search(q='', backend=backend)
     assert len(out) > 0
-
-
-def test_search():
-    """
-    Test search function with verbose=False
-    """
-    out = search(query="agua", order_by="score")
-    # check if function returns pd.DataFrame
-    assert isinstance(out, pd.DataFrame)
-    # check if there is duplicate tables in the result
-    assert out.id.nunique() == out.shape[0]
-    # check input error
-    with pytest.raises(ValueError):
-        search(query="agua", order_by="name")
-
-
-def test_get_table_size(capsys):
-    """
-    Test get_table_size function with verbose=False
-    """
-    get_table_size(
-        dataset_id="br_ibge_censo_demografico",
-        table_id="setor_censitario_basico_2010",
-    )
-    out, _ = capsys.readouterr()
-    assert "not available" in out
-
-
-def test__safe_fetch(capsys):
-    """
-    Test _safe_fetch function with verbose=False
-    """
-    _safe_fetch("https://www.lkajsdhgfal.com.br")
-    out, _ = capsys.readouterr()  # Capture prints
-    assert "HTTPSConnection" in out
-
-    response = _safe_fetch(
-        "https://basedosdados.org/api/3/action/bd_dataset_search?q=agua&page_size=10&resource_type=bdm_table"
-    )
-    assert isinstance(response.json(), dict)

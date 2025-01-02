@@ -7,8 +7,8 @@ classifiers = [
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-homepage = "https://github.com/basedosdados/mais"
-repository = "https://github.com/basedosdados/mais"
+homepage = "https://github.com/basedosdados/sdk"
+repository = "https://github.com/basedosdados/sdk"
 license = "MIT"
 packages = [
     {include = "basedosdados"},
@@ -51,9 +51,13 @@ all = ["gql", "pandavro", "requests-toolbelt"]
 avro = ["pandavro"]
 upload = ["gql", "requests-toolbelt"]
 
-[pytest]
-addopts = "-p no:warnings"
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = [
+    "--ignore=tests/outdated",
+    "-p no:warnings",
+]
 
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
