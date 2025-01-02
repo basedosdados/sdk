@@ -2,7 +2,6 @@
 Module for managing BigQuery Connections.
 """
 
-
 from typing import Union
 
 import google.auth

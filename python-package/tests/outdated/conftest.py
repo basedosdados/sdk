@@ -4,14 +4,12 @@ Share fixtures for tests.
 
 import shutil
 import sys
-
-
 from pathlib import Path
 
 import pytest
 import ruamel.yaml as ryaml
 
-from basedosdados import Metadata  # TODO: deprecate
+# from basedosdados import Metadata  # TODO: deprecate
 from basedosdados import Dataset, Storage, Table
 from basedosdados.core.base import Base
 

@@ -1,6 +1,7 @@
 """
 Functions for managing downloads
 """
+
 import gzip
 import os
 import re
@@ -24,6 +25,19 @@ from pandas_gbq import read_gbq
 from pandas_gbq.gbq import GenericGBQException
 from pydata_google_auth import cache, get_user_credentials
 from pydata_google_auth.exceptions import PyDataCredentialsError
+
+
+def _set_config_variables(billing_project_id, from_file):
+    """
+    Set billing_project_id and from_file variables
+    """
+
+    # standard billing_project_id configuration
+    billing_project_id = billing_project_id or config.billing_project_id
+    # standard from_file configuration
+    from_file = from_file or config.from_file
+
+    return billing_project_id, from_file
 
 
 def read_sql(
@@ -67,9 +81,9 @@ def read_sql(
 
         return read_gbq(
             query,
-            project_id=config.billing_project_id,
+            project_id=billing_project_id,
             use_bqstorage_api=use_bqstorage_api,
-            credentials=_credentials(from_file=config.from_file, reauth=reauth),
+            credentials=_credentials(from_file=from_file, reauth=reauth),
         )
     except GenericGBQException as e:
         if "Reason: 403" in str(e):

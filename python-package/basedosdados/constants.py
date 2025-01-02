@@ -1,6 +1,7 @@
 """
 Constants for the project.
 """
+
 __all__ = ["config", "constants"]
 
 from dataclasses import dataclass
