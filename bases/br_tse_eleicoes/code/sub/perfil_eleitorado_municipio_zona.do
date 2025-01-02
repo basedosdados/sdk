@@ -12,28 +12,54 @@ save `diretorio'
 // loops
 //------------------------//
 
-foreach ano of numlist 1994(2)2022 {
+foreach ano of numlist 1994(2)2024 {
 	
 	cap import delimited "input/perfil_eleitorado/perfil_eleitorado_`ano'/perfil_eleitorado_`ano'.txt", delim(";") stringcols(_all) varn(nonames) clear //rowr(1:100000)
 	cap import delimited "input/perfil_eleitorado/perfil_eleitorado_`ano'/perfil_eleitorado_`ano'.csv", delim(";") stringcols(_all) varn(nonames) clear //rowr(1:100000)
 	
 	drop in 1
 	
-	keep v3 v4 v5 v7 v9 v10 v12 v14 v16 v18 v19 v20 v21
+	if `ano' <= 2022 {
+		
+		keep v3 v4 v5 v7 v9 v10 v12 v14 v16 v18 v19 v20 v21
+		
+		ren v3 ano
+		ren v4 sigla_uf
+		ren v5 id_municipio_tse
+		ren v7 situacao_biometria
+		ren v9 zona
+		ren v10 genero
+		ren v12 estado_civil
+		ren v14 grupo_idade
+		ren v16 instrucao
+		ren v18 eleitores
+		ren v19 eleitores_biometria
+		ren v20 eleitores_deficiencia
+		ren v21 eleitores_inclusao_nome_social
+		
+	}
+	else if `ano' == 2024 {
+		
+		keep v3 v4 v5 v7 v8 v10 v12 v14 v24 v25 v26 v27
+		
+		ren v3 ano
+		ren v4 sigla_uf
+		ren v5 id_municipio_tse
+		ren v7 zona
+		ren v8 genero
+		ren v10 estado_civil
+		ren v12 grupo_idade
+		ren v14 instrucao
+		ren v24 eleitores
+		ren v25 eleitores_biometria
+		ren v26 eleitores_deficiencia
+		ren v27 eleitores_inclusao_nome_social
+		
+		gen situacao_biometria = ""
+		
+		
+	}
 	
-	ren v3 ano
-	ren v4 sigla_uf
-	ren v5 id_municipio_tse
-	ren v7 situacao_biometria
-	ren v9 zona
-	ren v10 genero
-	ren v12 estado_civil
-	ren v14 grupo_idade
-	ren v16 instrucao
-	ren v18 eleitores
-	ren v19 eleitores_biometria
-	ren v20 eleitores_deficiencia
-	ren v21 eleitores_inclusao_nome_social
 	
 	destring ano id_municipio_tse zona eleitores*, replace force
 	

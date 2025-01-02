@@ -1,7 +1,7 @@
 <!-- Header -->
 <p align="center">
   <a href="https://basedosdados.org">
-    <img src="docs/images/bdmais_logo.png" width="340" alt="Base dos Dados Mais">
+    <img src="docs/images/bdmais_logo.png" width="340" alt="Base dos Dados">
   </a>
 </p>
 
@@ -11,10 +11,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/basedosdados/mais/subscription" target="_blank">
+  <a href="https://github.com/basedosdados/sdk/subscription" target="_blank">
     <img src="https://img.shields.io/github/watchers/basedosdados/mais.svg?style=social" alt="Watch">
   </a>
-  <a href="https://github.com/basedosdados/mais/stargazers" target="_blank">
+  <a href="https://github.com/basedosdados/sdk/stargazers" target="_blank">
     <img src="https://img.shields.io/github/stars/basedosdados/mais.svg?style=social" alt="Start">
   </a>
   <a href="https://twitter.com/basedosdados" target="_blank">
@@ -31,11 +31,11 @@
   </a>
 </p>
 
-A Base dos Dados Mais (BD+) é um datalake público no Google BigQuery com
+A Base dos Dados (BD) é um datalake público no Google BigQuery com
 os principais conjuntos de dados abertos do Brasil.
-Na BD+ você encontra tabelas tratadas e prontas para uso de forma
+Na BD você encontra tabelas tratadas e prontas para uso de forma
 gratuita. Disponibilizamos e mantemos neste projeto pacotes de acesso à
-BD+ em diferentes linguagens.
+BD em diferentes linguagens.
 
 > O projeto faz parte da [Base dos Dados](http://basedosdados.org), uma organização sem fins lucrativos com a
 missão de universalizar o acesso a dados de qualidade para todes.
@@ -45,9 +45,9 @@ missão de universalizar o acesso a dados de qualidade para todes.
 | **R** | **Python** | **Stata**
 |-----|-----|-----|
 | `install.packages("basedosdados")` | `pip install basedosdados` | - |
-| <a href="https://CRAN.R-project.org/package=basedosdados" target="_blank"><img src="https://www.r-pkg.org/badges/version/basedosdados"></a> | <a href="https://pypi.org/project/basedosdados" target="_blank"><img src="https://badge.fury.io/py/basedosdados.svg"></a> | <a href="https://github.com/basedosdados/mais/pull/754" target="_blank"><img src="https://img.shields.io/badge/development-0.1.0-yellow"></a>
+| <a href="https://CRAN.R-project.org/package=basedosdados" target="_blank"><img src="https://www.r-pkg.org/badges/version/basedosdados"></a> | <a href="https://pypi.org/project/basedosdados" target="_blank"><img src="https://badge.fury.io/py/basedosdados.svg"></a> | <a href="https://github.com/basedosdados/sdk/pull/754" target="_blank"><img src="https://img.shields.io/badge/development-0.1.0-yellow"></a>
 | <a href="https://CRAN.R-project.org/package=basedosdados" target="_blank"><img src="http://cranlogs.r-pkg.org/badges/basedosdados"></a> | <a href="https://pypi.org/project/basedosdados" target="_blank"><img src="https://img.shields.io/pypi/dm/basedosdados?color=blue"></a> |
-| <a href="https://github.com/basedosdados/mais/labels/R" target="_blank"><img src="https://img.shields.io/github/issues/basedosdados/mais/R"></a> | <a href="https://github.com/basedosdados/mais/labels/python" target="_blank"><img src="https://img.shields.io/github/issues/basedosdados/mais/Python"></a> |
+| <a href="https://github.com/basedosdados/sdk/labels/R" target="_blank"><img src="https://img.shields.io/github/issues/basedosdados/sdk/R"></a> | <a href="https://github.com/basedosdados/sdk/labels/python" target="_blank"><img src="https://img.shields.io/github/issues/basedosdados/sdk/Python"></a> |
 
 ## Encontre aqui
 
@@ -63,7 +63,7 @@ missão de universalizar o acesso a dados de qualidade para todes.
     src="https://github.com/gauravghongde/social-icons/blob/master/PNG/Color/Medium.png?raw=true"
     width="15">  [Medium ↗](http://dev.to/basedosdados)
 - [⚙️ Desenvolvimento](#desenvolvimento)
-- [👥 Como contribuir ↗](https://basedosdados.github.io/mais/colab_data/)
+- [👥 Como contribuir ↗](https://basedosdados.github.io/sdk/colab_data/)
 - [💚 Apoie o projeto! ↗](https://apoia.se/basedosdados)
 
 ## Como citar o projeto
@@ -95,7 +95,7 @@ df = bd.read_table('br_ibge_pib', 'municipio', billing_project_id="<YOUR-PROJECT
 
 > Caso esteja acessando da primeira vez, vão aparecer alguns passos na tela para autenticar seu projeto - basta segui-los!
 >
-> É necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos).
+> É necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos).
 >
 > Se possível, armazene suas credenciais em um arquivo `dotenv`: `"billing_project_id=<suas_credenciais_do_projeto>" >> .env`
 
@@ -143,7 +143,7 @@ FROM `basedosdados.br_bd_diretorios_brasil.municipio`
 df = bd.read_sql(query=query)
 ```
 
-Para saber mais, veja os [exemplos](https://github.com/basedosdados/analises/tree/main/artigos) ou a [documentação da API](https://basedosdados.github.io/mais/api_reference_python/)
+Para saber mais, veja os [exemplos](https://github.com/basedosdados/analises/tree/main/artigos) ou a [documentação da API](https://basedosdados.github.io/sdk/api_reference_python/)
 
 ## Criando múltiplas configurações
 
@@ -184,7 +184,7 @@ install.packages("basedosdados")
 
 # ou a versão de desenvolvimento
 
-devtools::install_github("basedosdados/mais", subdir = "r-package")
+devtools::install_github("basedosdados/sdk", subdir = "r-package")
 ```
 
 ### Consultas
@@ -248,7 +248,7 @@ get_table_description("br_sp_alesp", "deputado")
 ## Atenção
 
 > Caso esteja acessando da primeira vez, vão aparecer alguns passos na tela para autenticar seu projeto com sua conta google e possivelmente na [Tidyverse API](https://www.tidyverse.org/google_privacy_policy/) - basta segui-los! As credenciais ficam armazenadas no computador então usuários com mais de uma máquina talvez precisem autenticar mais de uma vez.
-> É necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/mais/access_data_bq/#primeiros-passos).
+> É necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos).
 > Se possível, armazene suas credenciais em um arquivo `dotenv`, em bash o comando é `"billing_project_id=<suas_credenciais_do_projeto>" >> .env`. [Veja aqui como criar um arquivo dotenv](https://towardsdatascience.com/using-dotenv-to-hide-sensitive-information-in-r-8b878fa72020).
 
 ## Desenvolvimento
@@ -258,8 +258,8 @@ get_table_description("br_sp_alesp", "deputado")
 Para rodar a documentação localmente:
 
 ```bash
-python -m venv .mais # cria ambiente virtual (só rodar da primeira vez)
-. .mais/bin/activate # ativa ambiente virtual
+python -m venv .sdk # cria ambiente virtual (só rodar da primeira vez)
+. .sdk/bin/activate # ativa ambiente virtual
 pip install --upgrade  -r python-package/requirements-dev.txt # instala dependências
 python python-package/setup.py develop # instala pacote local
 mkdocs serve # cria documentacao em: http://localhost:8000/

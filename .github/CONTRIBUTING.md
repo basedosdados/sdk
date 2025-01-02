@@ -8,7 +8,7 @@ Incentivamos que outras instituições e pessoas contribuam conosco. Para colabo
 2. Revisar ao longo da semana e colocar sua solicitação como `priority` caso necessário
 3. Redesignar alguém para cuidar da solicitação caso necessário
 
-Caso você possa colaborar subindo a base, sinalize isso na sua solicitação. É requerido somente que o processo de captura e tratamento sejam públicos e documentados, e a inserção dos dados no BigQuery siga [nossa metodologia](https://basedosdados.github.io/mais/colab_data/).
+Caso você possa colaborar subindo a base, sinalize isso na sua solicitação. É requerido somente que o processo de captura e tratamento sejam públicos e documentados, e a inserção dos dados no BigQuery siga [nossa metodologia](https://basedosdados.github.io/sdk/colab_data/).
 
 # Contribuindo com código (CLI)
 Precisamos de ajuda para manter e melhorar nossos clientes Python, R, entre outros. Acesse nossos issues ou abra um novo para começar a desenvolver :)
@@ -16,13 +16,13 @@ Precisamos de ajuda para manter e melhorar nossos clientes Python, R, entre outr
 ## Teve algum erro? Utilize o template "Bugs"
 
 #### O que acontece?
-- Mantenedorxs vão:
+- Mantenedores vão:
 1. Revisar ao longo da semana e colocar sua solicitação como `priority` caso necessário
 2. Redesignar alguém para cuidar da solicitação caso necessário
 
 ## Tem sugestão de features ou pacotes em novas linguagens? Utilize o template "Novas funcionalidades"
 
 #### O que acontece?
-- Mantenedorxs vão:
+- Mantenedores vão:
 1. Revisar ao longo da semana e colocar sua solicitação como `priority` caso necessário
 2. Redesignar alguém para cuidar da solicitação caso necessário

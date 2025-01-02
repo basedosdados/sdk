@@ -43,6 +43,7 @@ mkdocs = "^1.2.3"
 mkdocs-click = "^0.5.0"
 mkdocs-material = "^8.2.7"
 mkdocstrings = "^0.18.1"
+mkdocs-static-i18n = "^0.56"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.2.1"

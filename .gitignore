@@ -1,20 +1,16 @@
 # OLD repo name
 .bases
 .mais
+.sdk
 bases/pytest/*
 bases/test/
+pytest/*
 test/*
 test.py
 
 
 .DS_Storage
 */*/.DS_Storage
-
-
-# NEW repo name
-.mais
-mais/pytest/*
-mais/test/
 
 bases/*/input/
 bases/*/tmp/

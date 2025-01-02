@@ -1,4 +1,4 @@
-site_name: Documentação
+site_name: Docs
 
 theme:
   name: material
@@ -17,7 +17,6 @@ theme:
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
-  language: pt
   font:
     text: Lato
   favicon: images/bd_minilogo.png
@@ -27,10 +26,9 @@ theme:
     - navigation.sections
     - navigation.top
     - toc.integrate
-    - navigation.tabs
 
-repo_url: https://github.com/basedosdados/mais
-repo_name: basedosdados/mais
+repo_url: https://github.com/basedosdados/sdk
+repo_name: basedosdados/sdk
 
 extra:
   version: 2.0
@@ -40,7 +38,7 @@ extra:
     - icon: fontawesome/brands/discord
       link: https://discord.com/invite/huKWpsVYx4
     - icon: fontawesome/brands/github
-      link: https://github.com/basedosdados/mais
+      link: https://github.com/basedosdados/sdk
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/basedosdados
     - icon: fontawesome/brands/whatsapp
@@ -51,21 +49,6 @@ extra:
   analytics:
     provider: google
     # property: !ENV GOOGLE_ANALYTICS_KEY
-
-nav:
-  - Home:
-    - Aprenda sobre a BD: index.md
-    - BigQuery: access_data_bq.md
-    - Pacotes: access_data_packages.md
-    - API:
-      - Python: api_reference_python.md
-      - R: api_reference_r.md
-      - Stata: api_reference_stata.md
-    - Contribua:
-      - Dados: colab_data.md
-      - Infraestrutura: colab_infrastructure.md
-      - Manual de estilo: style_data.md
-    #   - Como citar a Base dos Dados: index.md # TODO
 
 markdown_extensions:
   - admonition
@@ -82,6 +65,20 @@ extra_javascript:
 - js/termynal.js
 - js/custom.js
 
+nav:
+  - Home: index.md
+  - BigQuery: access_data_bq.md
+  - Pacotes: access_data_packages.md
+  - APIs:
+    - Python: api_reference_python.md
+    - R: api_reference_r.md
+    - Stata: api_reference_stata.md
+  - Contribua:
+    - Dados: colab_data.md
+    - Manual de estilo: style_data.md
+    - Infraestrutura: colab_infrastructure.md
+    - Testes: colab_checks.md
+
 plugins:
   - search
   - mkdocstrings:
@@ -92,7 +89,37 @@ plugins:
           setup_commands:
             - import sys
             - sys.path.insert(0, "python-package")
+  - i18n:
+      default_language: pt
+      docs_structure: folder
+      languages:
+        pt:
+          name: Português
+          default: true
+          build: true
+        en:
+          name: English
+          build: true
+        es:
+          name: Español
+          build: true
+      nav_translations:
+        en:
+          Pacotes: Packages
+          Contribua: Contribute
+          Dados: Data
+          Manual de estilo: Style guide
+          Infraestrutura: Infrastructure
+          Testes: Tests
+        es:
+          Pacotes: Paquetes
+          Contribua: Contribuir
+          Dados: Datos
+          Manual de estilo: Manual de estilo
+          Infraestrutura: Infraestructura
+          Testes: Pruebas
 
 extra_css:
 - css/termynal.css
 - css/custom.css
+

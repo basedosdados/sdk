@@ -1,5 +1,11 @@
 FROM python:3.11-slim AS builder
 
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV \
   PYTHONUNBUFFERED=1 \
   PYTHONDONTWRITEBYTECODE=1 \
@@ -32,7 +38,7 @@ COPY --from=builder $POETRY_HOME $POETRY_HOME
 
 COPY --from=builder $POETRY_VENV $POETRY_VENV
 
-RUN cd /src/package/ && poetry install
+RUN cd /src/package/ && poetry install --with=docs
 
 WORKDIR /src/docs
 

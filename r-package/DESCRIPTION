@@ -16,7 +16,7 @@ Authors@R:
              role = c("aut"),
              email = "rodornelles@gmail.com",
              comment = c(ORCID = "0000-0003-3709-4760")))
-Description: An R interface to the 'Base dos Dados' API <https://basedosdados.github.io/mais/py_reference_api/>). Authenticate your project, query our tables, save data to disk and memory, all from R.
+Description: An R interface to the 'Base dos Dados' API <https://basedosdados.github.io/sdk/py_reference_api/>). Authenticate your project, query our tables, save data to disk and memory, all from R.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
