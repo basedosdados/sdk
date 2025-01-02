@@ -34,7 +34,7 @@ numpy = "<2.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.3.3"
-ruff = "^0.4.3"
+ruff = "^0.8.5"
 semgrep = "^1.36.0"
 taskipy = "^1.12.0"
 
@@ -51,6 +51,11 @@ pytest = "^7.2.1"
 all = ["gql", "pandavro", "requests-toolbelt"]
 avro = ["pandavro"]
 upload = ["gql", "requests-toolbelt"]
+
+[tool.ruff]
+exclude = [
+    "tests/outdated"
+]
 
 [tool.pytest.ini_options]
 pythonpath = "."
