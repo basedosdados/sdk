@@ -111,13 +111,14 @@ def test_read_sql_invalid_billing_project_id():
             from_file=True,
         )
 
+
 @pytest.mark.skip(reason="TODO: Refactor the exceptions that are thrown in read_sql")
 def test_read_sql_inexistent_project():
     """
     Test if the `read_sql` function raises an error when the billing project id is not valid.
     """
 
-    # this is the exception throw BaseDosDadosAccessDeniedException 
+    # this is the exception throw BaseDosDadosAccessDeniedException
     with pytest.raises(GenericGBQException) as excinfo:
         read_sql(
             query="select * from `asedosdados.br_ibge_pib.municipio` limit 10",

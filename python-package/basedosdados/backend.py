@@ -383,7 +383,12 @@ class Backend(metaclass=SingletonMeta):
         response = self._execute_query(query=query, variables=variables)
         r = {} if response is None else self._simplify_response(response)
         if r.get("allCloudtable") != []:
-            return r.get("allCloudtable")["items"][0].get("table").get("dataset").get("_id")
+            return (
+                r.get("allCloudtable")["items"][0]
+                .get("table")
+                .get("dataset")
+                .get("_id")
+            )
         msg = f"{gcp_dataset_id} not found. Please create the metadata first in {self.graphql_url}"
         logger.info(msg)
         return None

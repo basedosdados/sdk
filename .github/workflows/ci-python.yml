@@ -39,6 +39,10 @@ jobs:
         run: poetry install --with dev --all-extras --no-root
         working-directory: python-package
 
+      - name: Format check
+        run: poetry run ruff format --check .
+        working-directory: python-package
+
       - name: Setup config
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}

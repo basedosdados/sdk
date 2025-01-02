@@ -13,6 +13,7 @@ def test_get_dataset():
     assert len(out) != 0
     assert out["page_total"] > 100
 
+
 def test_get_dataset_with_input():
     """
     Test dataset output with input
@@ -24,6 +25,7 @@ def test_get_dataset_with_input():
     assert isinstance(out, dict)
     assert len(out) != 0
     assert out["page_size"] > 1
+
 
 def test_get_tables():
     """
@@ -38,6 +40,7 @@ def test_get_tables():
     assert out["page_size"] >= 10
     assert out["page_total"] > 79
 
+
 def test_get_tables_with_input():
     """
     Test tables output with input
@@ -50,6 +53,7 @@ def test_get_tables_with_input():
     assert len(out) != 0
     assert out["page_size"] >= 10
     assert out["page_total"] == 0
+
 
 def test_get_columns():
     """
@@ -64,6 +68,7 @@ def test_get_columns():
     assert out["page_size"] > 1
     assert out["page_total"] > 3000
 
+
 def test_get_columns_with_input():
     """
     Test columns output with input
@@ -77,6 +82,7 @@ def test_get_columns_with_input():
     assert out["page_size"] >= 10
     assert out["page_total"] > 0
 
+
 def test_search():
     """
     Test search output without parameters
@@ -88,6 +94,7 @@ def test_search():
     assert isinstance(out, dict)
     assert len(out) != 0
     assert out["page_size"] > 1
+
 
 def test_search_with_input():
     """
@@ -101,17 +108,19 @@ def test_search_with_input():
     assert len(out) != 0
     assert out["page_size"] >= 10
 
+
 def test_get_dataset_config():
     """
     Test get_dataset_config output
     """
     backend = Backend()
 
-    out = backend.get_dataset_config(dataset_id='br_me_rais')
+    out = backend.get_dataset_config(dataset_id="br_me_rais")
     assert isinstance(out, dict)
     assert len(out) > 0
     assert out != ""
     assert out != "None" or "null" or "NaN" or "inf" or "-inf" or "nan"
+
 
 def test_get_table_config():
     """
@@ -119,7 +128,9 @@ def test_get_table_config():
     """
     backend = Backend()
 
-    out = backend.get_table_config(dataset_id='br_me_rais', table_id='microdados_estabelecimentos')
+    out = backend.get_table_config(
+        dataset_id="br_me_rais", table_id="microdados_estabelecimentos"
+    )
     print(out)
     print(len(out))
     print(type(out))
@@ -128,27 +139,30 @@ def test_get_table_config():
     assert out != ""
     assert out != "None" or "null" or "NaN" or "inf" or "-inf" or "nan"
 
-def test_get_dataset_id_from_name():
- """
-   Test get dataset id from name
- """
- backend = Backend()
 
- out = backend._get_dataset_id_from_name('br_me_rais')
- assert isinstance(out, str)
- assert len(out) > 30
- assert out == '3e7c4d58-96ba-448e-b053-d385a829ef00'
+def test_get_dataset_id_from_name():
+    """
+    Test get dataset id from name
+    """
+    backend = Backend()
+
+    out = backend._get_dataset_id_from_name("br_me_rais")
+    assert isinstance(out, str)
+    assert len(out) > 30
+    assert out == "3e7c4d58-96ba-448e-b053-d385a829ef00"
+
 
 def test_get_table_id_from_name():
- """
-   Test get table id from name
- """
- backend = Backend()
+    """
+    Test get table id from name
+    """
+    backend = Backend()
 
- out = backend._get_table_id_from_name('br_me_rais', 'microdados_estabelecimentos')
- assert isinstance(out, str)
- assert len(out) > 35
- assert out == '86b69f96-0bfe-45da-833b-6edc9a0af213'
+    out = backend._get_table_id_from_name("br_me_rais", "microdados_estabelecimentos")
+    assert isinstance(out, str)
+    assert len(out) > 35
+    assert out == "86b69f96-0bfe-45da-833b-6edc9a0af213"
+
 
 def test_execute_query():
     """
@@ -197,6 +211,7 @@ def test_execute_query():
     assert isinstance(out, dict)
     assert len(out) != 0
     assert out["allDataset"]["page_total"] > 100
+
 
 def test_simplify_response():
     """

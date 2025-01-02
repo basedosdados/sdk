@@ -1,6 +1,7 @@
 """
 Functions to get metadata from BD's API
 """
+
 from functools import wraps
 
 from basedosdados.backend import Backend
