@@ -1,4 +1,4 @@
-""" Utilities functions for Upload sub-module"""
+"""Utilities functions for Upload sub-module"""
 
 import os
 from pathlib import Path

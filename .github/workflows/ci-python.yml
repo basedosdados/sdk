@@ -1,0 +1,54 @@
+name: Test Python package
+
+on:
+  push:
+    branches: [master, v2.0.0]
+  pull_request:
+    branches: [master, v2.0.0]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.10"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        id: python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      # https://github.com/python-poetry/poetry/issues/2117
+      - name: Set Poetry environment
+        run: poetry env use '${{ steps.python.outputs.python-path }}'
+        working-directory: python-package
+
+      - name: Install package
+        run: poetry install
+        working-directory: python-package
+
+      - name: Install requirements
+        run: poetry install --with dev --all-extras --no-root
+        working-directory: python-package
+
+      - name: Format check
+        run: poetry run ruff format --check .
+        working-directory: python-package
+
+      - name: Setup config
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+        working-directory: python-package
+        run: poetry run python ../.github/scripts/setup-config.py
+
+      - name: Test (python-${{ matrix.python-version }}, ${{ matrix.os }})
+        run: poetry run pytest
+        working-directory: python-package

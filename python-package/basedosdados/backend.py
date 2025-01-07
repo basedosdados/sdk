@@ -1,6 +1,7 @@
 """
 Module for interacting with the backend.
 """
+
 from typing import Any, Dict
 
 from loguru import logger
@@ -70,33 +71,37 @@ class Backend(metaclass=SingletonMeta):
         query = """
             query ($first: Int!, $offset: Int!) {
                 allDataset(first: $first, offset: $offset) {
-                    edges {
-                        node {
-                            slug
-                            name
-                            description
-                            organization {
-                                name
-                            }
-                            tags {
-                                edges {
-                                    node {
-                                        name
-                                    }
-                                }
-                            }
-                            themes {
-                                edges {
-                                    node {
-                                        name
-                                    }
-                                }
-                            }
-                            createdAt
-                            updatedAt
-                        }
-                    }
-                    totalCount
+                	edges {
+      					node {
+      					  slug
+      					  name
+      					  description
+      					  organizations {
+      					    edges {
+      					      node {
+      					        name
+      					      }
+      					    }
+      					  }
+      					  tags {
+      					    edges {
+      					      node {
+      					        name
+      					      }
+      					    }
+      					  }
+      					  themes {
+      					    edges {
+      					      node {
+      					        name
+      					      }
+      					    }
+      					  }
+      					  createdAt
+      					  updatedAt
+  						}
+  					}
+  				    totalCount
                 }
             }
         """
@@ -279,8 +284,12 @@ class Backend(metaclass=SingletonMeta):
                                     }
                                 }
                             }
-                            organization {
-                                namePt
+                            organizations {
+                                edges {
+                                    node {
+                                        namePt
+                                    }
+                                }
                             }
                         }
                     }
@@ -291,7 +300,7 @@ class Backend(metaclass=SingletonMeta):
         if dataset_id:
             variables = {"dataset_id": dataset_id}
             response = self._execute_query(query=query, variables=variables)
-            return self._simplify_graphql_response(response).get("allDataset")[0]
+            return self._simplify_response(response).get("allDataset")["items"][0]
         else:
             return {}
 
@@ -306,35 +315,39 @@ class Backend(metaclass=SingletonMeta):
         """
 
         query = """
-            query ($table_id: ID!){
+            query ($table_id: ID!) {
                 allTable(id: $table_id) {
                     edges {
                         node {
                             slug
                             dataset {
                                 slug
-                                organization {
-                                    slug
+                                organizations {
+                                  edges {
+                                    node {
+                                      slug
+                                    }
+                                  }
                                 }
                             }
                             namePt
                             descriptionPt
                             columns {
-                            edges {
-                                node {
-                                    name
-                                    isInStaging
-                                    isPartition
-                                    descriptionPt
-                                    observations
-                                    bigqueryType {
+                                edges {
+                                    node {
                                         name
+                                        isInStaging
+                                        isPartition
+                                        descriptionPt
+                                        observations
+                                        bigqueryType {
+                                            name
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
                 }
             }
         """
@@ -345,7 +358,7 @@ class Backend(metaclass=SingletonMeta):
         if table_id:
             variables = {"table_id": table_id}
             response = self._execute_query(query=query, variables=variables)
-            return self._simplify_graphql_response(response).get("allTable")[0]
+            return self._simplify_response(response).get("allTable")["items"][0]
         else:
             return {}
 
@@ -355,10 +368,10 @@ class Backend(metaclass=SingletonMeta):
                 allCloudtable(gcpDatasetId: $gcp_dataset_id) {
                     edges {
                         node {
-                                table {
-                                    dataset {
-                                        _id
-                                    }
+                            table {
+                                dataset {
+                                    _id
+                                }
                             }
                         }
                     }
@@ -368,9 +381,14 @@ class Backend(metaclass=SingletonMeta):
 
         variables = {"gcp_dataset_id": gcp_dataset_id}
         response = self._execute_query(query=query, variables=variables)
-        r = {} if response is None else self._simplify_graphql_response(response)
-        if r.get("allCloudtable", []) != []:
-            return r.get("allCloudtable")[0].get("table").get("dataset").get("_id")
+        r = {} if response is None else self._simplify_response(response)
+        if r.get("allCloudtable") != []:
+            return (
+                r.get("allCloudtable")["items"][0]
+                .get("table")
+                .get("dataset")
+                .get("_id")
+            )
         msg = f"{gcp_dataset_id} not found. Please create the metadata first in {self.graphql_url}"
         logger.info(msg)
         return None
@@ -381,8 +399,8 @@ class Backend(metaclass=SingletonMeta):
                 allCloudtable(gcpDatasetId: $gcp_dataset_id, gcpTableId: $gcp_table_id) {
                     edges {
                         node {
-                                table {
-                                    _id
+                            table {
+                                _id
                             }
                         }
                     }
@@ -397,9 +415,9 @@ class Backend(metaclass=SingletonMeta):
             }
 
             response = self._execute_query(query=query, variables=variables)
-            r = {} if response is None else self._simplify_graphql_response(response)
+            r = {} if response is None else self._simplify_response(response)
             if r.get("allCloudtable", []) != []:
-                return r.get("allCloudtable")[0].get("table").get("_id")
+                return r.get("allCloudtable")["items"][0].get("table").get("_id")
         msg = f"No table {gcp_table_id} found in {gcp_dataset_id}. Please create in {self.graphql_url}"
         logger.info(msg)
         return None

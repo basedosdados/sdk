@@ -1,14 +1,14 @@
 [tool.poetry]
 name = "basedosdados"
-version = "2.0.0-beta.21"
+version = "2.0.0-beta.25"
 description = "Organizar e facilitar o acesso a dados brasileiros através de tabelas públicas no BigQuery."
 authors = ["Joao Carabetta <joao.carabetta@gmail.com>", "Ricardo Dahis", "Diego Oliveira"]
 classifiers = [
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-homepage = "https://github.com/basedosdados/mais"
-repository = "https://github.com/basedosdados/mais"
+homepage = "https://github.com/basedosdados/sdk"
+repository = "https://github.com/basedosdados/sdk"
 license = "MIT"
 packages = [
     {include = "basedosdados"},
@@ -30,10 +30,11 @@ pydata-google-auth = "^1.8"
 requests-toolbelt = { version = "^1", optional = true }
 tomlkit = "^0.11"
 tqdm = "^4"
+numpy = "<2.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.3.3"
-ruff = "^0.4.3"
+ruff = "^0.8.5"
 semgrep = "^1.36.0"
 taskipy = "^1.12.0"
 
@@ -52,9 +53,18 @@ all = ["gql", "pandavro", "requests-toolbelt"]
 avro = ["pandavro"]
 upload = ["gql", "requests-toolbelt"]
 
-[pytest]
-addopts = "-p no:warnings"
+[tool.ruff]
+exclude = [
+    "tests/outdated"
+]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = [
+    "--ignore=tests/outdated",
+    "-p no:warnings",
+]
 
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

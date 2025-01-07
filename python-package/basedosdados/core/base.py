@@ -9,8 +9,6 @@ import sys
 import warnings
 from functools import lru_cache
 from os import getenv
-
-
 from pathlib import Path
 from typing import Dict, List, Union
 
@@ -232,7 +230,7 @@ class Base:
         if (not config_file.exists()) or (force):
             # Load config file
             c_file = tomlkit.parse(
-                (Path(__file__).resolve().parents[1] / "templates" / "config.toml")
+                (Path(__file__).resolve().parents[1] / "core" / "config.toml")
                 .open("r", encoding="utf-8")
                 .read()
             )
