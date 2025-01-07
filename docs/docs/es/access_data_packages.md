@@ -60,7 +60,7 @@ Requerimientos:
 
 Con los requerimientos satisfechos, ejecutar los comandos siguientes:
 ```stata
-net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package")
+net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/sdk/master/stata-package")
 ```
 
 ### Configurando el paquete
@@ -159,7 +159,7 @@ para que empieces a usarlos.
 === "**Stata**"
     Documentación:
 
-    - [GitHub](https://github.com/basedosdados/mais/tree/master/stata-package)
+    - [GitHub](https://github.com/basedosdados/sdk/tree/master/stata-package)
 
 ## Manuales de referencia (API)
 

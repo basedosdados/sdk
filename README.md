@@ -1,7 +1,7 @@
 <!-- Header -->
 <p align="center">
   <a href="https://basedosdados.org">
-    <img src="docs/docs/images/bd_minilogo.png" width="340" alt="Base dos Dados">
+    <img src="docs/docs/pt/images/bd_minilogo.png" width="340" alt="Base dos Dados">
   </a>
 </p>
 

@@ -145,10 +145,10 @@ The `microdados_vinculos` table from RAIS, for example, is a very large table (+
 #### Example: PNAD Continuous - Cleaning Code
 
 The cleaning code was built in R and [can be consulted
-here](https://github.com/basedosdados/mais/tree/master/bases/br_ibge_pnadc/code).
+here](https://github.com/basedosdados/sdk/tree/master/bases/br_ibge_pnadc/code).
 
 #### Example: Activity in the Legislative Chamber - Download and Cleaning Code
-The cleaning code was built in Python [can be consulted here](https://github.com/basedosdados/mais/tree/bea9a323afcea8aa1609e9ade2502ca91f88054c/bases/br_camara_atividade_legislativa/code)
+The cleaning code was built in Python [can be consulted here](https://github.com/basedosdados/sdk/tree/bea9a323afcea8aa1609e9ade2502ca91f88054c/bases/br_camara_atividade_legislativa/code)
 
 ### 5. (If necessary) Organize auxiliary files
 
@@ -212,7 +212,7 @@ The data will pass through 3 places in Google Cloud:
     The following parameters can be used:
 
 
-    - `path` (required): the complete path of the file on your computer, like: `/Users/<your_username>/projects/basedosdados/mais/bases/[DATASET_ID]/output/microdados.csv`.
+    - `path` (required): the complete path of the file on your computer, like: `/Users/<your_username>/projects/basedosdados/sdk/bases/[DATASET_ID]/output/microdados.csv`.
 
 
     !!! Tip "If your data is partitioned, the path must point to the folder where the partitions are. Otherwise, it must point to a `.csv` file (for example, microdados.csv)."

@@ -198,8 +198,8 @@ for year in [*range(2005, 2020)]:
 
 Examples of partitioned tables in `R`:
 
-- [PNADC](https://github.com/basedosdados/mais/blob/master/bases/br_ibge_pnadc/code/microdados.R)
-- [PAM](https://github.com/basedosdados/mais/blob/master/bases/br_ibge_pam/code/permanentes_usando_api.R)
+- [PNADC](https://github.com/basedosdados/sdk/blob/master/bases/br_ibge_pnadc/code/microdados.R)
+- [PAM](https://github.com/basedosdados/sdk/blob/master/bases/br_ibge_pam/code/permanentes_usando_api.R)
 
 Example of how to partition a table in `SQL`:
 
@@ -274,4 +274,4 @@ The field refers to the data in the raw data source, which has not yet passed th
 
 ## **Thought of improvements for the standards defined?**
 
-Open an [issue on our Github](https://github.com/basedosdados/mais/labels/docs) or send a message on [Discord](https://discord.gg/huKWpsVYx4) to talk to us :)
+Open an [issue on our Github](https://github.com/basedosdados/sdk/labels/docs) or send a message on [Discord](https://discord.gg/huKWpsVYx4) to talk to us :)

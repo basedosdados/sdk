@@ -26,8 +26,8 @@ We explain the system's operation in more detail [on our blog](https://dev.to/ba
 ### How to contribute?
 
 - Improving system documentation here :)
-- [Creating automatic data and metadata quality checks (in Python)](https://github.com/basedosdados/mais/issues/376)
-- [Creating new issues and improvement suggestions](https://github.com/basedosdados/mais/issues/new/choose)
+- [Creating automatic data and metadata quality checks (in Python)](https://github.com/basedosdados/sdk/issues/376)
+- [Creating new issues and improvement suggestions](https://github.com/basedosdados/sdk/issues/new/choose)
 
 ## Access packages
 
@@ -35,9 +35,9 @@ The *datalake* access packages are constantly being improved, and you can collab
 
 ### How to contribute?
 
-- [Explore Python package issues](https://github.com/basedosdados/mais/labels/python)
-- [Explore R package issues](https://github.com/basedosdados/mais/labels/R)
-- [Help develop the Stata package](https://github.com/basedosdados/mais/pull/754)
+- [Explore Python package issues](https://github.com/basedosdados/sdk/labels/python)
+- [Explore R package issues](https://github.com/basedosdados/sdk/labels/R)
+- [Help develop the Stata package](https://github.com/basedosdados/sdk/pull/754)
 
 ## Website
 

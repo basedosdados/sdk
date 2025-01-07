@@ -229,8 +229,8 @@ for ano in [*range(2005, 2020)]:
 
 Ejemplos de tablas particionadas en `R`:
 
-- [PNADC](https://github.com/basedosdados/mais/blob/master/bases/br_ibge_pnadc/code/microdados.R)
-- [PAM](https://github.com/basedosdados/mais/blob/master/bases/br_ibge_pam/code/permanentes_usando_api.R)
+- [PNADC](https://github.com/basedosdados/sdk/blob/master/bases/br_ibge_pnadc/code/microdados.R)
+- [PAM](https://github.com/basedosdados/sdk/blob/master/bases/br_ibge_pam/code/permanentes_usando_api.R)
 
 Ejemplo de cómo particionar una tabla en `SQL`:
 
@@ -306,4 +306,4 @@ El campo se refiere a los datos en la fuente original, que aún no han pasado po
 
 ## **¿Pensaste en mejoras para los estándares definidos?**
 
-Abre un [issue en nuestro Github](https://github.com/basedosdados/mais/labels/docs) o envía un mensaje en [Discord](https://discord.gg/huKWpsVYx4) para conversar :)
+Abre un [issue en nuestro Github](https://github.com/basedosdados/sdk/labels/docs) o envía un mensaje en [Discord](https://discord.gg/huKWpsVYx4) para conversar :)
