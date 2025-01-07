@@ -1,7 +1,7 @@
 v 1
 d 'BASEDOSDADOS': Base dos Dados
 d 
-d The basedosdados package enables access to more than 70 Brazilian databases already cleaned and compatibilized, available in the public datalake BD+ from the Base dos Dados organization. The package consists of 7 commands. The commands give the possibility to list all available datasets from BD+ datalake and downloading or analyzing them directly from Stata. The package aims to provide access to clean, compatible and high-quality public data.
+d The basedosdados package enables access to more than 70 Brazilian databases already cleaned and compatibilized, available in the public datalake BD from the Base dos Dados organization. The package consists of 7 commands. The commands give the possibility to list all available datasets from BD datalake and downloading or analyzing them directly from Stata. The package aims to provide access to clean, compatible and high-quality public data.
 d 
 d Distribution-Date:   20220318
 d License: The Unlicense

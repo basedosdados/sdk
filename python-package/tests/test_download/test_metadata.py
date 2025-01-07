@@ -12,6 +12,9 @@ def test_get_datasets_output():
     out = metadata.get_datasets(dataset_id="", backend=backend)
     assert isinstance(out, dict)
 
+    out = metadata.get_datasets(dataset_id="", backend=backend)
+    assert isinstance(out, dict)
+
 
 def test_get_datasets_output_with_input():
     """

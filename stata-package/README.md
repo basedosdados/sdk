@@ -7,24 +7,25 @@ __Guia__
 4. [Exemplos](#4-exemplos)
     1. [PIB per capita dos municípios brasileiros](#41-PIB-per-capita-dos-municípios-brasileiros)
     2. [Nota média do IDESP 2019](#42-nota-média-do-IDESP-2019)
+5. [Desenvolvimento](#5-desenvolvimento)
 
 # 1. Introdução
 
-O pacote `basedosdados` no Stata possibilita o acesso a [centenas de tabelas tratadas e compatibilizadas](https://basedosdados.org/dataset?resource_type=bdm_table), disponíveis no datalake público BD+ da Base dos Dados. O pacote consiste em 7 comandos. Os comandos dão desde a possibilidade de listar todos os conjuntos de dados disponíveis do BD+ datalake até baixá-los ou analisá-los diretamente do Stata. Importante ressaltar que essa versão inicial ainda é um __wrapper__ do pacote do Python, e, portanto, necessita da execução de alguns passos antes da utilização. 
+O pacote `basedosdados` no Stata possibilita o acesso a [centenas de tabelas tratadas e compatibilizadas](https://basedosdados.org/dataset?resource_type=bdm_table), disponíveis no datalake público BD da Base dos Dados. O pacote consiste em 7 comandos. Os comandos dão desde a possibilidade de listar todos os conjuntos de dados disponíveis do BD datalake até baixá-los ou analisá-los diretamente do Stata. Importante ressaltar que essa versão inicial ainda é um __wrapper__ do pacote do Python, e, portanto, necessita da execução de alguns passos antes da utilização. 
 
 
 # 2. Instalação e requerimentos
 
 A instalação do pacote `basedosdados` no Stata consiste basicamente na execução desses 2 passos: 
 1. Garantir que seu Stata seja a __versão 16+__
-2. Garantir que o Python esteja instalado no seu computador - você pode se guiar pelo nosso Mini Tutorial de Python [aqui](https://github.com/basedosdados/mais/blob/master/stata-package/Minitutorial.md). Nesse tutorial você também vai descobrir como autenticar seu projeto pelo prompt do seu computador (__importante!__).
+2. Garantir que o Python esteja instalado no seu computador - você pode se guiar pelo nosso Mini Tutorial de Python [aqui](https://github.com/basedosdados/sdk/blob/master/stata-package/Minitutorial.md). Nesse tutorial você também vai descobrir como autenticar seu projeto pelo prompt do seu computador (__importante!__).
 
 > <img src="https://raw.githubusercontent.com/haghish/markdoc/master/Resources/images/attention.png" width="20px" height="20px"  align="left" hspace="0" vspace="0"> Caso esteja utilizando os dados da BD pela primeira vez, é necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#antes-de-comecar-crie-o-seu-projeto-no-google-cloud).
 
 Após garantir esses dois requerimentos __obrigatórios__, você pode finalmente instalar o pacote digitando o seguinte comando no seu Stata: 
 
 ```stata
-net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/mais/master/stata-package")
+net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/sdk/master/stata-package")
 ```
 
 # 3. Sintaxe
@@ -35,12 +36,12 @@ O pacote contém 7 comandos, conforme suas funcionalidades descritas abaixo:
 
 | __Comando__               | __Descrição__                                                                  |
 |---------------------------|--------------------------------------------------------------------------------|
-| `bd_download`             | baixa dados da Base dos Dados (BD+).                                           |
-| `bd_read_sql`             | baixa tabelas da BD+ usando consultas específicas.                             |
-| `bd_read_table`           | baixa tabelas da BD+ usando `dataset_id` e `table_id`.                         |
+| `bd_download`             | baixa dados da Base dos Dados (BD).                                           |
+| `bd_read_sql`             | baixa tabelas da BD usando consultas específicas.                             |
+| `bd_read_table`           | baixa tabelas da BD usando `dataset_id` e `table_id`.                         |
 | `bd_list_datasets`        | lista o `dataset_id` dos conjuntos de dados disponíveis em `query_project_id`. |
 | `bd_list_dataset_tables`  | lista `table_id` para tabelas disponíveis no `dataset_id` especificado.        |
-| `bd_get_table_description`| mostra a descrição completa da tabela BD+.                                     |
+| `bd_get_table_description`| mostra a descrição completa da tabela BD.                                     |
 | `bd_get_table_columns`    | mostra os nomes, tipos e descrições das colunas na tabela especificada.        |
 
 Cada comando tem um __help file__ de apoio, bastando abrir o help e seguir as instruções:
@@ -91,7 +92,7 @@ spmap pib_pc using brasilcoor.dta, id(id) name(m2019, replace) cln(5) ocolor(bla
 
 :point_right: Mais sobre fazer mapas no stata [aqui](https://medium.com/the-stata-guide/maps-in-stata-ii-fcb574270269).
 <p align="center">
-    <a href="https://github.com/basedosdados/mais/blob/master/stata-package/blob/main/examples/m2018-1.png">
+    <a href="https://github.com/basedosdados/sdk/blob/master/stata-package/blob/main/examples/m2018-1.png">
     <img src="examples/m2018-1.png" width="500" alt="Base dos Dados Mais">
     </a>
 </p>
@@ -132,7 +133,33 @@ spmap nota_em using brasilcoor.dta, id(id) name(m2019, replace) cln(5) ocolor(bl
 ```
 
 <p align="center">
-    <a href=https://github.com/basedosdados/mais/blob/master/stata-package/blob/main/examples/idesp_mapa.png">
+    <a href=https://github.com/basedosdados/sdk/blob/master/stata-package/blob/main/examples/idesp_mapa.png">
     <img src="examples/idesp_mapa.png" width="500" alt="Base dos Dados Mais">
     </a>
 </p>
+
+# 5. Desenvolvimento
+
+ __Passo 1.__ Clique [aqui](https://www.python.org/downloads/) na opção "Download Python" para baixar o Python. Em seguida, siga as instruções da tela e, principalmente, _não esqueça_ de marcar a opção "add to path": 
+
+<p align="left">
+    <a href="https://github.com/basedosdados/sdk/blob/master/stata-package/blob/main/examples/python1.png">
+    <img src="stata-package/examples/python1.png" width="400" alt="Base dos Dados Mais">
+    </a>
+</p>
+
+__Passo 2.__ Após instalar o Python, abra o menu iniciar, digite "cmd" e abra. Na tela do "Prompt de Comando" que aparecerá, digite `pip install basedosdados -U` e dê enter.
+
+<p align="left">
+    <a href="https://github.com/basedosdados/sdk/blob/master/stata-package/blob/main/examples/prompt.png">
+    <img src="stata-package/examples/prompt.png" width="400" alt="Base dos Dados Mais">
+    </a>
+</p>
+
+__Passo 3.__ Após concluir a instalação do pacote basedosdados, digite `basedosdados reauth` no Prompt de Comando. Copie o link que aparecerá, cole na sua aba de navegação e dê autorização ao google. Em seguida, copie o código gerado, volte e cole na tela do Prompt e dê enter.
+
+> <img src="https://raw.githubusercontent.com/haghish/markdoc/master/Resources/images/attention.png" width="20px" height="20px"  align="left" hspace="0" vspace="0"> Caso esteja utilizando os dados da BD pela primeira vez, é necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#antes-de-comecar-crie-o-seu-projeto-no-google-cloud).
+
+Após finalizar esses 3 passos, já será possível abrir o Stata e começar a usar o pacote. Para saber mais sobre os comandos do pacote, leia esse manual [aqui](https://github.com/basedosdados/sdk/tree/master/stata-package). 
+
+Com a conclusão da configuração do ambiente, você pode criar uma nova branch para desenvolver uma nova feature..

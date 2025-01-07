@@ -148,10 +148,10 @@ A tabela `microdados_vinculos` da RAIS, por exemplo, é uma tabela muito grande 
 #### Exemplo: PNAD Contínua - Código de limpeza
 
 O código de limpeza foi construído em R e [pode ser consultado
-aqui](https://github.com/basedosdados/mais/tree/master/bases/br_ibge_pnadc/code).
+aqui](https://github.com/basedosdados/sdk/tree/master/bases/br_ibge_pnadc/code).
 
 #### Exemplo: Atividade na Câmara Legislativa - Código de download e limpeza
-O código de limpeza foi construído em Python [pode ser consultado aqui](https://github.com/basedosdados/mais/tree/bea9a323afcea8aa1609e9ade2502ca91f88054c/bases/br_camara_atividade_legislativa/code)
+O código de limpeza foi construído em Python [pode ser consultado aqui](https://github.com/basedosdados/sdk/tree/bea9a323afcea8aa1609e9ade2502ca91f88054c/bases/br_camara_atividade_legislativa/code)
 
 
 
@@ -216,7 +216,7 @@ Os dados vão passar por 3 lugares no Google Cloud:
     Os seguintes parâmetros podem ser usados:
 
 
-    - `path` (obrigatório): o caminho completo do arquivo no seu computador, como: `/Users/<seu_usuario>/projetos/basedosdados/mais/bases/[DATASET_ID]/output/microdados.csv`.
+    - `path` (obrigatório): o caminho completo do arquivo no seu computador, como: `/Users/<seu_usuario>/projetos/basedosdados/sdk/bases/[DATASET_ID]/output/microdados.csv`.
 
 
     !!! Tip "Caso seus dados sejam particionados, o caminho deve apontar para a pasta onde estão as partições. No contrário, deve apontar para um arquivo `.csv` (por exemplo, microdados.csv)."

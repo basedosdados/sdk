@@ -5,7 +5,7 @@
 {title:Title}
 
 {phang}
-{bf:bd_download {hline 2}} download tables from Base dos Dados Mais (BD+) ({mansection B bd_download:View complete PDF manual entry}) {p_end}
+{bf:bd_download {hline 2}} download tables from Base dos Dados Mais (BD) ({mansection B bd_download:View complete PDF manual entry}) {p_end}
 
 {marker syntax}{...}
 {title:Syntax}
@@ -36,10 +36,10 @@ already exist and the file should end with the `.csv` extension {p_end}
 {title:Description}
 
 {pstd}
-{cmd:bd_download} download tables from the Base dos Dados Mais (BD+) data lake on {it:BigQuery}.
+{cmd:bd_download} download tables from the Base dos Dados Mais (BD) data lake on {it:BigQuery}.
 
 {pstd} To use {cmd:bd_download} you must have Stata version 16+ and the Python {it:`basedosdados`} package installed and configured. If not, 
-run {it:`pip install basedosdados`} and configure following the instructions at {browse "https://github.com/basedosdados/mais/tree/master/stata-package":https://github.com/basedosdados/mais/tree/master/stata-package}.
+run {it:`pip install basedosdados`} and configure following the instructions at {browse "https://github.com/basedosdados/sdk/tree/master/stata-package":https://github.com/basedosdados/sdk/tree/master/stata-package}.
 
 {pstd} Base dos Dados (BD) is a nonprofit with the mission to make access to high-quality data universal. You can support the project at {browse "https://apoia.se/basedosdados":https://apoia.se/basedosdados}. We also welcome collaboration and 
 suggestions, so feel free to open issues on our Github page {browse "https://github.com/basedosdados/": https://github.com/basedosdados/} or get in touch 

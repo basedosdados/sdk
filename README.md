@@ -1,7 +1,7 @@
 <!-- Header -->
 <p align="center">
   <a href="https://basedosdados.org">
-    <img src="docs/images/bdmais_logo.png" width="340" alt="Base dos Dados">
+    <img src="docs/docs/images/bd_minilogo.png" width="340" alt="Base dos Dados">
   </a>
 </p>
 
@@ -12,10 +12,10 @@
 
 <p align="center">
   <a href="https://github.com/basedosdados/sdk/subscription" target="_blank">
-    <img src="https://img.shields.io/github/watchers/basedosdados/mais.svg?style=social" alt="Watch">
+    <img src="https://img.shields.io/github/watchers/basedosdados/sdk.svg?style=social" alt="Watch">
   </a>
   <a href="https://github.com/basedosdados/sdk/stargazers" target="_blank">
-    <img src="https://img.shields.io/github/stars/basedosdados/mais.svg?style=social" alt="Start">
+    <img src="https://img.shields.io/github/stars/basedosdados/sdk.svg?style=social" alt="Start">
   </a>
   <a href="https://twitter.com/basedosdados" target="_blank">
     <img src="https://img.shields.io/twitter/follow/basedosdados?style=social" alt="Tweet">
@@ -31,7 +31,7 @@
   </a>
 </p>
 
-A Base dos Dados (BD) é um datalake público no Google BigQuery com
+A Base dos Dados é um datalake público no Google BigQuery com
 os principais conjuntos de dados abertos do Brasil.
 Na BD você encontra tabelas tratadas e prontas para uso de forma
 gratuita. Disponibilizamos e mantemos neste projeto pacotes de acesso à
@@ -79,10 +79,18 @@ modelo no menu ao lado conforme a imagem.
 
 ## Usando em Python
 
-
 ### Instale
+
+Com pip:
+
 ```bash
 pip install basedosdados
+```
+
+Com poetry:
+
+```sh
+poetry add basedosdados
 ```
 
 ### Acesse uma tabela
@@ -117,14 +125,6 @@ df = bd.read_sql(query, billing_project_id="<YOUR-PROJECT>")
 ```
 
 > Caso esteja acessando da primeira vez, vão aparecer alguns passos na tela para autenticar seu projeto - basta segui-los!
-
-### Veja todos os datasets disponíveis
-
-```python
-import basedosdados as bd
-
-bd.list_datasets()
-```
 
 ### Defina paramêtros utilizando as configurações do pacote
 
@@ -251,31 +251,6 @@ get_table_description("br_sp_alesp", "deputado")
 > É necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos).
 > Se possível, armazene suas credenciais em um arquivo `dotenv`, em bash o comando é `"billing_project_id=<suas_credenciais_do_projeto>" >> .env`. [Veja aqui como criar um arquivo dotenv](https://towardsdatascience.com/using-dotenv-to-hide-sensitive-information-in-r-8b878fa72020).
 
-## Desenvolvimento
+## Contribua
 
-### Documentação
-
-Para rodar a documentação localmente:
-
-```bash
-python -m venv .sdk # cria ambiente virtual (só rodar da primeira vez)
-. .sdk/bin/activate # ativa ambiente virtual
-pip install --upgrade  -r python-package/requirements-dev.txt # instala dependências
-python python-package/setup.py develop # instala pacote local
-mkdocs serve # cria documentacao em: http://localhost:8000/
-```
-
-Atualize os docs adicionando ou editando os arquivos `.md` em `docs/`.
-
-Para adicionar seu arquivo no sumário da documentação, adicione-o em
-`mkdocs.yml` sob a chave `nav`:
-
-```yaml
-nav:
-  - Home:
-    - Aprenda sobre a BD: index.md
-    - BigQuery: access_data_bq.md
-    - Pacotes: access_data_packages.md
-    - Contribua: colab.md
-    - [Seu novo título]: <seu_arquivo>.md
-```
+Leia nosso [guia de contribuição](./CONTRIBUTING.md)

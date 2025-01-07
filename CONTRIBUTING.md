@@ -1,48 +1,62 @@
-# CONTRIBUTING
+# Contribuindo
 
 O repositório `sdk` contém o código base para os pacotes de **BD** em Python, R e Stata. Neste documento, detalhamos a configuração de ambiente necessária para contribuir em cada um dos nossos pacotes.
 
-## Python
+## Iniciando
 
-Clone o repositório principal:
-
-```sh
-git clone https://github.com/basedosdados/sdk.git
-```
-Entre na pasta local do repositório usando `cd sdk/` e suba o ambiente localmente:
+Faça um fork do repositório e clone. Para mais detalhes veja o tutorial como contribuir para um [projeto no GitHub](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project)
 
 ```sh
-make create-env
-. .sdk/bin/activate
-cd python-package/
-python setup.py develop
+git clone git@github.com:USERNAME/sdk.git
 ```
 
-Após esses passos, seu ambiente estará configurado e você pode criar uma nova branch para desenvolver uma nova feature.
+> [!NOTE]
+> Não esqueça de criar sua branch para fazer alterações
 
-## Stata
+Acesso o guia de contribuição para cada pacote:
 
+- [Python Package](./python-package/README.md)
+- [R Package](./r-package/README.md)
+- [Stata Package](./stata-package/README.md)
 
- __Passo 1.__ Clique [aqui](https://www.python.org/downloads/) na opção "Download Python" para baixar o Python. Em seguida, siga as instruções da tela e, principalmente, _não esqueça_ de marcar a opção "add to path": 
+## Processo de contribuição
 
-<p align="left">
-    <a href="https://github.com/basedosdados/sdk/blob/master/stata-package/blob/main/examples/python1.png">
-    <img src="stata-package/examples/python1.png" width="400" alt="Base dos Dados">
-    </a>
-</p>
+1. Abra uma branch com o nome issue-<X>
+2. Faça as modificações necessárias
+3. Suba o Pull Request
+4. O nome do PR deve seguir o padrão
+   `[infra] <titulo explicativo>`
 
-__Passo 2.__ Após instalar o Python, abra o menu iniciar, digite "cmd" e abra. Na tela do "Prompt de Comando" que aparecerá, digite `pip install basedosdados -U` e dê enter.
+## O que uma modificação precisa ter
 
-<p align="left">
-    <a href="https://github.com/basedosdados/sdk/blob/master/stata-package/blob/main/examples/prompt.png">
-    <img src="stata-package/examples/prompt.png" width="400" alt="Base dos Dados">
-    </a>
-</p>
+- Resolver um problema
+- Lista de modificações efetuadas
+  1. Mudei a função X para fazer Y
+  2. Troquei o nome da variavel Z
+- Referência aos issues atendidos ser possível
+- Documentação e Docstrings
+- Testes
 
-__Passo 3.__ Após concluir a instalação do pacote basedosdados, digite `basedosdados reauth` no Prompt de Comando. Copie o link que aparecerá, cole na sua aba de navegação e dê autorização ao google. Em seguida, copie o código gerado, volte e cole na tela do Prompt e dê enter.
+## Documentação
 
-> <img src="https://raw.githubusercontent.com/haghish/markdoc/master/Resources/images/attention.png" width="20px" height="20px"  align="left" hspace="0" vspace="0"> Caso esteja utilizando os dados da BD pela primeira vez, é necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#antes-de-comecar-crie-o-seu-projeto-no-google-cloud).
+Para rodar a documentação em `docs` localmente você precisa instalar as dependências [Python](./python-package/README.md)
 
-Após finalizar esses 3 passos, já será possível abrir o Stata e começar a usar o pacote. Para saber mais sobre os comandos do pacote, leia esse manual [aqui](https://github.com/basedosdados/sdk/tree/master/stata-package). 
+Acesse a pasta `docs/` na raiz do projeto e execute
 
-Com a conclusão da configuração do ambiente, você pode criar uma nova branch para desenvolver uma nova feature..
+```bash
+mkdocs serve # Acesse http://localhost:8000/
+```
+
+Atualize os docs adicionando ou editando os arquivos `.md` em `docs/`.
+
+Para adicionar seu arquivo no sumário da documentação, adicione-o em `mkdocs.yml` sob a chave `nav`:
+
+```yaml
+nav:
+  - Home:
+      - Aprenda sobre a BD: index.md
+      - BigQuery: access_data_bq.md
+      - Pacotes: access_data_packages.md
+      - Contribua: colab.md
+      - [Seu novo título]: <seu_arquivo>.md
+```
