@@ -72,39 +72,39 @@ class Backend(metaclass=SingletonMeta):
 
         query = """
             query ($first: Int!, $offset: Int!) {
-                allDataset(first: $first, offset: $offset) {
-                	edges {
-      					node {
-      					  slug
-      					  name
-      					  description
-      					  organizations {
-      					    edges {
-      					      node {
-      					        name
-      					      }
-      					    }
-      					  }
-      					  tags {
-      					    edges {
-      					      node {
-      					        name
-      					      }
-      					    }
-      					  }
-      					  themes {
-      					    edges {
-      					      node {
-      					        name
-      					      }
-      					    }
-      					  }
-      					  createdAt
-      					  updatedAt
-  						}
-  					}
-  				    totalCount
+              allDataset(first: $first, offset: $offset) {
+                edges {
+                  node {
+                    slug
+                    name
+                    description
+                    organizations {
+                      edges {
+                        node {
+                          name
+                        }
+                      }
+                    }
+                    tags {
+                      edges {
+                        node {
+                          name
+                        }
+                      }
+                    }
+                    themes {
+                      edges {
+                        node {
+                          name
+                        }
+                      }
+                    }
+                    createdAt
+                    updatedAt
+                  }
                 }
+                totalCount
+              }
             }
         """
         variables = {"first": page_size, "offset": (page - 1) * page_size}

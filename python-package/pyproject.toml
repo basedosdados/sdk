@@ -70,6 +70,9 @@ select = [
     # Pyflakes
     "F"
 ]
+ignore = [
+    "E501"
+]
 
 [tool.pytest.ini_options]
 pythonpath = "."
