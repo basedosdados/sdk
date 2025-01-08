@@ -46,7 +46,10 @@ class Storage(Base):
             # It should fail if there is folder which is not a partition
             try:
                 # check if it fits rule
-                {b.split("=")[0]: b.split("=")[1] for b in partitions.split("/")}
+                {
+                    b.split("=")[0]: b.split("=")[1]
+                    for b in partitions.split("/")
+                }
             except IndexError as e:
                 raise Exception(
                     f"The path {partitions} is not a valid partition"
@@ -54,7 +57,9 @@ class Storage(Base):
 
             return partitions + "/"
 
-        raise Exception(f"Partitions format or type not accepted: {partitions}")
+        raise Exception(
+            f"Partitions format or type not accepted: {partitions}"
+        )
 
     def _build_blob_name(self, filename, mode, partitions=None):
         """
@@ -178,7 +183,8 @@ class Storage(Base):
             paths = [
                 f
                 for f in path.glob("**/*")
-                if f.is_file() and f.suffix in [".csv", ".parquet", "parquet.gzip"]
+                if f.is_file()
+                and f.suffix in [".csv", ".parquet", "parquet.gzip"]
             ]
 
             parts = [
@@ -202,7 +208,9 @@ class Storage(Base):
             else [mode]
         )
         for m in mode:
-            for filepath, part in tqdm(list(zip(paths, parts)), desc="Uploading files"):
+            for filepath, part in tqdm(
+                list(zip(paths, parts)), desc="Uploading files"
+            ):
                 blob_name = self._build_blob_name(filepath.name, m, part)
 
                 blob = self.bucket.blob(blob_name, chunk_size=chunk_size)
@@ -351,7 +359,9 @@ class Storage(Base):
         )
 
         for m in mode:
-            blob = self.bucket.blob(self._build_blob_name(filename, m, partitions))
+            blob = self.bucket.blob(
+                self._build_blob_name(filename, m, partitions)
+            )
 
             if blob.exists() or not blob.exists() and not not_found_ok:
                 blob.delete()
@@ -366,7 +376,9 @@ class Storage(Base):
             action="deleted",
         )
 
-    def delete_table(self, mode="staging", bucket_name=None, not_found_ok=False):
+    def delete_table(
+        self, mode="staging", bucket_name=None, not_found_ok=False
+    ):
         """Deletes a table from storage, sends request in batches.
 
         Args:

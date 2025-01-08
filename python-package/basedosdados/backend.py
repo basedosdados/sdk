@@ -42,7 +42,9 @@ class Backend(metaclass=SingletonMeta):
             graphql_url (str): URL of the GraphQL endpoint.
         """
         self.search_url: str = search_url or constants.BACKEND_SEARCH_URL.value
-        self.graphql_url: str = graphql_url or constants.BACKEND_GRAPHQL_URL.value
+        self.graphql_url: str = (
+            graphql_url or constants.BACKEND_GRAPHQL_URL.value
+        )
         self.graphql_client: "Client" = self._get_client()
 
     def get_datasets(
@@ -115,7 +117,9 @@ class Backend(metaclass=SingletonMeta):
         if extra:
             query = query.replace("$offset)", f"$offset, {extra})")
 
-        return self._execute_query(query, variables, page, page_size).get("allDataset")
+        return self._execute_query(query, variables, page, page_size).get(
+            "allDataset"
+        )
 
     def get_tables(
         self,
@@ -172,7 +176,9 @@ class Backend(metaclass=SingletonMeta):
         if extra:
             query = query.replace("$offset)", f"$offset, {extra})")
 
-        return self._execute_query(query, variables, page, page_size).get("allTable")
+        return self._execute_query(query, variables, page, page_size).get(
+            "allTable"
+        )
 
     def get_columns(
         self,
@@ -228,9 +234,13 @@ class Backend(metaclass=SingletonMeta):
         if extra:
             query = query.replace("$offset)", f"$offset, {extra})")
 
-        return self._execute_query(query, variables, page, page_size).get("allColumn")
+        return self._execute_query(query, variables, page, page_size).get(
+            "allColumn"
+        )
 
-    def search(self, q: str = None, page: int = 1, page_size: int = 10) -> list[dict]:
+    def search(
+        self, q: str = None, page: int = 1, page_size: int = 10
+    ) -> list[dict]:
         """
         Search for datasets, querying all available metadata for the term `q`
 
@@ -300,11 +310,15 @@ class Backend(metaclass=SingletonMeta):
         if dataset_id:
             variables = {"dataset_id": dataset_id}
             response = self._execute_query(query=query, variables=variables)
-            return self._simplify_response(response).get("allDataset")["items"][0]
+            return self._simplify_response(response).get("allDataset")[
+                "items"
+            ][0]
         else:
             return {}
 
-    def get_table_config(self, dataset_id: str, table_id: str) -> Dict[str, Any]:
+    def get_table_config(
+        self, dataset_id: str, table_id: str
+    ) -> Dict[str, Any]:
         """
         Get table configuration.
         Args:
@@ -358,7 +372,9 @@ class Backend(metaclass=SingletonMeta):
         if table_id:
             variables = {"table_id": table_id}
             response = self._execute_query(query=query, variables=variables)
-            return self._simplify_response(response).get("allTable")["items"][0]
+            return self._simplify_response(response).get("allTable")["items"][
+                0
+            ]
         else:
             return {}
 
@@ -417,13 +433,17 @@ class Backend(metaclass=SingletonMeta):
             response = self._execute_query(query=query, variables=variables)
             r = {} if response is None else self._simplify_response(response)
             if r.get("allCloudtable", []) != []:
-                return r.get("allCloudtable")["items"][0].get("table").get("_id")
+                return (
+                    r.get("allCloudtable")["items"][0].get("table").get("_id")
+                )
         msg = f"No table {gcp_table_id} found in {gcp_dataset_id}. Please create in {self.graphql_url}"
         logger.info(msg)
         return None
 
     def _get_client(
-        self, headers: Dict[str, str] = None, fetch_schema_from_transport: bool = False
+        self,
+        headers: Dict[str, str] = None,
+        fetch_schema_from_transport: bool = False,
     ) -> "Client":
         """
         Get a GraphQL client.
@@ -447,7 +467,8 @@ class Backend(metaclass=SingletonMeta):
             url=self.graphql_url, headers=headers, use_json=True
         )
         return Client(
-            transport=transport, fetch_schema_from_transport=fetch_schema_from_transport
+            transport=transport,
+            fetch_schema_from_transport=fetch_schema_from_transport,
         )
 
     def _execute_query(

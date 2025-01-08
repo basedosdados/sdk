@@ -54,8 +54,21 @@ avro = ["pandavro"]
 upload = ["gql", "requests-toolbelt"]
 
 [tool.ruff]
+line-length = 79
 exclude = [
     "tests/outdated"
+]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 20
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F"
 ]
 
 [tool.pytest.ini_options]

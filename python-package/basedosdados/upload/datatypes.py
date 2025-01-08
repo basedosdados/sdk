@@ -91,13 +91,17 @@ class Datatype:
         """
         if self.source_format == "csv":
             _external_config = bigquery.ExternalConfig("CSV")
-            _external_config.options.skip_leading_rows = self.csv_skip_leading_rows
+            _external_config.options.skip_leading_rows = (
+                self.csv_skip_leading_rows
+            )
             _external_config.options.allow_quoted_newlines = True
             _external_config.options.allow_jagged_rows = True
             _external_config.autodetect = False
             _external_config.schema = self.schema
             _external_config.options.field_delimiter = self.csv_delimiter
-            _external_config.options.allow_jagged_rows = self.csv_allow_jagged_rows
+            _external_config.options.allow_jagged_rows = (
+                self.csv_allow_jagged_rows
+            )
         elif self.source_format == "avro":
             _external_config = bigquery.ExternalConfig("AVRO")
         elif self.source_format == "parquet":

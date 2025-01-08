@@ -160,7 +160,9 @@ class Base:
                 return default_return
 
             if res == "n":
-                return self._input_validator(no_question, default_no, with_lower)
+                return self._input_validator(
+                    no_question, default_no, with_lower
+                )
 
             print(f"{res} is not accepted as an awnser. Try y or n.\n")
 
@@ -220,11 +222,17 @@ class Base:
             with open(config_file, "w", encoding="utf-8") as f:
                 f.write(self._decode_env(constants.ENV_CONFIG.value))
                 f.close()
-            with open(credentials_folder / "prod.json", "w", encoding="utf-8") as f:
+            with open(
+                credentials_folder / "prod.json", "w", encoding="utf-8"
+            ) as f:
                 f.write(self._decode_env(constants.ENV_CREDENTIALS_PROD.value))
                 f.close()
-            with open(credentials_folder / "staging.json", "w", encoding="utf-8") as f:
-                f.write(self._decode_env(constants.ENV_CREDENTIALS_STAGING.value))
+            with open(
+                credentials_folder / "staging.json", "w", encoding="utf-8"
+            ) as f:
+                f.write(
+                    self._decode_env(constants.ENV_CREDENTIALS_STAGING.value)
+                )
                 f.close()
 
         if (not config_file.exists()) or (force):
@@ -256,7 +264,8 @@ class Base:
                     default_yn="y",
                     default_return=credentials_path,
                     no_question=(
-                        "\nWhere would you like to save it?\n" "credentials path: "
+                        "\nWhere would you like to save it?\n"
+                        "credentials path: "
                     ),
                     with_lower=False,
                 )
@@ -272,7 +281,9 @@ class Base:
                 "basedosdados-staging",
             )
 
-            self._check_credentials(project_staging, "staging", credentials_path)
+            self._check_credentials(
+                project_staging, "staging", credentials_path
+            )
 
             c_file["gcloud-projects"]["staging"]["credentials_path"] = str(
                 credentials_path / "staging.json"
@@ -330,7 +341,9 @@ class Base:
 
             c_file["api"]["url"] = api_base_url
 
-            config_file.open("w", encoding="utf-8").write(tomlkit.dumps(c_file))
+            config_file.open("w", encoding="utf-8").write(
+                tomlkit.dumps(c_file)
+            )
 
     @staticmethod
     def _config_log(verbose: bool):
@@ -353,7 +366,9 @@ class Base:
         if getenv(constants.ENV_CONFIG.value):
             return tomlkit.parse(self._decode_env(constants.ENV_CONFIG.value))
         return tomlkit.parse(
-            (self.config_path / "config.toml").open("r", encoding="utf-8").read()
+            (self.config_path / "config.toml")
+            .open("r", encoding="utf-8")
+            .read()
         )
 
     @staticmethod
@@ -396,7 +411,9 @@ class Base:
         project_id = self._get_project_id(mode)
 
         return (
-            crm_service.projects().get(projectId=project_id).execute()["projectNumber"]
+            crm_service.projects()
+            .get(projectId=project_id)
+            .execute()["projectNumber"]
         )
 
     def _get_project_iam_policy(
@@ -421,7 +438,9 @@ class Base:
 
     def _set_project_iam_policy(
         self,
-        policy: Dict[str, Union[str, int, List[Dict[str, Union[str, List[str]]]]]],
+        policy: Dict[
+            str, Union[str, int, List[Dict[str, Union[str, List[str]]]]]
+        ],
         mode: str,
     ):
         """

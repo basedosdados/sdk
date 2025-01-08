@@ -7,7 +7,9 @@ from typing import List
 import pandas as pd
 
 
-def to_partitions(data: pd.DataFrame, partition_columns: List[str], savepath: str):
+def to_partitions(
+    data: pd.DataFrame, partition_columns: List[str], savepath: str
+):
     """Save data in to hive patitions schema, given a dataframe and a list of partition columns.
     Args:
         data (pandas.core.frame.DataFrame): Dataframe to be partitioned.
@@ -88,5 +90,6 @@ def break_file(filepath: str, columns: list, chunksize: int = 1000000) -> None:
             os.makedirs(subfolder)
         # save chunk
         chunk.to_csv(
-            os.path.join(subfolder, f'{filename.split(".")[0]}_{i}.csv'), index=False
+            os.path.join(subfolder, f'{filename.split(".")[0]}_{i}.csv'),
+            index=False,
         )

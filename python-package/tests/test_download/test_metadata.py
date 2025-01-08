@@ -92,7 +92,9 @@ def test_get_columns_output_with_input():
 
     backend = Backend()
 
-    out = metadata.get_columns(columns_name="microdados_antigos", backend=backend)
+    out = metadata.get_columns(
+        columns_name="microdados_antigos", backend=backend
+    )
     ## out: {'items': [], 'page': 1, 'page_size': 10, 'page_total': 0}
     assert isinstance(out, dict)
     assert len(out) > 0
