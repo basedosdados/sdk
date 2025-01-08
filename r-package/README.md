@@ -2,14 +2,14 @@
 ### Desenvolvimento via GitHub
 
 Tenha certeza que você deseja colaborar! Às vezes, o que você gostaria de melhorar já foi observado ou já está em processo de manutenção. 
-Verifique sempre as issues [abertas](https://github.com/basedosdados/mais/labels/R) e [fechadas](https://github.com/basedosdados/mais/issues?q=label%3AR+is%3Aclosed) sobre o pacote R. Se você deseja contribuir com o código no pacote .R, é necessário seguir os seguintes passos: 
+Verifique sempre as issues [abertas](https://github.com/basedosdados/sdk/labels/R) e [fechadas](https://github.com/basedosdados/sdk/issues?q=label%3AR+is%3Aclosed) sobre o pacote R. Se você deseja contribuir com o código no pacote .R, é necessário seguir os seguintes passos: 
 
 ### Propondo Mudanças
-Abra uma Issue no [repositório](https://github.com/basedosdados/mais/issues) `mais` demonstrando para a equipe a existência de um bug, a necessidade de implementação de uma função nova ou até mesmo a melhoria plena de um processo ou função que já existe.
+Abra uma Issue no [repositório](https://github.com/basedosdados/sdk/issues) `sdk` demonstrando para a equipe a existência de um bug, a necessidade de implementação de uma função nova ou até mesmo a melhoria plena de um processo ou função que já existe.
 No caso de bugs, por favor, preencha a issue com um exemplo reprodutível [reprex](https://github.com/tidyverse/reprex).
 
 ### Fork o pacote e clone em sua máquina
-`usethis::create_from_github("https://github.com/basedosdados/mais/tree/master/r-package", fork = TRUE)`
+`usethis::create_from_github("https://github.com/basedosdados/sdk/tree/master/r-package", fork = TRUE)`
 
 ### Instale as dependências de desenvolvimento 
 Instale as dependências de desenvolvimento com o comando `devtools::install_dev_deps()` e posteriormente rode `devtools::check()`. Tenha certeza que o pacote passou no `devtools::check()`. Caso não passe, é uma boa ideia nos contactar via [Discord](https://discord.com/invite/huKWpsVYx4) ou via [site (https://basedosdados.org/contato).

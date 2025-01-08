@@ -37,10 +37,10 @@ Converse conosco no bate-papo da infra no Discord. Caso não tenha uma sugestão
 
 ## 2. Escreva sua consulta
 
-Faça um fork do repositório da [Base dos Dados](https://github.com/basedosdados/mais/tree/master).
+Faça um fork do repositório da [Base dos Dados+](https://github.com/basedosdados/sdk/tree/master).
 Em seguida adicione novas consultas e suas respectivas funções de execução nos arquivos
-[checks.yaml](https://github.com/basedosdados/mais/blob/master/.github/workflows/data-check/checks.yaml)
-e [test_data.py](https://github.com/basedosdados/mais/blob/master/.github/workflows/data-check/test_data.py).
+[checks.yaml](https://github.com/basedosdados/sdk/blob/master/.github/workflows/data-check/checks.yaml)
+e [test_data.py](https://github.com/basedosdados/sdk/blob/master/.github/workflows/data-check/test_data.py).
 
 As consultas são escritas em um arquivo YAML com `Jinja` e SQL, da forma:
 
@@ -66,7 +66,7 @@ Não se assuste caso não conheça algo da sintaxe acima, podemos lhe ajudar dur
 o processo. Note que os valores entre chaves são variáveis contidas em arquivos
 `table_config.yaml`, que contém metadados das tabelas. Logo a escrita de consulta
 é limitada pelos metadados existentes. Recomendamos consultar estes arquivos
-no diretório das [bases](https://github.com/basedosdados/mais/tree/master/bases).
+no diretório das [bases](https://github.com/basedosdados/sdk/tree/master/bases).
 
 <!----------------------------------------------------------------------------->
 
