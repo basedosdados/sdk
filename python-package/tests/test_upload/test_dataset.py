@@ -1,5 +1,3 @@
-import pytest
-import google.api_core.exceptions as google_exceptions
 from basedosdados.upload.dataset import Dataset
 
 def test_exists():
