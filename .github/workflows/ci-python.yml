@@ -3,8 +3,14 @@ name: Test Python package
 on:
   push:
     branches: [master, v2.0.0]
+    paths:
+      - "python-package/**"
+      - ".github/workflows/ci-python.yml"
   pull_request:
     branches: [master, v2.0.0]
+    paths:
+      - "python-package/**"
+      - ".github/workflows/ci-python.yml"
 
 jobs:
   build:
@@ -29,6 +35,10 @@ jobs:
       # https://github.com/python-poetry/poetry/issues/2117
       - name: Set Poetry environment
         run: poetry env use '${{ steps.python.outputs.python-path }}'
+        working-directory: python-package
+
+      - name: Poetry check
+        run: poetry check
         working-directory: python-package
 
       - name: Install package
