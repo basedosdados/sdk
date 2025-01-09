@@ -54,6 +54,31 @@ poetry install --with dev --all-extras --no-root
 - Documentação e Docstrings
 - Testes
 
+## Testes
+
+Após fazer as alterações execute os testes e verifique se tudo passou
+
+> [!NOTE]
+> Você deve ter as credencias configuradas (conta serviço do Google Cloud)
+
+```sh
+poetry run pytest
+```
+
+## Linter e Formatação
+
+Verifique se o linter e/ou o formatador reporta algum erro
+
+```sh
+poetry run ruff check .
+```
+
+Para formatar os arquivos:
+
+```sh
+poetry run ruff format .
+```
+
 ## Versionamento
 
 **Para publicar uma nova versão do pacote é preciso seguir os seguintes passos:**
