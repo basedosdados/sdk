@@ -30,7 +30,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install poetry
-        run: pipx install poetry
+        run: pipx install "poetry<2"
 
       # https://github.com/python-poetry/poetry/issues/2117
       - name: Set Poetry environment
