@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+         <loc>None.</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/"/>
+         
+    </url>
+    <url>
+         <loc>Noneaccess_data_bq/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/access_data_bq/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/access_data_bq/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/access_data_bq/"/>
+         
+    </url>
+    <url>
+         <loc>Noneaccess_data_packages/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/access_data_packages/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/access_data_packages/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/access_data_packages/"/>
+         
+    </url>
+    <url>
+         <loc>Noneapi_reference_python/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/api_reference_python/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/api_reference_python/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/api_reference_python/"/>
+         
+    </url>
+    <url>
+         <loc>Noneapi_reference_r/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/api_reference_r/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/api_reference_r/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/api_reference_r/"/>
+         
+    </url>
+    <url>
+         <loc>Noneapi_reference_stata/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/api_reference_stata/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/api_reference_stata/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/api_reference_stata/"/>
+         
+    </url>
+    <url>
+         <loc>Nonecolab_checks/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/colab_checks/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/colab_checks/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/colab_checks/"/>
+         
+    </url>
+    <url>
+         <loc>Nonecolab_data/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/colab_data/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/colab_data/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/colab_data/"/>
+         
+    </url>
+    <url>
+         <loc>Nonecolab_infrastructure/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/colab_infrastructure/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/colab_infrastructure/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/colab_infrastructure/"/>
+         
+    </url>
+    <url>
+         <loc>Nonestyle_data/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/style_data/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/style_data/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/style_data/"/>
+         
+    </url>
+    <url>
+         <loc>Nonetutorial_join_tables/</loc>
+         <lastmod>2025-01-09</lastmod>
+         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="pt" href="Nonept/tutorial_join_tables/"/>
+         <xhtml:link rel="alternate" hreflang="en" href="Noneen/tutorial_join_tables/"/>
+         <xhtml:link rel="alternate" hreflang="es" href="Nonees/tutorial_join_tables/"/>
+         
+    </url>
+</urlset>
