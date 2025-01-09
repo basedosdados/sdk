@@ -34,8 +34,8 @@ Explicamos con más detalles el funcionamiento de este sistema [en el blog](http
 ### ¿Cómo contribuir?
 
 - Mejorando la documentación del sistema aquí :)
-- [Creando verificaciones automáticas de calidad de datos y metadatos (en Python)](https://github.com/basedosdados/mais/issues/376)
-- [Creando nuevos issues y sugerencias de mejoras](https://github.com/basedosdados/mais/issues/new/choose)
+- [Creando verificaciones automáticas de calidad de datos y metadatos (en Python)](https://github.com/basedosdados/sdk/issues/376)
+- [Creando nuevos issues y sugerencias de mejoras](https://github.com/basedosdados/sdk/issues/new/choose)
 
 ## Paquetes de acceso
 
@@ -45,9 +45,9 @@ más.
 
 ### ¿Cómo contribuir?
 
-- [Explora los issues del paquete Python](https://github.com/basedosdados/mais/labels/python)
-- [Explora los issues del paquete R](https://github.com/basedosdados/mais/labels/R)
-- [Ayuda a desarrollar el paquete en Stata](https://github.com/basedosdados/mais/pull/754)
+- [Explora los issues del paquete Python](https://github.com/basedosdados/sdk/labels/python)
+- [Explora los issues del paquete R](https://github.com/basedosdados/sdk/labels/R)
+- [Ayuda a desarrollar el paquete en Stata](https://github.com/basedosdados/sdk/pull/754)
 
 ## Sitio web
 

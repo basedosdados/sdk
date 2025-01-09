@@ -4,7 +4,7 @@ A missão da Base dos Dados é universalizar o uso de dados de qualidade
 no Brasil e no mundo. Para isso, criamos uma ferramenta que te permite **acessar
 recursos importantes de diversos conjuntos de dados públicos**, como:
 
-- **Tabelas tratadas**: Tabelas completas, já tratadas e prontas
+- **Tabelas tratadas BD**: Tabelas completas, já tratadas e prontas
   para análise, disponíveis no nosso datalake público.
 
 - **Dados originais**: Links com informações úteis para explorar mais

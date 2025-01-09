@@ -37,10 +37,10 @@ Conversa con nosotros en el chat de infraestructura en Discord. Si no tienes una
 
 ## 2. Escribe tu consulta
 
-Haz un fork del repositorio de [Base de los Datos](https://github.com/basedosdados/mais/tree/master).
+Haz un fork del repositorio de [Base de los Datos](https://github.com/basedosdados/sdk/tree/master).
 Luego agrega nuevas consultas y sus respectivas funciones de ejecución en los archivos
-[checks.yaml](https://github.com/basedosdados/mais/blob/master/.github/workflows/data-check/checks.yaml)
-y [test_data.py](https://github.com/basedosdados/mais/blob/master/.github/workflows/data-check/test_data.py).
+[checks.yaml](https://github.com/basedosdados/sdk/blob/master/.github/workflows/data-check/checks.yaml)
+y [test_data.py](https://github.com/basedosdados/sdk/blob/master/.github/workflows/data-check/test_data.py).
 
 Las consultas se escriben en un archivo YAML con `Jinja` y SQL, de la siguiente forma:
 
@@ -66,7 +66,7 @@ No te asustes si no conoces algo de la sintaxis anterior, podemos ayudarte duran
 el proceso. Ten en cuenta que los valores entre llaves son variables contenidas en archivos
 `table_config.yaml`, que contienen metadatos de las tablas. Por lo tanto, la escritura de consultas
 está limitada por los metadatos existentes. Recomendamos consultar estos archivos
-en el directorio de las [bases](https://github.com/basedosdados/mais/tree/master/bases).
+en el directorio de las [bases](https://github.com/basedosdados/sdk/tree/master/bases).
 
 <!----------------------------------------------------------------------------->
 

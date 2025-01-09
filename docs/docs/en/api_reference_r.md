@@ -43,4 +43,4 @@ Another common error is related to the use of the `basedosdados::bdplyr` functio
 You can check your `dbplyr` version by running `utils::packageVersion("dbplyr")` in R. If it's higher than version 2.1.1, you need to downgrade to the correct version. To do this, you can run `devtools::install_version("dbplyr", version = "2.1.1", repos = "http://cran.us.r-project.org")`.
 
 ### Other errors
-If errors persist, you can open an issue on our Github by clicking [here](https://github.com/basedosdados/mais/issues). You can also visit the issues that have already been resolved and are tagged with the `R` label on our Github [here](https://github.com/basedosdados/mais/issues?q=is%3Aissue+is%3Aclosed).
+If errors persist, you can open an issue on our Github by clicking [here](https://github.com/basedosdados/sdk/issues). You can also visit the issues that have already been resolved and are tagged with the `R` label on our Github [here](https://github.com/basedosdados/sdk/issues?q=is%3Aissue+is%3Aclosed).

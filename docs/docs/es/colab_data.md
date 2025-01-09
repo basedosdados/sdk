@@ -147,10 +147,10 @@ La tabla `microdados_vinculos` de RAIS, por ejemplo, es una tabla muy grande (+2
 #### Ejemplo: PNAD Continua - Código de limpieza
 
 El código de limpieza fue construido en R y [puede ser consultado
-aquí](https://github.com/basedosdados/mais/tree/master/bases/br_ibge_pnadc/code).
+aquí](https://github.com/basedosdados/sdk/tree/master/bases/br_ibge_pnadc/code).
 
 #### Ejemplo: Actividad en la Cámara Legislativa - Código de descarga y limpieza
-El código de limpieza fue construido en Python [puede ser consultado aquí](https://github.com/basedosdados/mais/tree/bea9a323afcea8aa1609e9ade2502ca91f88054c/bases/br_camara_atividade_legislativa/code)
+El código de limpieza fue construido en Python [puede ser consultado aquí](https://github.com/basedosdados/sdk/tree/bea9a323afcea8aa1609e9ade2502ca91f88054c/bases/br_camara_atividade_legislativa/code)
 
 ### 5. (Si es necesario) Organizar archivos auxiliares
 
@@ -214,7 +214,7 @@ Los datos pasarán por 3 lugares en Google Cloud:
     Los siguientes parámetros pueden ser usados:
 
 
-    - `path` (obligatorio): la ruta completa del archivo en tu computadora, como: `/Users/<tu_usuario>/proyectos/basedosdados/mais/bases/[DATASET_ID]/output/microdados.csv`.
+    - `path` (obligatorio): la ruta completa del archivo en tu computadora, como: `/Users/<tu_usuario>/proyectos/basedosdados/sdk/bases/[DATASET_ID]/output/microdados.csv`.
 
 
     !!! Tip "Si tus datos están particionados, la ruta debe apuntar a la carpeta donde están las particiones. En caso contrario, debe apuntar a un archivo `.csv` (por ejemplo, microdados.csv)."

@@ -47,4 +47,4 @@ Outro erro comum está relacionado ao uso da função `basedosdados::bdplyr`. No
 Você pode checar a sua versão do `dbplyr` rodando `utils::packageVersion("dbplyr")` no seu R. Caso ela seja superior à versão 2.1.1, você precisa dar um _downgrade_ para a versão correta. Para isso, você pode rodar `devtools::install_version("dbplyr", version = "2.1.1", repos = "http://cran.us.r-project.org")`.
 
 ### Outros erros
-Caso os erros persistam, você pode abrir uma _issue_ no nosso Github clicando [aqui](https://github.com/basedosdados/mais/issues). Você também visitar as _issues_ que já foram resolvidas e estão atribuídas com o a etiqueta `R` em nosso Github [aqui](https://github.com/basedosdados/mais/issues?q=is%3Aissue+is%3Aclosed).
+Caso os erros persistam, você pode abrir uma _issue_ no nosso Github clicando [aqui](https://github.com/basedosdados/sdk/issues). Você também visitar as _issues_ que já foram resolvidas e estão atribuídas com o a etiqueta `R` em nosso Github [aqui](https://github.com/basedosdados/sdk/issues?q=is%3Aissue+is%3Aclosed).
