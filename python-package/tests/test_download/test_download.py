@@ -13,7 +13,6 @@ from basedosdados import download, read_sql, read_table
 from basedosdados.exceptions import (
     BaseDosDadosException,
     BaseDosDadosInvalidProjectIDException,
-    BaseDosDadosAccessDeniedException,
 )
 
 TEST_PROJECT_ID = "basedosdados-dev"
@@ -39,7 +38,8 @@ def test_download_by_query():
 
 def test_download_by_table():
     """
-    Test for the `download` function when the table and dataset ids are provided.
+    Test for the `download` function when the table and dataset ids are
+    provided.
     """
 
     download(
@@ -57,7 +57,8 @@ def test_download_by_table():
 @pytest.mark.skip(reason="Takes long time to run. Better run isolated.")
 def test_download_large_file():
     """
-    Test for the `download` function for a large file when the query is provided.
+    Test for the `download` function for a large file when the query is
+    provided.
     """
 
     download(
@@ -72,7 +73,8 @@ def test_download_large_file():
 
 def test_download_no_query_or_table():
     """
-    Test if the `download` function raises an error when neither the query nor the table are provided.
+    Test if the `download` function raises an error when neither the query nor
+    the table are provided.
     """
 
     with pytest.raises(BaseDosDadosException):
@@ -99,7 +101,8 @@ def test_read_sql():
 
 def test_read_sql_invalid_billing_project_id():
     """
-    Test if the `read_sql` function raises an error when the billing project id is not valid.
+    Test if the `read_sql` function raises an error when the billing project
+    id is not valid.
     """
 
     pattern = r"You are using an invalid `billing_project_id`"
@@ -112,10 +115,13 @@ def test_read_sql_invalid_billing_project_id():
         )
 
 
-@pytest.mark.skip(reason="TODO: Refactor the exceptions that are thrown in read_sql")
+@pytest.mark.skip(
+    reason="TODO: Refactor the exceptions that are thrown in read_sql"
+)
 def test_read_sql_inexistent_project():
     """
-    Test if the `read_sql` function raises an error when the billing project id is not valid.
+    Test if the `read_sql` function raises an error when the billing project id
+    is not valid.
     """
 
     # this is the exception throw BaseDosDadosAccessDeniedException
@@ -134,7 +140,8 @@ def test_read_sql_inexistent_project():
 
 def test_read_sql_inexistent_dataset():
     """
-    Test if the `read_sql` function raises an error when the dataset id is not valid.
+    Test if the `read_sql` function raises an error when the dataset id is not
+    valid.
     """
 
     with pytest.raises(GenericGBQException) as excinfo:
@@ -149,7 +156,8 @@ def test_read_sql_inexistent_dataset():
 
 def test_read_sql_inexistent_table():
     """
-    Test if the `read_sql` function raises an error when the table id is not valid.
+    Test if the `read_sql` function raises an error when the table id is not
+    valid.
     """
 
     with pytest.raises(GenericGBQException) as excinfo:
@@ -164,7 +172,8 @@ def test_read_sql_inexistent_table():
 
 def test_read_sql_syntax_error():
     """
-    Test if the `read_sql` function raises an error when the query is not valid.
+    Test if the `read_sql` function raises an error when the query is not
+    valid.
     """
 
     with pytest.raises(GenericGBQException) as excinfo:
@@ -179,7 +188,8 @@ def test_read_sql_syntax_error():
 
 def test_read_sql_out_of_bound_date():
     """
-    Test if the `read_sql` function raises an error when the date is out of bound.
+    Test if the `read_sql` function raises an error when the date is out of
+    bound.
     """
 
     read_sql(

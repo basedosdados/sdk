@@ -58,8 +58,12 @@ def get_datasets(
     result = backend.get_datasets(dataset_id, dataset_name, page, page_size)
     for item in result.get("items", []) or []:
         item["organization"] = item.get("organization", {}).get("name")
-        item["tags"] = [i.get("name") for i in item.get("tags", {}).get("items")]
-        item["themes"] = [i.get("name") for i in item.get("themes", {}).get("items")]
+        item["tags"] = [
+            i.get("name") for i in item.get("tags", {}).get("items")
+        ]
+        item["themes"] = [
+            i.get("name") for i in item.get("themes", {}).get("items")
+        ]
     return result
 
 
@@ -90,7 +94,9 @@ def get_tables(
         dict: List of tables.
     """
 
-    return backend.get_tables(dataset_id, table_id, table_name, page, page_size)
+    return backend.get_tables(
+        dataset_id, table_id, table_name, page, page_size
+    )
 
 
 @check_input
@@ -120,7 +126,9 @@ def get_columns(
         dict: List of tables.
     """
 
-    result = backend.get_columns(table_id, column_id, columns_name, page, page_size)
+    result = backend.get_columns(
+        table_id, column_id, columns_name, page, page_size
+    )
     for item in result.get("items", []) or []:
         item["bigquery_type"] = item.pop("bigqueryType", {}).get("name")
     return result

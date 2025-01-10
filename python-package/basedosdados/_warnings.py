@@ -24,7 +24,9 @@ def get_latest_version_number():
         return None
 
 
-def compare_version_numbers(versionA: str, versionB: str) -> Tuple[int, str, str]:
+def compare_version_numbers(
+    versionA: str, versionB: str
+) -> Tuple[int, str, str]:
     """
     Compares two version numbers and returns the difference between them.
 

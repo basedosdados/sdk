@@ -60,7 +60,8 @@ class Dataset(Base):
             try:
                 description = self.dataset_config.get("descriptionPt", "")
                 labels = {
-                    tag.get("namePt"): True for tag in self.dataset_config.get("tags")
+                    tag.get("namePt"): True
+                    for tag in self.dataset_config.get("tags")
                 }
             except BaseException:
                 logger.warning(
@@ -142,7 +143,11 @@ class Dataset(Base):
         return bool(ref)
 
     def create(
-        self, mode="all", if_exists="raise", dataset_is_public=True, location=None
+        self,
+        mode="all",
+        if_exists="raise",
+        dataset_is_public=True,
+        location=None,
     ):
         """Creates BigQuery datasets given `dataset_id`.
 
@@ -189,7 +194,9 @@ class Dataset(Base):
                     dataset_obj = self._setup_dataset_object(
                         dataset_id=m["id"], location=location, mode=m["mode"]
                     )
-                    m["client"].create_dataset(dataset_obj)  # Make an API request.
+                    m["client"].create_dataset(
+                        dataset_obj
+                    )  # Make an API request.
                     logger.success(
                         " {object} {object_id}_{mode} was {action}!",
                         object_id=self.dataset_id,
@@ -198,11 +205,15 @@ class Dataset(Base):
                         action="created",
                     )
                     # Make prod dataset public
-                    self.publicize(dataset_is_public=dataset_is_public, mode=m["mode"])
+                    self.publicize(
+                        dataset_is_public=dataset_is_public, mode=m["mode"]
+                    )
             except Conflict as e:
                 if if_exists == "pass":
                     continue
-                raise Conflict(f"Dataset {self.dataset_id} already exists") from e
+                raise Conflict(
+                    f"Dataset {self.dataset_id} already exists"
+                ) from e
 
     def delete(self, mode="all"):
         """Deletes dataset in BigQuery. Toogle mode to choose which dataset to delete.
@@ -212,7 +223,9 @@ class Dataset(Base):
         """
 
         for m in self._loop_modes(mode):
-            m["client"].delete_dataset(m["id"], delete_contents=True, not_found_ok=True)
+            m["client"].delete_dataset(
+                m["id"], delete_contents=True, not_found_ok=True
+            )
             logger.info(
                 " {object} {object_id}_{mode} was {action}!",
                 object_id=self.dataset_id,
@@ -236,7 +249,9 @@ class Dataset(Base):
             # Raises google.api_core.exceptions.Conflict if the Dataset already
             # exists within the project.
             m["client"].update_dataset(
-                self._setup_dataset_object(m["id"], location=location, mode=m["mode"]),
+                self._setup_dataset_object(
+                    m["id"], location=location, mode=m["mode"]
+                ),
                 fields=["description"],
             )  # Make an API request.
 

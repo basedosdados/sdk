@@ -158,7 +158,9 @@ def test_get_table_id_from_name():
     """
     backend = Backend()
 
-    out = backend._get_table_id_from_name("br_me_rais", "microdados_estabelecimentos")
+    out = backend._get_table_id_from_name(
+        "br_me_rais", "microdados_estabelecimentos"
+    )
     assert isinstance(out, str)
     assert len(out) > 35
     assert out == "86b69f96-0bfe-45da-833b-6edc9a0af213"

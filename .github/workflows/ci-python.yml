@@ -3,8 +3,14 @@ name: Test Python package
 on:
   push:
     branches: [master, v2.0.0]
+    paths:
+      - "python-package/**"
+      - ".github/workflows/ci-python.yml"
   pull_request:
     branches: [master, v2.0.0]
+    paths:
+      - "python-package/**"
+      - ".github/workflows/ci-python.yml"
 
 jobs:
   build:
@@ -31,6 +37,10 @@ jobs:
         run: poetry env use '${{ steps.python.outputs.python-path }}'
         working-directory: python-package
 
+      - name: Poetry check
+        run: poetry check
+        working-directory: python-package
+
       - name: Install package
         run: poetry install
         working-directory: python-package
@@ -39,8 +49,8 @@ jobs:
         run: poetry install --with dev --all-extras --no-root
         working-directory: python-package
 
-      - name: Format check
-        run: poetry run ruff format --check .
+      - name: Ruff check
+        run: poetry run ruff check .
         working-directory: python-package
 
       - name: Setup config

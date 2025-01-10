@@ -54,8 +54,20 @@ avro = ["pandavro"]
 upload = ["gql", "requests-toolbelt"]
 
 [tool.ruff]
+line-length = 79
 exclude = [
     "tests/outdated"
+]
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F"
+]
+ignore = [
+    "E501"
 ]
 
 [tool.pytest.ini_options]

@@ -56,7 +56,9 @@ class Connection(Base):
         Returns connection object.
         """
         client = self.client[f"bigquery_connection_{self._mode}"]
-        request = GetConnectionRequest(name=f"{self._parent}/connections/{self._name}")
+        request = GetConnectionRequest(
+            name=f"{self._parent}/connections/{self._name}"
+        )
         try:
             return client.get_connection(request=request)
         except google.api_core.exceptions.NotFound:
@@ -114,9 +116,13 @@ class Connection(Base):
                 mode=self._mode,
             )
         except Exception as e:
-            error_message = 'Failed to grant "roles/storage.objectViewer" role to '
+            error_message = (
+                'Failed to grant "roles/storage.objectViewer" role to '
+            )
             error_message += f"service account {self.service_account} "
-            error_message += f"for project {self._project}. Maybe you don't have "
+            error_message += (
+                f"for project {self._project}. Maybe you don't have "
+            )
             error_message += "permissions to grant roles?"
             raise Exception(error_message) from e
 
@@ -131,9 +137,13 @@ class Connection(Base):
                 mode=self._mode,
             )
         except Exception as e:
-            error_message = 'Failed to revoke "roles/storage.objectViewer" role from '
+            error_message = (
+                'Failed to revoke "roles/storage.objectViewer" role from '
+            )
             error_message += f"service account {self.service_account} "
-            error_message += f"for project {self._project}. Maybe you don't have "
+            error_message += (
+                f"for project {self._project}. Maybe you don't have "
+            )
             error_message += "permissions to revoke roles?"
             raise Exception(error_message) from e
 

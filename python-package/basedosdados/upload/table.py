@@ -54,7 +54,9 @@ class Table(Base):
         Get table object from BigQuery
         """
 
-        return self.client[f"bigquery_{mode}"].get_table(self.table_full_name[mode])
+        return self.client[f"bigquery_{mode}"].get_table(
+            self.table_full_name[mode]
+        )
 
     def _is_partitioned(
         self, data_sample_path=None, source_format=None, csv_delimiter=None
@@ -113,7 +115,9 @@ class Table(Base):
             mode="staging",
         )
 
-        return self._load_schema_from_json(columns=table_columns.get("columns"))
+        return self._load_schema_from_json(
+            columns=table_columns.get("columns")
+        )
 
     def _load_schema_from_bq(self, mode="staging"):
         """Load schema from table config
@@ -123,7 +127,9 @@ class Table(Base):
 
         """
         table_columns = self._get_columns_from_bq()
-        columns = table_columns.get("partition_columns") + table_columns.get("columns")
+        columns = table_columns.get("partition_columns") + table_columns.get(
+            "columns"
+        )
         return self._load_schema_from_json(columns=columns)
 
     def _load_schema_from_api(self, mode="staging"):
@@ -141,7 +147,9 @@ class Table(Base):
             )
 
         table_columns = self._get_columns_metadata_from_api()
-        columns = table_columns.get("partition_columns") + table_columns.get("columns")
+        columns = table_columns.get("partition_columns") + table_columns.get(
+            "columns"
+        )
 
         return self._load_schema_from_json(columns=columns)
 
@@ -206,7 +214,9 @@ class Table(Base):
         Get columns and partition columns from API.
         """
         table_columns = self.table_config.get("columns", {})
-        columns = [col for col in table_columns if col.get("isPartition", {}) is False]
+        columns = [
+            col for col in table_columns if col.get("isPartition", {}) is False
+        ]
 
         partition_columns = [
             col for col in table_columns if col.get("isPartition", {}) is True
@@ -350,7 +360,9 @@ class Table(Base):
         for col in columns:
             name = col.get("name")
             bigquery_type = (
-                "STRING" if col.get("type") is None else col.get("type").upper()
+                "STRING"
+                if col.get("type") is None
+                else col.get("type").upper()
             )
 
             publish_txt += f"SAFE_CAST({name} AS {bigquery_type}) {name},\n"
@@ -359,9 +371,7 @@ class Table(Base):
 
         # add from statement
         project_id_staging = self.client["bigquery_staging"].project
-        publish_txt += (
-            f"FROM {project_id_staging}.{self.dataset_id}_staging.{self.table_id} AS t"
-        )
+        publish_txt += f"FROM {project_id_staging}.{self.dataset_id}_staging.{self.table_id} AS t"
 
         return publish_txt
 
@@ -380,9 +390,14 @@ class Table(Base):
         return bool(ref)
 
     def _get_biglake_connection(
-        self, set_biglake_connection_permissions=True, location=None, mode="staging"
+        self,
+        set_biglake_connection_permissions=True,
+        location=None,
+        mode="staging",
     ):
-        connection = Connection(name="biglake", location=location, mode="staging")
+        connection = Connection(
+            name="biglake", location=location, mode="staging"
+        )
         if not connection.exists:
             try:
                 logger.info("Creating BigLake connection...")
@@ -408,7 +423,9 @@ class Table(Base):
                 ) from exc
         if set_biglake_connection_permissions:
             try:
-                logger.info("Setting permissions for BigLake service account...")
+                logger.info(
+                    "Setting permissions for BigLake service account..."
+                )
                 connection.set_biglake_permissions()
                 logger.success("Permissions set successfully!")
             except google.api_core.exceptions.Forbidden as exc:
@@ -544,7 +561,8 @@ class Table(Base):
         if path is None:
             # Look if table data already exists at Storage
             data = self.client["storage_staging"].list_blobs(
-                self.bucket_name, prefix=f"staging/{self.dataset_id}/{self.table_id}"
+                self.bucket_name,
+                prefix=f"staging/{self.dataset_id}/{self.table_id}",
             )
 
             # Raise: Cannot create table without external data
@@ -617,7 +635,9 @@ class Table(Base):
                 source_format=source_format,
                 csv_delimiter=csv_delimiter,
             ),
-            biglake_connection_id=biglake_connection_id if biglake_table else None,
+            biglake_connection_id=biglake_connection_id
+            if biglake_table
+            else None,
         ).external_config
 
         # When using BigLake tables, schema must be provided to the `Table` object
@@ -711,7 +731,9 @@ class Table(Base):
             action="updated",
         )
 
-    def publish(self, if_exists="raise", custon_publish_sql=None, custom_schema=None):
+    def publish(
+        self, if_exists="raise", custon_publish_sql=None, custom_schema=None
+    ):
         """Creates BigQuery table at production dataset.
 
         Table should be located at `<dataset_id>.<table_id>`.

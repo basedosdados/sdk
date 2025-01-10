@@ -74,9 +74,11 @@ def read_sql(
 
     try:
         # Set a two hours timeout
-        bigquery_storage_v1.client.BigQueryReadClient.read_rows = partialmethod(
-            bigquery_storage_v1.client.BigQueryReadClient.read_rows,
-            timeout=3600 * 2,
+        bigquery_storage_v1.client.BigQueryReadClient.read_rows = (
+            partialmethod(
+                bigquery_storage_v1.client.BigQueryReadClient.read_rows,
+                timeout=3600 * 2,
+            )
         )
 
         return read_gbq(
@@ -99,7 +101,9 @@ def read_sql(
 
     except (OSError, ValueError) as e:
         no_billing_id = "Could not determine project ID" in str(e)
-        no_billing_id |= "reading from stdin while output is captured" in str(e)
+        no_billing_id |= "reading from stdin while output is captured" in str(
+            e
+        )
         if no_billing_id:
             raise BaseDosDadosNoBillingProjectIDException from e
         raise
@@ -156,7 +160,9 @@ def read_table(
         if limit is not None:
             query += f" LIMIT {limit}"
     else:
-        raise BaseDosDadosException("Both table_id and dataset_id should be filled.")
+        raise BaseDosDadosException(
+            "Both table_id and dataset_id should be filled."
+        )
 
     return read_sql(
         query,
@@ -257,13 +263,17 @@ def download(
         # views may take longer: wait for job to finish.
         _wait_for(job)
 
-        dest_table = job._properties["configuration"]["query"]["destinationTable"]
+        dest_table = job._properties["configuration"]["query"][
+            "destinationTable"
+        ]
 
         project_id = dest_table["projectId"]
         dataset_id = dest_table["datasetId"]
         table_id = dest_table["tableId"]
 
-    _direct_download(client, dataset_id, table_id, savepath, project_id, compression)
+    _direct_download(
+        client, dataset_id, table_id, savepath, project_id, compression
+    )
 
 
 def _direct_download(
