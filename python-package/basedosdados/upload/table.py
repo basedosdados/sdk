@@ -732,7 +732,7 @@ class Table(Base):
         )
 
     def publish(
-        self, if_exists="raise", custom_publish_sql=None, custom_schema=None
+            self, if_exists="raise", custom_publish_sql=None, custom_schema=None
     ):
         """Creates BigQuery table at production dataset.
 
