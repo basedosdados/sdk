@@ -36,7 +36,8 @@ class GoogleClient(ty.TypedDict):
 
 
 def _set_config_variables(
-    billing_project_id: ty.Optional[str], from_file: bool,
+    billing_project_id: ty.Optional[str],
+    from_file: bool,
 ) -> tuple[str, bool]:
     """Set billing_project_id and from_file variables."""
     # standard billing_project_id configuration
@@ -80,7 +81,8 @@ def read_sql(
 
     """
     billing_project_id, from_file = _set_config_variables(
-        billing_project_id=billing_project_id, from_file=from_file,
+        billing_project_id=billing_project_id,
+        from_file=from_file,
     )
 
     try:
@@ -97,7 +99,7 @@ def read_sql(
             project_id=billing_project_id,
             use_bqstorage_api=use_bqstorage_api,
             credentials=_credentials(from_file=from_file, reauth=reauth),
-        ) # type: ignore
+        )  # type: ignore
     except GenericGBQException as e:
         if "Reason: 403" in str(e):
             raise BaseDosDadosAccessDeniedException from e
@@ -165,7 +167,8 @@ def read_table(
 
     """
     billing_project_id, from_file = _set_config_variables(
-        billing_project_id=billing_project_id, from_file=from_file,
+        billing_project_id=billing_project_id,
+        from_file=from_file,
     )
 
     query = f"""
@@ -247,7 +250,8 @@ def download(
 
     """
     billing_project_id, from_file = _set_config_variables(
-        billing_project_id=billing_project_id, from_file=from_file,
+        billing_project_id=billing_project_id,
+        from_file=from_file,
     )
 
     if (query is None) and ((table_id is None) or (dataset_id is None)):
@@ -353,7 +357,12 @@ def _direct_download(
 
         # move table to temporary file inside temporary bucket
         _move_table_to_bucket(
-            client, dataset_id, table_id, blob_path, project_id, compression,
+            client,
+            dataset_id,
+            table_id,
+            blob_path,
+            project_id,
+            compression,
         )
 
         # download file from bucket directly to disk
@@ -375,7 +384,9 @@ def _direct_download(
 
 
 def _download_blob_from_bucket(
-    client: GoogleClient, bucket_name: str, savepath: Path,
+    client: GoogleClient,
+    bucket_name: str,
+    savepath: Path,
 ) -> None:
     """Download a blob from a bucket to the path specified.
 
@@ -483,7 +494,7 @@ def _move_table_to_bucket(
     dataset_ref = bigquery.DatasetReference(project_id, dataset_id)
     table_ref = dataset_ref.table(table_id)
 
-    job_config = bigquery.job.ExtractJobConfig(compression=compression) # type: ignore
+    job_config = bigquery.job.ExtractJobConfig(compression=compression)  # type: ignore
 
     # perform transfer from bq to bucket
     extract_job = client_bigquery.extract_table(
@@ -589,23 +600,26 @@ def _credentials(
         return Base()._load_credentials(mode="prod")
 
     if reauth:
-        return get_user_credentials(scopes, credentials_cache=cache.REAUTH) # type: ignore
+        return get_user_credentials(scopes, credentials_cache=cache.REAUTH)  # type: ignore
 
     return get_user_credentials(scopes)
 
 
 @lru_cache(256)
 def _google_client(
-    billing_project_id: str, from_file: bool, reauth: bool,
+    billing_project_id: str,
+    from_file: bool,
+    reauth: bool,
 ) -> GoogleClient:
     """Get Google Cloud client for bigquery and storage."""
+    credentials = _credentials(from_file=from_file, reauth=reauth)
     return {
         "bigquery": bigquery.Client(
-            credentials=_credentials(from_file=from_file, reauth=reauth),
+            credentials=credentials,
             project=billing_project_id,
         ),
         "storage": storage.Client(
-            credentials=_credentials(from_file=from_file, reauth=reauth),
+            credentials=credentials,
             project=billing_project_id,
         ),
     }
