@@ -49,8 +49,12 @@ jobs:
         run: poetry install --with dev --all-extras --no-root
         working-directory: python-package
 
-      - name: Ruff check
+      - name: Ruff linter check
         run: poetry run ruff check .
+        working-directory: python-package
+
+      - name: Ruff format check
+        run: poetry run ruff format --check .
         working-directory: python-package
 
       - name: Setup config
