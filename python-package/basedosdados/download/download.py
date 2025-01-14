@@ -559,7 +559,7 @@ def _clean_name(string: str) -> str:
     return re.sub(pattern, replace, string)
 
 
-def _wait_for(job):
+def _wait_for(job: bigquery.QueryJob) -> None:
     """Wait for bigquery job to finish.
 
     Args:
