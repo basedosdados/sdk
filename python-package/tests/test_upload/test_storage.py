@@ -14,8 +14,8 @@ def test_upload_with_errors():
   """
     Test the upload method raise errors
   """
-  storage.delete_file(csvPath, "staging", not_found_ok=True)
-  storage.upload(csvPath, mode="staging")
+  storage.delete_file(csvPath, mode="staging", not_found_ok=True)
+  storage.upload(csvPath, mode="staging", if_exists='pass')
 
   with pytest.raises(Exception):
     storage.upload(csvPath, mode="staging")
@@ -39,14 +39,6 @@ def test_upload_with_errors():
       if_exists="replace",
       partitions=["key1", "value1", "key2", "value1"],
     )
-
-# def test_upload(caplog):
-#   """
-#     Test the upload method
-#   """
-#   storage.delete_file(csvPath, "all", not_found_ok=True)
-#   out = storage.upload(csvPath, mode="staging", if_exists='pass')
-#   assert 'File municipio.csv_staging was uploaded!' == out
 
 def test_download_not_found():
   """
