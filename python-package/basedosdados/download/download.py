@@ -323,7 +323,7 @@ def _direct_download(
     download it to disk. In the end, remove the temporary bucket.
 
     Args:
-        client (dict of google.cloud.bigquery.client.Client):
+        client (GoogleClient):
             BigQuery and Storage clients.
         dataset_id (str):
             Dataset id available in project_id.
@@ -391,7 +391,7 @@ def _download_blob_from_bucket(
     """Download a blob from a bucket to the path specified.
 
     Args:
-        client (dict of google.cloud.bigquery.client.Client):
+        client (GoogleClient):
             BigQuery and Storage clients.
         bucket_name (str):
             Name of the bucket for the file to be stored.
@@ -411,7 +411,7 @@ def _create_bucket(client: GoogleClient, bucket_name: str) -> None:
     """Create a new buket in a specific location with standard storage class.
 
     Args:
-        client (dict of google.cloud.bigquery.client.Client):
+        client (GoogleClient):
             BigQuery and Storage clients.
         bucket_name (str):
             Name of the bucket to be created.
@@ -435,7 +435,7 @@ def _delete_bucket(client: GoogleClient, bucket_name: str) -> None:
     This method deletes all blobs from a bucket.
 
     Args:
-        client (dict of google.cloud.bigquery.client.Client):
+        client (GoogleClient):
             BigQuery and Storage clients.
         bucket_name (str):
             Name of the bucket to be deleted.
@@ -470,7 +470,7 @@ def _move_table_to_bucket(
     """Move table from BigQuery to bucket.
 
     Args:
-        client (dict of google.cloud.bigquery.client.Client):
+        client (GoogleClient):
             BigQuery and Storage clients.
         dataset_id (str):
             Dataset id available in project_id.
