@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "basedosdados"
-version = "2.0.0-beta.25"
+version = "2.0.0"
 description = "Organizar e facilitar o acesso a dados brasileiros através de tabelas públicas no BigQuery."
 authors = ["Joao Carabetta <joao.carabetta@gmail.com>", "Ricardo Dahis", "Diego Oliveira"]
 classifiers = [
