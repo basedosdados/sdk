@@ -732,7 +732,7 @@ class Table(Base):
         )
 
     def publish(
-        self, if_exists="raise", custon_publish_sql=None, custom_schema=None
+        self, if_exists="raise", custom_publish_sql=None, custom_schema=None
     ):
         """Creates BigQuery table at production dataset.
 
@@ -765,13 +765,13 @@ class Table(Base):
         publish_sql = self._make_publish_sql()
 
         # create view using API metadata
-        if custon_publish_sql is None:
+        if custom_publish_sql is None:
             self.client["bigquery_prod"].query(publish_sql).result()
             self.update(mode="prod")
 
         # create view using custon query
-        if custon_publish_sql is not None:
-            self.client["bigquery_prod"].query(custon_publish_sql).result()
+        if custom_publish_sql is not None:
+            self.client["bigquery_prod"].query(custom_publish_sql).result()
             # update schema using a custom schema
             if custom_schema is not None:
                 self.update(custom_schema=custom_schema)
