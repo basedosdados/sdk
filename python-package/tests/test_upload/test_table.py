@@ -11,7 +11,8 @@ parquetPath = "tests/test_upload/table/municipio.parquet"
 sqlPath = "tests/test_upload/table/publish.sql"
 
 table = Table(dataset_id=DATASET_ID, table_id=TABLE_ID)
-table2 = Table(dataset_id='br_me_rais', table_id='microdados_estabelecimentos')
+table2 = Table(dataset_id="br_me_rais", table_id="microdados_estabelecimentos")
+
 
 def test_table_config():
     """
@@ -22,20 +23,24 @@ def test_table_config():
     assert isinstance(out, dict)
     assert len(out) != 0
 
+
 def test_is_partitioned():
     """
     Test if the sample is partitioned
     """
-    out = table._is_partitioned(data_sample_path=csvPath, source_format='csv', csv_delimiter=',')
+    out = table._is_partitioned(
+        data_sample_path=csvPath, source_format="csv", csv_delimiter=","
+    )
 
     assert isinstance(out, bool)
     assert out is False
+
 
 def test_load_schema_from_bq():
     """
     Test if return the schema
     """
-    out = table._load_schema_from_bq('staging')
+    out = table._load_schema_from_bq("staging")
 
     assert isinstance(out, list)
     assert len(out) > 5
@@ -47,7 +52,7 @@ def test_load_schema_from_bq():
 #     """
 #     out = table._load_schema_from_api('staging') ## IndexError: list index out of range (backend.py:437)
 #     ## WARNING  | _load_schema_from_api:143 -  Table pytest allready exists, replacing schema!
-#     
+#
 #     assert isinstance(out, list)
 
 
@@ -56,17 +61,17 @@ def test_get_table_description():
     Test if get the correct description of a table
     """
 
-    out = table._get_table_description('staging')
+    out = table._get_table_description("staging")
 
     assert isinstance(out, str)
-    assert 'staging table for `basedosdados-dev.pytest.pytest' in out
+    assert "staging table for `basedosdados-dev.pytest.pytest" in out
 
 
 # def test_get_table_description_error(capsys):
 #     """
 #     Test the exception of table description
 #     """
-# 
+#
 #     table._get_table_description('prod')
 #     _, out = capsys.readouterr()
 #     ## WARNING  | _get_table_description:478 - table pytest does not have a description in the API.
@@ -109,7 +114,7 @@ def test_append_error():
     """
 
     with pytest.raises(BaseDosDadosException):
-        table.append(csvPath, if_exists='raise')
+        table.append(csvPath, if_exists="raise")
 
 
 def test_create_table_exists():
@@ -130,34 +135,34 @@ def test_create_with_error():
     """
     Test if throw an error trying to create table
     """
-    
+
     with pytest.raises(BaseDosDadosException):
         table.create(
             path=csvPath,
             if_table_exists="raise",
             if_dataset_exists="raise",
             if_storage_data_exists="raise",
-            )
+        )
 
 
 def test_get_columns_from_bq():
     """
     Test if get the columns
     """
-    out = table._get_columns_from_bq('staging')
-#    table._get_columns_from_bq('prod') 
-#    _, out2 = capsys.readouterr() TypeError: exceptions must derive from BaseException
-#    ERROR    | _get_columns_from_bq:272 - Table pytest.pytest does not exist in prod, please create first!
-#    assert 'Table pytest.pytest does not exist in prod, please create first!' in out2
+    out = table._get_columns_from_bq("staging")
+    #    table._get_columns_from_bq('prod')
+    #    _, out2 = capsys.readouterr() TypeError: exceptions must derive from BaseException
+    #    ERROR    | _get_columns_from_bq:272 - Table pytest.pytest does not exist in prod, please create first!
+    #    assert 'Table pytest.pytest does not exist in prod, please create first!' in out2
     assert isinstance(out, dict)
     assert len(out) != 0
 
 
 # def test_get_cross_columns_from_bq_api():
 #     """
-#     Test if get the bd_columns 
+#     Test if get the bd_columns
 #     """
-# 
+#
 #     out = table._get_cross_columns_from_bq_api() ## IndexError: list index out of range (backend.py:437)
 #     print(out)
 #     print(len(out))
@@ -168,12 +173,16 @@ def test_get_columns_from_data():
     """
     Test if get the columns from data
     """
-    out = table._get_columns_from_data(csvPath, mode='staging')
-    out2 = table._get_columns_from_data(data_sample_path='tests/test_upload/table', source_format='csv', mode='staging')
+    out = table._get_columns_from_data(csvPath, mode="staging")
+    out2 = table._get_columns_from_data(
+        data_sample_path="tests/test_upload/table",
+        source_format="csv",
+        mode="staging",
+    )
 
     assert isinstance(out, dict)
     assert isinstance(out2, dict)
-    assert 10 > len(out['columns']) > 0 
+    assert 10 > len(out["columns"]) > 0
     assert len(out2) != 0
     assert len(out) != 0
 
