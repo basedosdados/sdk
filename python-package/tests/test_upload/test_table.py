@@ -5,10 +5,10 @@ import pytest
 
 DATASET_ID = "pytest"
 TABLE_ID = "pytest"
-csvPath = "tests/test_upload/table/municipio.csv"
-avroPath = "tests/test_upload/table/municipio.avro"
-parquetPath = "tests/test_upload/table/municipio.parquet"
-sqlPath = "tests/test_upload/table/publish.sql"
+csv_path = "tests/test_upload/table/municipio.csv"
+avro_path = "tests/test_upload/table/municipio.avro"
+parquet_path = "tests/test_upload/table/municipio.parquet"
+sql_path = "tests/test_upload/table/publish.sql"
 
 table = Table(dataset_id=DATASET_ID, table_id=TABLE_ID)
 table2 = Table(dataset_id="br_me_rais", table_id="microdados_estabelecimentos")
@@ -29,31 +29,23 @@ def test_is_partitioned():
     Test if the sample is partitioned
     """
     out = table._is_partitioned(
-        data_sample_path=csvPath, source_format="csv", csv_delimiter=","
+        data_sample_path=csv_path, source_format="csv", csv_delimiter=","
     )
 
     assert isinstance(out, bool)
     assert out is False
 
 
-def test_load_schema_from_bq():
+@pytest.mark.skip(reason="incomplete test because of flow issues")
+def test_load_schema_from_api():
     """
     Test if return the schema
     """
-    out = table._load_schema_from_bq("staging")
-
+    out = table._load_schema_from_api(
+        "staging"
+    )  ## IndexError: list index out of range (backend.py:437)
+    ## WARNING  | _load_schema_from_api:143 -  Table pytest allready exists, replacing schema!
     assert isinstance(out, list)
-    assert len(out) > 5
-
-
-# def test_load_schema_from_api():
-#     """
-#     Test if return the schema
-#     """
-#     out = table._load_schema_from_api('staging') ## IndexError: list index out of range (backend.py:437)
-#     ## WARNING  | _load_schema_from_api:143 -  Table pytest allready exists, replacing schema!
-#
-#     assert isinstance(out, list)
 
 
 def test_get_table_description():
@@ -67,17 +59,16 @@ def test_get_table_description():
     assert "staging table for `basedosdados-dev.pytest.pytest" in out
 
 
-# def test_get_table_description_error(capsys):
-#     """
-#     Test the exception of table description
-#     """
-#
-#     table._get_table_description('prod')
-#     _, out = capsys.readouterr()
-#     ## WARNING  | _get_table_description:478 - table pytest does not have a description in the API.
-#     print('_', _)
-#     print('out', out)
-#     assert 'description not available in the API.' in out
+@pytest.mark.skip(reason="incomplete test because of flow issues")
+def test_get_table_description_error(capsys):
+    """
+    Test the exception of table description
+    """
+
+    table._get_table_description("prod")
+    _, out = capsys.readouterr()
+    ## WARNING  | _get_table_description:478 - table pytest does not have a description in the API.
+    assert "description not available in the API." in out
 
 
 def test_create():
@@ -86,7 +77,7 @@ def test_create():
     """
 
     table.create(
-        path=csvPath,
+        path=csv_path,
         if_table_exists="pass",
         if_dataset_exists="pass",
         if_storage_data_exists="pass",
@@ -97,12 +88,23 @@ def test_create():
     assert out is True
 
 
+def test_load_schema_from_bq():
+    """
+    Test if return the schema
+    """
+
+    out = table._load_schema_from_bq("staging")
+
+    assert isinstance(out, list)
+    assert len(out) > 5
+
+
 def test_append(capsys):
     """
     Test append method
     """
 
-    table.append(csvPath)
+    table.append(csv_path)
     _, out = capsys.readouterr()
 
     assert "Table pytest was appended!" in out
@@ -114,7 +116,7 @@ def test_append_error():
     """
 
     with pytest.raises(BaseDosDadosException):
-        table.append(csvPath, if_exists="raise")
+        table.append(csv_path, if_exists="raise")
 
 
 def test_create_table_exists():
@@ -124,7 +126,7 @@ def test_create_table_exists():
 
     with pytest.raises(FileExistsError):
         table.create(
-            path=csvPath,
+            path=csv_path,
             if_table_exists="raise",
             if_dataset_exists="pass",
             if_storage_data_exists="pass",
@@ -138,7 +140,7 @@ def test_create_with_error():
 
     with pytest.raises(BaseDosDadosException):
         table.create(
-            path=csvPath,
+            path=csv_path,
             if_table_exists="raise",
             if_dataset_exists="raise",
             if_storage_data_exists="raise",
@@ -150,30 +152,44 @@ def test_get_columns_from_bq():
     Test if get the columns
     """
     out = table._get_columns_from_bq("staging")
-    #    table._get_columns_from_bq('prod')
-    #    _, out2 = capsys.readouterr() TypeError: exceptions must derive from BaseException
-    #    ERROR    | _get_columns_from_bq:272 - Table pytest.pytest does not exist in prod, please create first!
-    #    assert 'Table pytest.pytest does not exist in prod, please create first!' in out2
+
     assert isinstance(out, dict)
     assert len(out) != 0
 
 
-# def test_get_cross_columns_from_bq_api():
-#     """
-#     Test if get the bd_columns
-#     """
-#
-#     out = table._get_cross_columns_from_bq_api() ## IndexError: list index out of range (backend.py:437)
-#     print(out)
-#     print(len(out))
-#     assert isinstance(out, dict)
+@pytest.mark.skip(reason="incomplete test because of flow issues")
+def test_get_columns_from_bq_prod(capsys):
+    """
+    Test if get the columns when is prod
+    """
+    table._get_columns_from_bq(
+        "prod"
+    )  ## TypeError: exceptions must derive from BaseException
+    _, out = capsys.readouterr()
+    ## ERROR    | _get_columns_from_bq:272 - Table pytest.pytest does not exist in prod, please create first!
+    assert (
+        "Table pytest.pytest does not exist in prod, please create first!"
+        in out
+    )
+
+
+@pytest.mark.skip(reason="incomplete test because of flow issues")
+def test_get_cross_columns_from_bq_api():
+    """
+    Test if get the bd_columns
+    """
+
+    out = (
+        table._get_cross_columns_from_bq_api()
+    )  ## IndexError: list index out of range (backend.py:437)
+    assert isinstance(out, dict)
 
 
 def test_get_columns_from_data():
     """
     Test if get the columns from data
     """
-    out = table._get_columns_from_data(csvPath, mode="staging")
+    out = table._get_columns_from_data(csv_path, mode="staging")
     out2 = table._get_columns_from_data(
         data_sample_path="tests/test_upload/table",
         source_format="csv",
@@ -194,7 +210,7 @@ def test_create_dataset_and_storage_exists():
 
     with pytest.raises(BaseDosDadosException):
         table.create(
-            path=csvPath,
+            path=csv_path,
             if_table_exists="replace",
             if_dataset_exists="raise",
             if_storage_data_exists="raise",
@@ -221,7 +237,7 @@ def test_table_create_with_parquet_source_format():
     """
 
     table.create(
-        path=parquetPath,
+        path=parquet_path,
         source_format="parquet",
         if_table_exists="replace",
         if_storage_data_exists="replace",
@@ -236,7 +252,7 @@ def test_table_create_with_avro_source_format(capsys):
     """
 
     table.create(
-        path=avroPath,
+        path=avro_path,
         source_format="avro",
         if_table_exists="pass",
         if_storage_data_exists="pass",
@@ -253,7 +269,7 @@ def test_table_create_not_implemented_source_format():
 
     with pytest.raises(NotImplementedError):
         table.create(
-            path=csvPath,
+            path=csv_path,
             if_table_exists="pass",
             if_storage_data_exists="pass",
             if_dataset_exists="pass",
@@ -266,7 +282,7 @@ def test_delete_all():
     Test delete method with all modes
     """
     table.create(
-        path=csvPath,
+        path=csv_path,
         if_table_exists="replace",
         if_storage_data_exists="replace",
         if_dataset_exists="replace",
@@ -284,7 +300,7 @@ def test_delete_staging(capsys):
     Test delete method with staging mode
     """
     table.create(
-        path=csvPath,
+        path=csv_path,
         if_table_exists="replace",
         if_storage_data_exists="replace",
         if_dataset_exists="replace",
@@ -303,7 +319,7 @@ def test_delete_prod():
     Test delete method with prod mode
     """
     table.create(
-        path=csvPath,
+        path=csv_path,
         if_table_exists="replace",
         if_storage_data_exists="replace",
         if_dataset_exists="replace",

@@ -24,6 +24,8 @@ docs/site
 TODO
 
 python-package/tests/tmp_bases
+python-package/tests/test_upload/tmp_bases
+python-package/tests/outdated
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
