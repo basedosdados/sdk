@@ -1,10 +1,12 @@
-from basedosdados.upload.table import Table
-from basedosdados.upload.dataset import Dataset
-from basedosdados.exceptions import BaseDosDadosException
 import pytest
+
+from basedosdados.exceptions import BaseDosDadosException
+from basedosdados.upload.dataset import Dataset
+from basedosdados.upload.table import Table
 
 DATASET_ID = "pytest"
 TABLE_ID = "pytest"
+
 csv_path = "tests/test_upload/table/municipio.csv"
 avro_path = "tests/test_upload/table/municipio.avro"
 parquet_path = "tests/test_upload/table/municipio.parquet"

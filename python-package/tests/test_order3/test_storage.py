@@ -1,7 +1,9 @@
-import pytest
-from basedosdados.upload.storage import Storage
-from google.api_core.exceptions import NotFound
 from pathlib import Path
+
+import pytest
+from google.api_core.exceptions import NotFound
+
+from basedosdados.upload.storage import Storage
 
 csv_path = "tests/test_upload/table/municipio.csv"
 SAVEPATH = Path(__file__).parent / "tmp_bases"

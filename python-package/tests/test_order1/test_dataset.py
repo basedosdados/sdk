@@ -1,18 +1,22 @@
+import pytest
+
 from basedosdados.upload.dataset import Dataset
 
 DATASET_ID = "pytest"
 
 
+@pytest.mark.order1
 def test_create():
     """
     Test the create function
     """
     dataset = Dataset(dataset_id=DATASET_ID)
 
-    dataset.create(if_exists="raise")
+    if dataset.exists():
+        dataset.delete()
+        assert not dataset.exists()
 
-    dataset.delete()
-    assert not dataset.exists()
+    dataset.create(if_exists="raise")
 
     dataset.create(if_exists="replace")
 
@@ -22,6 +26,7 @@ def test_create():
     assert dataset.exists()
 
 
+@pytest.mark.order2
 def test_exists():
     """
     Test the exists function
@@ -33,19 +38,7 @@ def test_exists():
     assert out is True
 
 
-def test_delete():
-    """
-    Test the delete function
-    """
-    dataset = Dataset(dataset_id=DATASET_ID)
-
-    dataset.delete()
-
-    out = dataset.exists()
-    assert isinstance(out, bool)
-    assert out is False
-
-
+@pytest.mark.order3
 def test_update():
     """
     Test the update function
@@ -56,6 +49,7 @@ def test_update():
     assert dataset.exists()
 
 
+@pytest.mark.order4
 def test_loop_modes():
     """
     Test the loop_modes function
@@ -68,6 +62,7 @@ def test_loop_modes():
     assert len(list(dataset._loop_modes(mode="prod"))) == 1
 
 
+@pytest.mark.order5
 def test_publicize():
     """
     Test the publicize function
@@ -76,3 +71,17 @@ def test_publicize():
 
     dataset.create(if_exists="pass")
     dataset.publicize()
+
+
+@pytest.mark.order6
+def test_delete():
+    """
+    Test the delete function
+    """
+    dataset = Dataset(dataset_id=DATASET_ID)
+
+    dataset.delete()
+
+    out = dataset.exists()
+    assert isinstance(out, bool)
+    assert out is False
