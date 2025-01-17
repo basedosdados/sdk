@@ -1,21 +1,13 @@
 from basedosdados.upload.dataset import Dataset
 
-
-def test_exists():
-    """
-    Test the exists function
-    """
-    dataset = Dataset(dataset_id="1")
-
-    out = dataset.exists()
-    assert isinstance(out, bool)
+DATASET_ID = "pytest"
 
 
 def test_create():
     """
     Test the create function
     """
-    dataset = Dataset(dataset_id="1")
+    dataset = Dataset(dataset_id=DATASET_ID)
 
     dataset.create(if_exists="raise")
 
@@ -30,24 +22,35 @@ def test_create():
     assert dataset.exists()
 
 
+def test_exists():
+    """
+    Test the exists function
+    """
+    dataset = Dataset(dataset_id=DATASET_ID)
+
+    out = dataset.exists()
+    assert isinstance(out, bool)
+    assert out is True
+
+
 def test_delete():
     """
     Test the delete function
     """
-    dataset = Dataset(dataset_id="1")
+    dataset = Dataset(dataset_id=DATASET_ID)
 
     dataset.delete()
 
     out = dataset.exists()
     assert isinstance(out, bool)
-    assert not out
+    assert out is False
 
 
 def test_update():
     """
     Test the update function
     """
-    dataset = Dataset(dataset_id="1")
+    dataset = Dataset(dataset_id=DATASET_ID)
 
     dataset.create(if_exists="pass")
     assert dataset.exists()
@@ -69,7 +72,7 @@ def test_publicize():
     """
     Test the publicize function
     """
-    dataset = Dataset(dataset_id="1")
+    dataset = Dataset(dataset_id=DATASET_ID)
 
     dataset.create(if_exists="pass")
     dataset.publicize()
