@@ -4,9 +4,9 @@ from google.cloud.bigquery.external_config import (
     HivePartitioningOptions,
 )
 
-csvPath = "tests/test_upload/table/municipio.csv"
-avroPath = "tests/test_upload/table/municipio.avro"
-parquetPath = "tests/test_upload/table/municipio.parquet"
+csv_path = "tests/test_upload/table/municipio.csv"
+avro_path = "tests/test_upload/table/municipio.avro"
+parquet_path = "tests/test_upload/table/municipio.parquet"
 
 
 def test_header_avro():
@@ -15,7 +15,7 @@ def test_header_avro():
     """
 
     dt = Datatype(source_format="avro")
-    cols = dt.header(avroPath, csv_delimiter=1)
+    cols = dt.header(avro_path, csv_delimiter="1")
 
     assert cols == [
         "ano",
@@ -38,10 +38,18 @@ def test_header_csv():
     """
 
     dt = Datatype(source_format="csv")
-    cols = dt.header(csvPath, csv_delimiter="1")
+    cols = dt.header(csv_path, csv_delimiter=",")
 
     assert [
-        "ano,id_municipio,pib,impostos_liquidos,va,va_agropecuaria,va_industria,va_servicos,va_adespss"
+        "ano",
+        "id_municipio",
+        "pib",
+        "impostos_liquidos",
+        "va",
+        "va_agropecuaria",
+        "va_industria",
+        "va_servicos",
+        "va_adespss",
     ] == cols
     assert len(cols) != 0
     assert isinstance(cols, list)
@@ -53,7 +61,7 @@ def test_header_parquet():
     """
 
     dt = Datatype(source_format="parquet")
-    cols = dt.header(parquetPath, csv_delimiter="1")
+    cols = dt.header(parquet_path, csv_delimiter="1")
 
     assert cols == [
         "ano",

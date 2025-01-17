@@ -3,7 +3,7 @@ from basedosdados.upload.storage import Storage
 from google.api_core.exceptions import NotFound
 from pathlib import Path
 
-csvPath = "tests/test_upload/table/municipio.csv"
+csv_path = "tests/test_upload/table/municipio.csv"
 SAVEPATH = Path(__file__).parent / "tmp_bases"
 DATASET_ID = "pytest"
 TABLE_ID = "pytest"
@@ -15,27 +15,27 @@ def test_upload_with_errors():
     """
     Test the upload method raise errors
     """
-    storage.delete_file(csvPath, mode="staging", not_found_ok=True)
-    storage.upload(csvPath, mode="staging", if_exists="pass")
+    storage.delete_file(csv_path, mode="staging", not_found_ok=True)
+    storage.upload(csv_path, mode="staging", if_exists="pass")
 
     with pytest.raises(Exception):
-        storage.upload(csvPath, mode="staging")
-    storage.upload(csvPath, mode="staging", if_exists="replace")
+        storage.upload(csv_path, mode="staging")
+    storage.upload(csv_path, mode="staging", if_exists="replace")
     storage.upload(
-        csvPath,
+        csv_path,
         mode="staging",
         if_exists="replace",
         partitions="key1=value1/key2=value2",
     )
     storage.upload(
-        csvPath,
+        csv_path,
         mode="staging",
         if_exists="replace",
         partitions={"key1": "value1", "key2": "value1"},
     )
     with pytest.raises(Exception):
         storage.upload(
-            csvPath,
+            csv_path,
             mode="staging",
             if_exists="replace",
             partitions=["key1", "value1", "key2", "value1"],
