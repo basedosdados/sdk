@@ -23,8 +23,7 @@ secrets
 docs/site
 TODO
 
-python-package/**/tmp_bases
-python-package/tests/test_upload/tmp_bases
+python-package/tests/tmp/
 python-package/tests/outdated
 # Byte-compiled / optimized / DLL files
 __pycache__/
