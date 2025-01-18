@@ -1,8 +1,7 @@
 import pytest
 
 from basedosdados.upload.dataset import Dataset
-
-from ..config import DATASET_ID
+from tests.config import DATASET_ID
 
 
 @pytest.mark.order1

@@ -3,8 +3,7 @@ import pytest
 from basedosdados.exceptions import BaseDosDadosException
 from basedosdados.upload.dataset import Dataset
 from basedosdados.upload.table import Table
-
-from ..config import DATASET_ID, TABLE_ID
+from tests.config import DATASET_ID, TABLE_ID
 
 csv_path = "tests/test_upload/table/municipio.csv"
 avro_path = "tests/test_upload/table/municipio.avro"
@@ -57,7 +56,9 @@ def test_get_table_description():
     out = table._get_table_description("staging")
 
     assert isinstance(out, str)
-    assert "staging table for `basedosdados-dev.pytest.pytest" in out
+    assert (
+        f"staging table for `basedosdados-dev.{DATASET_ID}.{TABLE_ID}" in out
+    )
 
 
 @pytest.mark.skip(reason="incomplete test because of flow issues")
@@ -109,7 +110,7 @@ def test_append(capsys):
     table.append(csv_path)
     _, out = capsys.readouterr()
 
-    assert "Table pytest was appended!" in out
+    assert f"Table {TABLE_ID} was appended!" in out
 
 
 def test_append_error():

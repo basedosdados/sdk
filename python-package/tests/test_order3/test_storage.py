@@ -4,8 +4,7 @@ import pytest
 from google.api_core.exceptions import NotFound
 
 from basedosdados.upload.storage import Storage
-
-from ..config import DATASET_ID, TABLE_ID
+from tests.config import DATASET_ID, TABLE_ID
 
 csv_path = "tests/test_upload/table/municipio.csv"
 SAVEPATH = Path(__file__).parent / "tmp_bases"
@@ -13,6 +12,7 @@ SAVEPATH = Path(__file__).parent / "tmp_bases"
 storage = Storage(dataset_id=DATASET_ID, table_id=TABLE_ID)
 
 
+@pytest.mark.order1
 def test_upload_with_errors():
     """
     Test the upload method raise errors
@@ -53,6 +53,7 @@ def test_download_not_found():
         storage.download(filename="not_found", savepath=SAVEPATH)
 
 
+@pytest.mark.order2
 def test_download_filename():
     """
     Test the download method with a filename
@@ -66,6 +67,7 @@ def test_download_filename():
     ).is_file()
 
 
+@pytest.mark.order2
 def test_download_partitions():
     """
     Test the download method with partitions
@@ -104,6 +106,7 @@ def test_download_partitions():
     ).is_file()
 
 
+@pytest.mark.order2
 def test_download_default():
     """
     Test the download method with the default mode
@@ -116,6 +119,38 @@ def test_download_default():
     ).is_file()
 
 
+@pytest.mark.order2
+def test_copy_table():
+    """
+    Test the copy_table method
+    """
+
+    new_table_id = f"{TABLE_ID}_storage_test_copy_table"
+
+    # Create copy from folder on storage
+    storage.copy_table(
+        source_bucket_name="basedosdados-dev",
+        destination_bucket_name="basedosdados-dev",
+        new_table_id=new_table_id,
+    )
+
+    savepath = SAVEPATH / "storage_test_copy_table"
+
+    # Download file copied
+    Storage(dataset_id=new_table_id, table_id=new_table_id).download(
+        filename="municipio.csv", savepath=savepath
+    )
+
+    assert (
+        savepath
+        / "staging"
+        / new_table_id  # dataset_id
+        / new_table_id
+        / "municipio.csv"
+    ).exists()
+
+
+@pytest.mark.order3
 def test_delete_file():
     """
     Test the delete_file method
@@ -123,26 +158,13 @@ def test_delete_file():
 
     storage.delete_file("municipio.csv", "staging")
 
+    # Ensures the file has been deleted
     with pytest.raises(NotFound):
         storage.delete_file("municipio.csv", "staging")
         storage.delete_file("municipio.csv", "staging", not_found_ok=True)
 
 
-def test_copy_table():
-    """
-    Test the copy_table method
-    """
-
-    storage.copy_table()
-
-    with pytest.raises(FileNotFoundError):
-        Storage("br_ibge_pib2", "municipio2").copy_table()
-
-    storage.copy_table(
-        destination_bucket_name="basedosdados-dev",
-    )
-
-
+@pytest.mark.order3
 def test_delete_table():
     """
     Test the delete_table method
