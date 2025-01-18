@@ -4,12 +4,15 @@ import pytest
 from google.api_core.exceptions import NotFound
 
 from basedosdados.upload.storage import Storage
-from tests.config import DATASET_ID, TABLE_ID
+from tests.constants import DATASET_ID_PREFIX, TABLE_ID_PREFIX
 
 csv_path = "tests/test_upload/table/municipio.csv"
 SAVEPATH = Path(__file__).parent / "tmp_bases"
 
-storage = Storage(dataset_id=DATASET_ID, table_id=TABLE_ID)
+dataset_id = f"{DATASET_ID_PREFIX}_test_storage"
+table_id = f"{TABLE_ID_PREFIX}_test_storage"
+
+storage = Storage(dataset_id=dataset_id, table_id=table_id)
 
 
 @pytest.mark.order1
@@ -63,7 +66,7 @@ def test_download_filename():
         filename="municipio.csv", savepath=SAVEPATH, mode="staging"
     )
     assert (
-        Path(SAVEPATH) / "staging" / DATASET_ID / TABLE_ID / "municipio.csv"
+        Path(SAVEPATH) / "staging" / dataset_id / table_id / "municipio.csv"
     ).is_file()
 
 
@@ -82,8 +85,8 @@ def test_download_partitions():
     assert (
         Path(SAVEPATH)
         / "staging"
-        / DATASET_ID
-        / TABLE_ID
+        / dataset_id
+        / table_id
         / "key1=value1"
         / "key2=value1"
         / "municipio.csv"
@@ -98,8 +101,8 @@ def test_download_partitions():
     assert (
         Path(SAVEPATH)
         / "staging"
-        / DATASET_ID
-        / TABLE_ID
+        / dataset_id
+        / table_id
         / "key1=value1"
         / "key2=value2"
         / "municipio.csv"
@@ -115,7 +118,7 @@ def test_download_default():
     storage.download(savepath=SAVEPATH, mode="staging")
 
     assert (
-        Path(SAVEPATH) / "staging" / DATASET_ID / TABLE_ID / "municipio.csv"
+        Path(SAVEPATH) / "staging" / dataset_id / table_id / "municipio.csv"
     ).is_file()
 
 
@@ -125,7 +128,7 @@ def test_copy_table():
     Test the copy_table method
     """
 
-    new_table_id = f"{TABLE_ID}_storage_test_copy_table"
+    new_table_id = f"{table_id}_copy_table"
 
     # Create copy from folder on storage
     storage.copy_table(
@@ -137,9 +140,9 @@ def test_copy_table():
     savepath = SAVEPATH / "storage_test_copy_table"
 
     # Download file copied
-    Storage(dataset_id=new_table_id, table_id=new_table_id).download(
-        filename="municipio.csv", savepath=savepath
-    )
+    st = Storage(dataset_id=new_table_id, table_id=new_table_id)
+
+    st.download(filename="municipio.csv", savepath=savepath)
 
     assert (
         savepath
@@ -148,6 +151,9 @@ def test_copy_table():
         / new_table_id
         / "municipio.csv"
     ).exists()
+
+    # Cleanup
+    st.delete_table()
 
 
 @pytest.mark.order3
