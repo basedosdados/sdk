@@ -5,10 +5,10 @@ from google.api_core.exceptions import NotFound
 
 from basedosdados.upload.storage import Storage
 
+from ..config import DATASET_ID, TABLE_ID
+
 csv_path = "tests/test_upload/table/municipio.csv"
 SAVEPATH = Path(__file__).parent / "tmp_bases"
-DATASET_ID = "pytest"
-TABLE_ID = "pytest"
 
 storage = Storage(dataset_id=DATASET_ID, table_id=TABLE_ID)
 

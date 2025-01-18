@@ -4,8 +4,7 @@ from basedosdados.exceptions import BaseDosDadosException
 from basedosdados.upload.dataset import Dataset
 from basedosdados.upload.table import Table
 
-DATASET_ID = "pytest"
-TABLE_ID = "pytest"
+from ..config import DATASET_ID, TABLE_ID
 
 csv_path = "tests/test_upload/table/municipio.csv"
 avro_path = "tests/test_upload/table/municipio.avro"
@@ -73,6 +72,7 @@ def test_get_table_description_error(capsys):
     assert "description not available in the API." in out
 
 
+@pytest.mark.order1
 def test_create():
     """
     Test create method
@@ -121,6 +121,7 @@ def test_append_error():
         table.append(csv_path, if_exists="raise")
 
 
+@pytest.mark.order2
 def test_create_table_exists():
     """
     Test create if table already exists

@@ -2,7 +2,7 @@ import pytest
 
 from basedosdados.upload.dataset import Dataset
 
-DATASET_ID = "pytest"
+from ..config import DATASET_ID
 
 
 @pytest.mark.order1
@@ -73,7 +73,6 @@ def test_publicize():
     dataset.publicize()
 
 
-@pytest.mark.order6
 def test_delete():
     """
     Test the delete function
