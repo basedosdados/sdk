@@ -3,8 +3,6 @@ Class for managing the files in cloud storage.
 """
 
 import sys
-
-
 import time
 import traceback
 from pathlib import Path
@@ -12,8 +10,8 @@ from pathlib import Path
 from loguru import logger
 from tqdm import tqdm
 
-from basedosdados.exceptions import BaseDosDadosException
 from basedosdados.core.base import Base
+from basedosdados.exceptions import BaseDosDadosException
 
 # google retryble exceptions. References: https://googleapis.dev/python/storage/latest/retry_timeout.html#module-google.cloud.storage.retry
 
@@ -243,7 +241,7 @@ class Storage(Base):
     def download(
         self,
         filename="*",
-        savepath=".",
+        savepath: Path = Path("."),
         partitions=None,
         mode="staging",
         if_not_exists="raise",
