@@ -47,7 +47,7 @@ class Datatype:
         self.partitioned = partitioned
         self.biglake_connection_id = biglake_connection_id
 
-    def header(self, data_sample_path, csv_delimiter):
+    def header(self, data_sample_path, csv_delimiter: str = ","):
         """
         Retrieve the header of the data sample
         """

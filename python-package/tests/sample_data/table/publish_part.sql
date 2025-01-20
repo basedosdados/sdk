@@ -18,7 +18,7 @@ TIPOS:
     - Mais detalhes: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types
 
 */
-CREATE VIEW basedosdados-dev.pytest.pytest AS
+CREATE VIEW basedosdados-dev.pytest.pytest_partitioned AS
 SELECT
 id_municipio,
 ano,
@@ -28,5 +28,6 @@ VA,
 VA_agropecuaria,
 VA_industria,
 VA_servicos,
-VA_ADESPSS
-from basedosdados-dev.pytest_staging.pytest as t
+VA_ADESPSS,
+keys
+from basedosdados-dev.pytest_staging.pytest_partitioned as t

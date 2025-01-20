@@ -16,9 +16,10 @@ from basedosdados.exceptions import (
 )
 
 TEST_PROJECT_ID = "basedosdados-dev"
-SAVEFILE = Path(__file__).parent.parent / "tmp_bases" / "test.csv"
-SAVEPATH = Path(__file__).parent.parent / "tmp_bases"
-shutil.rmtree(SAVEPATH, ignore_errors=True)
+SAVE_DIR = Path("tests") / "tmp"
+SAVEFILE = SAVE_DIR / "test.csv"
+
+shutil.rmtree(SAVE_DIR, ignore_errors=True)
 
 
 def test_download_by_query():

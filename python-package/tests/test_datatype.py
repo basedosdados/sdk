@@ -1,12 +1,13 @@
-from basedosdados.upload.datatypes import Datatype
 from google.cloud.bigquery.external_config import (
     ExternalConfig,
     HivePartitioningOptions,
 )
 
-csv_path = "tests/test_upload/table/municipio.csv"
-avro_path = "tests/test_upload/table/municipio.avro"
-parquet_path = "tests/test_upload/table/municipio.parquet"
+from basedosdados.upload.datatypes import Datatype
+
+csv_path = "tests/sample_data/table/municipio.csv"
+avro_path = "tests/sample_data/table/municipio.avro"
+parquet_path = "tests/sample_data/table/municipio.parquet"
 
 
 def test_header_avro():
@@ -15,7 +16,7 @@ def test_header_avro():
     """
 
     dt = Datatype(source_format="avro")
-    cols = dt.header(avro_path, csv_delimiter="1")
+    cols = dt.header(avro_path)
 
     assert cols == [
         "ano",
@@ -61,7 +62,7 @@ def test_header_parquet():
     """
 
     dt = Datatype(source_format="parquet")
-    cols = dt.header(parquet_path, csv_delimiter="1")
+    cols = dt.header(parquet_path)
 
     assert cols == [
         "ano",
