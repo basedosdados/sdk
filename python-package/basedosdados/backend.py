@@ -2,7 +2,7 @@
 Module for interacting with the backend.
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from loguru import logger
 from requests import get
@@ -442,7 +442,7 @@ class Backend(metaclass=SingletonMeta):
 
     def _get_client(
         self,
-        headers: Dict[str, str] = None,
+        headers: Optional[Dict[str, str]] = None,
         fetch_schema_from_transport: bool = False,
     ) -> "Client":
         """
@@ -474,9 +474,12 @@ class Backend(metaclass=SingletonMeta):
     def _execute_query(
         self,
         query: str,
-        variables: Dict[str, str] = None,
+        variables: Optional[Dict[str, str]] = None,
+        client: Optional[Client] = None,  # type: ignore
+        headers: Optional[Dict[str, str]] = None,
         page: int = 1,
         page_size: int = 10,
+        fetch_schema_from_transport: bool = False,
     ) -> Dict[str, Any]:
         """
         Execute a GraphQL query.
@@ -484,14 +487,26 @@ class Backend(metaclass=SingletonMeta):
         Args:
             query (str): GraphQL query.
             variables (Dict[str, str], optional): Variables to be passed to the query. Defaults to None.
+            client (Client, optional): GraphQL client. Defaults to None.
+            headers (Dict[str, str], optional): Headers to be passed to the client. Defaults to
+                None.
+            fetch_schema_from_transport (bool, optional): Whether to fetch the schema from the
+                transport. Defaults to False.
 
         Returns:
             Dict: GraphQL response.
         """
-        try:
-            response = self.graphql_client.execute(
-                gql(query), variable_values=variables
+
+        client_ = (
+            self._get_client(
+                headers=headers,
+                fetch_schema_from_transport=fetch_schema_from_transport,
             )
+            if client is None  # type: ignore
+            else self.graphql_client
+        )
+        try:
+            response = client_.execute(gql(query), variable_values=variables)
         except Exception as e:
             logger.error(
                 f"The API URL in the config.toml file may be incorrect "
