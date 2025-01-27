@@ -496,6 +496,12 @@ class Backend(metaclass=SingletonMeta):
         Returns:
             Dict: GraphQL response.
         """
+        if not _backend_dependencies:
+            raise BaseDosDadosMissingDependencyException(
+                "Optional dependencies for backend interaction are not installed. "
+                'Please install basedosdados with the "upload" extra, such as:'
+                "\n\npip install basedosdados[upload]"
+            )
 
         client_ = (
             self._get_client(
