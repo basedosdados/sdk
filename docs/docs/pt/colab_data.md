@@ -181,7 +181,7 @@ revisão. Para isso, vamos usar o cliente `basedosdados` (disponível em Python)
 !!! Info "Como existe um custo para o armazenamento no storage, para finalizar essa etapa vamos precisar te disponibilizar uma api_key especifica para voluntários para subir os dados em nosso ambiente de desenvolvimento. Assim, entre em nosso [canal no Discord](https://discord.gg/huKWpsVYx4) e nos chame em 'quero-contribuir'"
 
 #### Configure suas credenciais localmente
-  **7.1** No seu terminal instale nosso cliente: `pip install basedosdados`.
+  **7.1** No seu terminal instale nosso cliente: `pip install basedosdados`. 
   **7.2** Rode `import basedosdados as bd` no python e siga o passo a passo para configurar localmente com as credenciais de seu projeto no Google Cloud. Preencha as informações conforme a seguir:
 ```
     * STEP 1: y
@@ -239,12 +239,12 @@ Os dados vão passar por 3 lugares no Google Cloud:
   Consulte também nossa [API](../api_reference_cli) para mais detalhes de cada método.
 
 **7.4** Crie os arquivos .sql e schema.yml a partir da tabela de arquitetura seguindo essa [documentação](https://github.com/basedosdados/pipelines/wiki/Fun%C3%A7%C3%A3o-%60create_yaml_file()%60)
-!!! Tip "Caso você precise, nesse momento você pode alterar a consulta em SQL para realizar tratamentos finais a partir da tabela `staging`, pode incluir coluna, remover coluna, fazer operações algébricas, substituir strings, etc. O SQL é o limite!"
+!!! Tip "Caso você precise, nesse momento você pode alterar a consulta em SQL para realizar tratamentos finais a partir da tabela `staging`, pode incluir coluna, remover coluna, fazer operações algébricas, substituir strings, etc. O SQL é o limite!" 
 
-**7.5** Rode e teste os modelos localmente seguindo essa [documentação](https://github.com/basedosdados/pipelines/wiki/Testar-modelos-dbt-localmente)
+**7.5** Rode e teste os modelos localmente seguindo essa [documentação](https://github.com/basedosdados/pipelines/wiki/Testar-modelos-dbt-localmente) 
 
 **7.6** Suba os metadados da tabela no site:
-!!! Info "Por enquanto apenas a equipe dados tem permissões de subir os metadados da tabela no site, por isso será necessário entrar em contato conosco. Já estamos trabalhando para que, num futuro próximo, os voluntários também possam atualizar dados no site."
+!!! Info "Por enquanto apenas a equipe dados tem permissões de subir os metadados da tabela no site, por isso será necessário entrar em contato conosco. Já estamos trabalhando para que, num futuro próximo, os voluntários também possam atualizar dados no site." 
 
 **7.7** Suba os arquivos auxiliares:
     ```python
