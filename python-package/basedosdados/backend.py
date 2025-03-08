@@ -475,7 +475,7 @@ class Backend(metaclass=SingletonMeta):
         self,
         query: str,
         variables: Optional[Dict[str, str]] = None,
-        client: Optional[Client] = None,  # type: ignore
+        client: Optional["Client"] = None,  # type: ignore
         headers: Optional[Dict[str, str]] = None,
         page: int = 1,
         page_size: int = 10,
