@@ -2781,4 +2781,4 @@ upload = ["gql", "requests-toolbelt"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4"
-content-hash = "392b48ff4f06498535205072fdf560f23960525eaa5a1255b907f0235590f77d"
+content-hash = "10eea5d7594d7b6d8944e10fba48f1aacdfd0a31b234e68fc0d7df0991f59e7e"
