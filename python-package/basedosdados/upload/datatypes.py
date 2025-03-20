@@ -7,14 +7,15 @@ import csv
 import pandas as pd
 from google.cloud import bigquery
 
-try:
-    import pandavro
-
-    _avro_dependencies = True
-except ImportError:
-    _avro_dependencies = False
-
 from basedosdados.exceptions import BaseDosDadosMissingDependencyException
+
+_avro_dependencies = False
+# try:
+#     import pandavro
+#
+#     _avro_dependencies = True
+# except ImportError:
+#     _avro_dependencies = False
 
 
 class Datatype:
@@ -59,19 +60,18 @@ class Datatype:
                 return next(csv_reader)
 
         if self.source_format == "avro":
+            # TODO: Restore support for avro format
+            # See https://github.com/ynqa/pandavro/issues/56 and https://github.com/basedosdados/sdk/issues/1728
             if not _avro_dependencies:
-                raise BaseDosDadosMissingDependencyException(
-                    "Optional dependencies for handling AVRO files are not installed. "
-                    'Please install basedosdados with the "avro" extra, such as:'
-                    "\n\npip install basedosdados[avro]"
-                )
-            dataframe = pandavro.read_avro(str(data_sample_path))
-            return list(dataframe.columns.values)
+                msg = "Handling avro file is currently not supported due to a limitation. See https://github.com/ynqa/pandavro/issues/56"
+                raise BaseDosDadosMissingDependencyException(msg)
+            # dataframe = pandavro.read_avro(str(data_sample_path))
+            # return list(dataframe.columns.values)
         if self.source_format == "parquet":
             dataframe = pd.read_parquet(str(data_sample_path))
             return list(dataframe.columns.values)
         raise NotImplementedError(
-            "Base dos Dados just supports comma separated csv, avro and parquet files"
+            "Base dos Dados just supports comma separated csv and parquet files"
         )
 
     def partition(self):
@@ -108,7 +108,7 @@ class Datatype:
             _external_config = bigquery.ExternalConfig("PARQUET")
         else:
             raise NotImplementedError(
-                "Base dos Dados just supports csv, avro and parquet files"
+                "Base dos Dados just supports csv and parquet files"
             )
         _external_config.source_uris = self.uri
         if self.partitioned:
