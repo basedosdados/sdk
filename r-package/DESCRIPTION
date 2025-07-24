@@ -39,7 +39,6 @@ Imports:
     dbplyr (>= 2.1.1),
     scales (>= 1.1.1),
     DBI (>= 1.1.1),
-    typed (>= 0.0.1),
     methods
 Suggests: 
     rmarkdown,

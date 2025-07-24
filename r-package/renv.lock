@@ -2365,32 +2365,6 @@
       "Maintainer": "Lionel Henry <lionel@posit.co>",
       "Repository": "CRAN"
     },
-    "typed": {
-      "Package": "typed",
-      "Version": "0.0.1",
-      "Source": "Repository",
-      "Title": "Support Types for Variables, Arguments, and Return Values",
-      "Authors@R": "person(given = \"Antoine\", family = \"Fabri\", role = c(\"aut\", \"cre\"), email = \"antoine.fabri@gmail.com\")",
-      "Description": "A type system for R. It supports setting variable types in a script or the body of a function, so variables can't be assigned illegal values. Moreover it supports setting argument and return types for functions.",
-      "License": "GPL-3",
-      "Encoding": "UTF-8",
-      "Language": "en",
-      "LazyData": "true",
-      "RoxygenNote": "7.1.1",
-      "URL": "https://github.com/moodymudskipper/typed",
-      "BugReports": "https://github.com/moodymudskipper/typed/issues",
-      "Imports": [
-        "waldo"
-      ],
-      "Suggests": [
-        "testthat",
-        "covr"
-      ],
-      "NeedsCompilation": "no",
-      "Author": "Antoine Fabri [aut, cre]",
-      "Maintainer": "Antoine Fabri <antoine.fabri@gmail.com>",
-      "Repository": "CRAN"
-    },
     "tzdb": {
       "Package": "tzdb",
       "Version": "0.5.0",

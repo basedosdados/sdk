@@ -156,8 +156,8 @@ get_dataset_description <- function(dataset_id) {
 #'
 
 get_table_description <- function(
-  dataset_id = ? typed::Character(1),
-  table_id = ? typed::Character(1)) {
+  dataset_id,
+  table_id) {
 
   basedosdados::bd_request(
     endpoint = "bdm_table_show",

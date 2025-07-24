@@ -1,6 +1,4 @@
 
-require(typed)
-
 testthat::test_that("Basic dataset search", {
 
   testthat::skip_on_cran()
