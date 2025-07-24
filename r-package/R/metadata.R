@@ -60,7 +60,7 @@ dataset_search <- function(search_term) {
 
 list_dataset_tables <- function(dataset_id) {
 
-    bd_request(
+    basedosdados::bd_request(
       endpoint = "bdm_dataset_show",
       query = list(
         dataset_id = dataset_id)) ->
@@ -102,7 +102,7 @@ get_table_columns <- function(
   dataset_id,
   table_id) {
 
-  bd_request(
+  basedosdados::bd_request(
     endpoint = "bdm_table_show",
     query = list(
       table_id = table_id,
@@ -129,7 +129,7 @@ get_table_columns <- function(
 
 get_dataset_description <- function(dataset_id) {
 
-  bd_request(
+  basedosdados::bd_request(
     endpoint = "bdm_dataset_show",
     query = list(
       dataset_id = dataset_id)) ->
@@ -159,7 +159,7 @@ get_table_description <- function(
   dataset_id = ? typed::Character(1),
   table_id = ? typed::Character(1)) {
 
-  bd_request(
+  basedosdados::bd_request(
     endpoint = "bdm_table_show",
     query = list(
       dataset_id = dataset_id,

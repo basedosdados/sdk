@@ -1,4 +1,5 @@
 ## usethis namespace: start
-#' @importFrom typed "?" check_output check_arg
+#' @rawNamespace import(typed, except = c())
+#' @rawNamespace export("?")
 ## usethis namespace: end
 NULL
