@@ -37,7 +37,7 @@ jobs:
         working-directory: python-package
 
       - name: Install dependencies
-        run: uv sync --locked
+        run: uv sync --locked --all-groups
         working-directory: python-package
 
       - name: Ruff linter check
