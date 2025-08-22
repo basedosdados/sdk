@@ -29,40 +29,31 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install poetry
-        run: pipx install "poetry<2"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
-      # https://github.com/python-poetry/poetry/issues/2117
-      - name: Set Poetry environment
-        run: poetry env use '${{ steps.python.outputs.python-path }}'
+      - name: Set up Python
+        run: uv python install
         working-directory: python-package
 
-      - name: Poetry check
-        run: poetry check
-        working-directory: python-package
-
-      - name: Install package
-        run: poetry install
-        working-directory: python-package
-
-      - name: Install requirements
-        run: poetry install --with dev --all-extras --no-root
+      - name: Install dependencies
+        run: uv sync --locked
         working-directory: python-package
 
       - name: Ruff linter check
-        run: poetry run ruff check .
+        run: uv run ruff check .
         working-directory: python-package
 
       - name: Ruff format check
-        run: poetry run ruff format --check .
+        run: uv run ruff format --check .
         working-directory: python-package
 
       - name: Setup config
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
         working-directory: python-package
-        run: poetry run python ../.github/scripts/setup-config.py
+        run: uv run python ../.github/scripts/setup-config.py
 
       - name: Test (python-${{ matrix.python-version }}, ${{ matrix.os }})
-        run: poetry run pytest
+        run: uv run pytest
         working-directory: python-package

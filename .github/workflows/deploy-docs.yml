@@ -7,6 +7,7 @@ on:
     paths:
       - 'docs/**'
       - '.github/workflows/deploy-docs.yml'
+      - python-package/
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,23 +15,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up poetry
-        run: pipx install "poetry<2"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
-      - name: Set up python
-        uses: actions/setup-python@v5
-        with:
-          cache: poetry
-          python-version: '3.10'
+      - name: Set up Python
+        run: uv python install
+        working-directory: python-package
 
-      - name: Install requirements and activate environment
-        working-directory: ./python-package
-        run: |
-          poetry install
-          echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
+      - name: Install dependencies
+        run: uv sync --locked
+        working-directory: python-package
 
       - name: Build and deploy docs
-        working-directory: ./docs
-        run: python -m mkdocs gh-deploy --force
+        working-directory: python-package
+        run: uv run mkdocs gh-deploy --force --config-file ../docs/mkdocs.yml
         env:
           GOOGLE_ANALYTICS_KEY: ${{ secrets.GOOGLE_ANALYTICS_KEY }}
