@@ -86,6 +86,20 @@ dependencies = [
     { name = "tqdm" },
 ]
 
+[package.optional-dependencies]
+all = [
+    { name = "gql" },
+    { name = "pandavro" },
+    { name = "requests-toolbelt" },
+]
+avro = [
+    { name = "pandavro" },
+]
+upload = [
+    { name = "gql" },
+    { name = "requests-toolbelt" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "pre-commit" },
@@ -113,15 +127,22 @@ requires-dist = [
     { name = "google-cloud-bigquery-storage", specifier = ">=2.19" },
     { name = "google-cloud-storage", specifier = ">=2.9" },
     { name = "gql", specifier = ">=3.4" },
+    { name = "gql", marker = "extra == 'all'" },
+    { name = "gql", marker = "extra == 'upload'" },
     { name = "loguru", specifier = ">=0.7.0" },
     { name = "pandas", specifier = ">=2.0" },
     { name = "pandas-gbq", specifier = ">=0.19" },
     { name = "pandavro", specifier = ">=1.7" },
+    { name = "pandavro", marker = "extra == 'all'" },
+    { name = "pandavro", marker = "extra == 'avro'" },
     { name = "pydata-google-auth", specifier = ">=1.8" },
     { name = "requests-toolbelt", specifier = ">=1" },
+    { name = "requests-toolbelt", marker = "extra == 'all'" },
+    { name = "requests-toolbelt", marker = "extra == 'upload'" },
     { name = "tomlkit", specifier = ">=0.11" },
     { name = "tqdm", specifier = ">=4" },
 ]
+provides-extras = ["all", "avro", "upload"]
 
 [package.metadata.requires-dev]
 dev = [
