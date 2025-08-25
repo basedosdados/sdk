@@ -1,6 +1,6 @@
 Package: basedosdados
 Title: 'Base Dos Dados' R Client
-Version: 0.2.3
+Version: 0.2.4
 Authors@R: 
     c(person(given = "Pedro",
              family = "Cavalcante",
@@ -20,7 +20,7 @@ Description: An R interface to the 'Base dos Dados' API <https://basedosdados.gi
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Imports: 
     purrr (>= 0.3.4),
     dplyr (>= 1.0.6),
@@ -39,7 +39,6 @@ Imports:
     dbplyr (>= 2.1.1),
     scales (>= 1.1.1),
     DBI (>= 1.1.1),
-    typed (>= 0.0.1),
     methods
 Suggests: 
     rmarkdown,
