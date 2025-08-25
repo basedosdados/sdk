@@ -56,14 +56,14 @@ markdown_extensions:
   - mkdocs_click
   - attr_list
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.tabbed
   - pymdownx.superfences
 
 extra_javascript:
-- js/termynal.js
-- js/custom.js
+- assets/js/termynal.js
+- assets/js/custom.js
 
 nav:
   - Home: index.md
@@ -81,45 +81,35 @@ nav:
 
 plugins:
   - search
-  - mkdocstrings:
-      handlers:
-        python:
-          rendering:
-            rendering_opt: "value"
-          setup_commands:
-            - import sys
-            - sys.path.insert(0, "python-package")
+  - mkdocstrings
   - i18n:
-      default_language: pt
       docs_structure: folder
       languages:
-        pt:
+        - locale: pt
           name: Português
           default: true
           build: true
-        en:
+        - locale: en
           name: English
           build: true
-        es:
+          nav_translations:
+            Pacotes: Packages
+            Contribua: Contribute
+            Dados: Data
+            Manual de estilo: Style guide
+            Infraestrutura: Infrastructure
+            Testes: Tests
+        - locale: es
           name: Español
           build: true
-      nav_translations:
-        en:
-          Pacotes: Packages
-          Contribua: Contribute
-          Dados: Data
-          Manual de estilo: Style guide
-          Infraestrutura: Infrastructure
-          Testes: Tests
-        es:
-          Pacotes: Paquetes
-          Contribua: Contribuir
-          Dados: Datos
-          Manual de estilo: Manual de estilo
-          Infraestrutura: Infraestructura
-          Testes: Pruebas
+          nav_translations:
+            Pacotes: Paquetes
+            Contribua: Contribuir
+            Dados: Datos
+            Manual de estilo: Manual de estilo
+            Infraestrutura: Infraestructura
+            Testes: Pruebas
 
 extra_css:
-- css/termynal.css
-- css/custom.css
-
+- assets/css/termynal.css
+- assets/css/custom.css

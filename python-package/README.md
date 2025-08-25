@@ -2,8 +2,7 @@
 
 ## Requisitos
 
-- `pyenv`: Para gerenciar versões do python
-- `poetry`: Gerenciador de dependências
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
 ## Setup
 
@@ -15,24 +14,8 @@ git clone git@github.com:basedosdados/sdk.git
 
 Entre na pasta local do repositório usando `cd sdk/python-package` e faça o setup do ambiente de desenvolvimento:
 
-Ative a versão do python:
-
 ```sh
-pyenv shell 3.10
-```
-
-Crie a env:
-
-```sh
-poetry env use 3.10
-```
-
-> Se a env já existe, ative com `poetry shell`
-
-Instale as dependências para desenvolvimento:
-
-```sh
-poetry install --with dev --all-extras --no-root
+uv sync
 ```
 
 ## Desenvolva uma nova feature
@@ -66,24 +49,7 @@ poetry install --with dev --all-extras --no-root
 
    Onde `[python-version]` é a branch da nova versão do pacote.
 
-2. Editar `pyproject.toml`:
-
-   O arquivo `pyproject.toml` contém, entre outras informações, a versão do pacote em python da **BD**. Segue excerto do arquivo:
-
-   ```toml
-   description = "Organizar e facilitar o acesso a dados brasileiros através de tabelas públicas no BigQuery."
-   homepage = "https://github.com/base-dos-dados/bases"
-   license = "MIT"
-   name = "basedosdados"
-   packages = [
-     {include = "basedosdados"},
-   ]
-   readme = "README.md"
-   repository = "https://github.com/base-dos-dados/bases"
-   version = "1.6.1-beta.2"
-   ```
-
-   O campo `version` deve ser alterado para o número da versão sendo lançada.
+2. [Atualize a versão do pacote](https://docs.astral.sh/uv/guides/package/#updating-your-version)
 
 3. Push para branch:
 
@@ -95,8 +61,7 @@ poetry install --with dev --all-extras --no-root
    Para publicar o pacote no PyPI, use:
 
    ```sh
-   poetry version [python-version]
-   poetry publish --build
+   uv publish
    ```
 
 5. Faz merge da branch para a master
