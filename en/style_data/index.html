@@ -1,0 +1,1387 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../colab_data/">
+      
+      
+        <link rel="next" href="../colab_infrastructure/">
+      
+      
+      <link rel="icon" href="../../images/bd_minilogo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Style guide - Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Lato";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../assets/css/termynal.css">
+    
+      <link rel="stylesheet" href="../../assets/css/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config",""),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#style-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../" title="Docs" class="md-header__button md-logo" aria-label="Docs" data-md-component="logo">
+      
+  <img src="../../images/bd_minilogo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Style guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../style_data/" hreflang="pt" class="md-select__link">
+              Português
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../es/style_data/" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/basedosdados/sdk" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    basedosdados/sdk
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../" title="Docs" class="md-nav__button md-logo" aria-label="Docs" data-md-component="logo">
+      
+  <img src="../../images/bd_minilogo.png" alt="logo">
+
+    </a>
+    Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/basedosdados/sdk" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    basedosdados/sdk
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../access_data_bq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    BigQuery
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../access_data_packages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Packages
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    APIs
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            APIs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_reference_python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Python
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_reference_r/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    R
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_reference_stata/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stata
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Contribute
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Contribute
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colab_data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Style guide
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Style guide
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#naming-datasets-and-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Naming datasets and tables
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Naming datasets and tables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#datasets-dataset_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      Datasets (dataset_id)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples-of-dataset_idtable_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      Examples of dataset_id.table_id
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table formats
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variable-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variable naming
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#measurement-units" class="md-nav__link">
+    <span class="md-ellipsis">
+      Measurement units
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#which-variables-to-keep-add-and-remove" class="md-nav__link">
+    <span class="md-ellipsis">
+      Which variables to keep, add, and remove
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#temporal-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Temporal coverage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleaning-strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cleaning STRINGs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#value-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Value formats
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table partitioning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Table partitioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-partitioning-and-what-is-its-goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is partitioning and what is its goal?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-should-a-table-be-partitioned" class="md-nav__link">
+    <span class="md-ellipsis">
+      When should a table be partitioned?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-partition-a-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to partition a table?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-rules-for-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Important rules for partitioning.
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#number-of-bases-per-pull-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      Number of bases per pull request
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dictionaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dictionaries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dictionaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-fill-in-the-table-dictionary-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to fill in the table dictionary metadata?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Directories
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Directories">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-fill-in-the-directory-table-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to fill in the directory table metadata?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#raw-data-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Raw Data Sources
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thought-of-improvements-for-the-standards-defined" class="md-nav__link">
+    <span class="md-ellipsis">
+      Thought of improvements for the standards defined?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colab_infrastructure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Infrastructure
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../colab_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tests
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="style-guide">Style Guide</h1>
+<p>In this section we list all the standards from our style guide and data guidelines that we use at Data Basis. They help us maintain high quality in the data and metadata we publish.</p>
+<div class="admonition tip">
+<p class="admonition-title">You can use the left menu to navigate through the different topics on this page.</p>
+</div>
+<hr />
+<h2 id="naming-datasets-and-tables">Naming datasets and tables</h2>
+<h3 id="datasets-dataset_id">Datasets (<code>dataset_id</code>)</h3>
+<p>We name datasets in the format <code>&lt;organization_id&gt;_&lt;description&gt;</code>, where
+<code>organization_id</code> follows by default the <strong>geographic scope of the
+organization</strong> that publishes the dataset:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>organization_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Global</td>
+<td><code>world_&lt;organization&gt;</code></td>
+</tr>
+<tr>
+<td>Federal</td>
+<td><code>&lt;country_code&gt;_&lt;organization&gt;</code></td>
+</tr>
+<tr>
+<td>State</td>
+<td><code>&lt;country_code&gt;_&lt;state_code&gt;_&lt;organization&gt;</code></td>
+</tr>
+<tr>
+<td>Municipal</td>
+<td><code>&lt;country_code&gt;_&lt;state_code&gt;_&lt;city&gt;_&lt;organization&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>country_code</code> and <code>state_code</code> are always 2 lowercase letters;</li>
+<li><code>organization</code> is the name or acronym (preferably) of the organization that
+  published the original data (e.g., <code>ibge</code>, <code>tse</code>, <code>inep</code>).</li>
+<li><code>description</code> is a brief description of the dataset</li>
+</ul>
+<p>For example, the GDP dataset from IBGE has as <code>dataset_id</code>: <code>br_ibge_pib</code></p>
+<div class="admonition tip">
+<p class="admonition-title">Not sure how to name the organization?</p>
+<p>We suggest visiting their website and seeing how they refer to themselves (e.g., DETRAN-RJ would be <code>br_rj_detran</code>)</p>
+</div>
+<h3 id="tables">Tables</h3>
+<p>Naming tables is less structured and therefore requires good judgment. But we have some rules:</p>
+<ul>
+<li>If there are tables for different entities, include the entity at the beginning of the name. Example: <code>municipality_value</code>, <code>state_value</code>.</li>
+<li>Do not include the time unit in the name. Example: name it <code>municipality</code>, not <code>municipality_year</code>.</li>
+<li>Keep names in singular. Example: <code>school</code>, not <code>schools</code>.</li>
+<li>Name the most disaggregated tables as <code>microdata</code>. Generally these have data at the person or transaction level.</li>
+</ul>
+<h3 id="examples-of-dataset_idtable_id">Examples of <code>dataset_id.table_id</code></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Global</td>
+<td><code>world_waze.alerts</code></td>
+<td>Waze alert data from different cities.</td>
+</tr>
+<tr>
+<td>Federal</td>
+<td><code>br_tse_elections.candidates</code></td>
+<td>TSE political candidate data.</td>
+</tr>
+<tr>
+<td>Federal</td>
+<td><code>br_ibge_pnad.microdata</code></td>
+<td>Microdata from the National Household Sample Survey produced by IBGE.</td>
+</tr>
+<tr>
+<td>Federal</td>
+<td><code>br_ibge_pnadc.microdata</code></td>
+<td>Microdata from the Continuous National Household Sample Survey (PNAD-C) produced by IBGE.</td>
+</tr>
+<tr>
+<td>State</td>
+<td><code>br_sp_see_teachers.workload</code></td>
+<td>Anonymized workload of active teachers in SP state education network.</td>
+</tr>
+<tr>
+<td>Municipal</td>
+<td><code>br_rj_riodejaneiro_cmrj_legislative.votes</code></td>
+<td>Voting data from Rio de Janeiro City Council (RJ).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="table-formats">Table formats</h2>
+<p>Tables should, whenever possible, be in <code>long</code> format, rather than <code>wide</code>.</p>
+<h2 id="variable-naming">Variable naming</h2>
+<p>Variable names must follow some rules:</p>
+<ul>
+<li>Use existing names in the repository as much as possible. Examples: <code>year</code>, <code>month</code>, <code>municipality_id</code>, <code>state_code</code>, <code>age</code>, <code>position</code>, <code>result</code>, <code>votes</code>, <code>revenue</code>, <code>expense</code>, <code>price</code>, etc.</li>
+<li>Respect directory table patterns.</li>
+<li>Be as intuitive, clear, and extensive as possible.</li>
+<li>Have all lowercase letters (including acronyms), without accents, connected by <code>_</code>.</li>
+<li>Do not include connectors like <code>of</code>, <code>the</code>, <code>and</code>, <code>in</code>, etc.</li>
+<li>Only have the <code>id_</code> prefix when the variable represents primary keys of entities (that would eventually have a directory table).<ul>
+<li>Examples that have it: <code>municipality_id</code>, <code>state_id</code>, <code>school_id</code>, <code>person_id</code>.</li>
+<li>Examples that don't: <code>network</code>, <code>location</code>.</li>
+<li><strong>Important</strong>: when the dataset is in English, id becomes a suffix</li>
+</ul>
+</li>
+<li>Only have entity suffixes when the column's entity is different from the table's entity.<ul>
+<li>Examples that have it: in a table with entity <code>person</code>, a column about municipal GDP would be called <code>municipality_gdp</code>.</li>
+<li>Examples that don't: in a table with entity <code>person</code>, person characteristics would be called <code>name</code>, <code>age</code>, <code>sex</code>, etc.</li>
+</ul>
+</li>
+<li>List of <strong>allowed prefixes</strong><ul>
+<li><code>name_</code>,</li>
+<li><code>date_</code>,</li>
+<li><code>number_</code>,</li>
+<li><code>quantity_</code>,</li>
+<li><code>proportion_</code> (percentage variables 0-100%),</li>
+<li><code>rate_</code>,</li>
+<li><code>ratio_</code>,</li>
+<li><code>index_</code>,</li>
+<li><code>indicator_</code> (boolean type variables),</li>
+<li><code>type_</code>,</li>
+<li><code>code_</code>,</li>
+<li><code>sequential_</code>.</li>
+</ul>
+</li>
+<li>List of <strong>common suffixes</strong><ul>
+<li><code>_pc</code> (per capita)</li>
+</ul>
+</li>
+</ul>
+<h2 id="measurement-units">Measurement units</h2>
+<p>The rule is to keep variables with their original measurement units listed in this <a href="https://github.com/basedosdados/website/blob/master/ckanext-basedosdados/ckanext/basedosdados/validator/available_options/measurement_unit.py">code</a>, with the exception of financial variables where we convert old currencies to current ones (e.g. Cruzeiro to Real).</p>
+<p>We catalog measurement units in standard format in the architecture table. <a href="https://github.com/basedosdados/website/blob/master/ckanext-basedosdados/ckanext/basedosdados/validator/available_options/measurement_unit.py">Complete list here</a> Examples: <code>m</code>, <code>km/h</code>, <code>BRL</code>.</p>
+<p>For deflated financial columns, we list the currency with the base year. Example: a column measured in reais in 2010 has unit <code>BRL_2010</code>.</p>
+<p>Variables must always have measurement units with base 1. In other words, having <code>BRL</code> instead of <code>1000 BRL</code>, or <code>person</code> instead of <code>1000 persons</code>. This information, as well as other column metadata, is recorded in the architecture table of the table.</p>
+<h2 id="which-variables-to-keep-add-and-remove">Which variables to keep, add, and remove</h2>
+<p>We partially <a href="https://www.guru99.com/database-normalization.html">normalize</a> our tables and have rules for which variables to include in production. They are:</p>
+<ul>
+<li>Remove variables from entity names that already exist in directories. Example: remove <code>municipality</code> from the table that already includes <code>municipality_id</code>.</li>
+<li>Remove variables serving as partitions. Example: remove <code>year</code> and <code>state_code</code> if the table is partitioned in these two dimensions.</li>
+<li>Add primary keys for each existing entity. Example: add <code>municipality_id</code> to tables that only include <code>municipality_tse</code>.</li>
+<li>Keep all primary keys that already come with the table, but (1) add relevant keys (e.g. <code>state_code</code>, <code>municipality_id</code>) and (2) remove irrelevant keys (e.g. <code>region</code>).</li>
+</ul>
+<h2 id="temporal-coverage">Temporal coverage</h2>
+<p>Fill in the <code>temporal_coverage</code> column in table, column, and key metadata (in dictionaries) according to the following pattern.</p>
+<ul>
+<li>
+<p>General format: <code>initial_date(temporal_unit)final_date</code></p>
+<ul>
+<li><code>initial_date</code> and <code>final_date</code> are in the corresponding temporal unit.<ul>
+<li>Example: table with unit <code>year</code> has coverage <code>2005(1)2018</code>.</li>
+<li>Example: table with unit <code>month</code> has coverage <code>2005-08(1)2018-12</code>.</li>
+<li>Example: table with unit <code>week</code> has coverage <code>2005-08-01(7)2018-08-31</code>.</li>
+<li>Example: table with unit <code>day</code> has coverage <code>2005-08-01(1)2018-12-31</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Rules for filling in</p>
+<ul>
+<li>Table metadata<ul>
+<li>Fill in the general format.</li>
+</ul>
+</li>
+<li>Column metadata<ul>
+<li>Fill in the general format, except when <code>initial_date</code> or <code>final_date</code> are equal to the table's. In that case, leave it empty.</li>
+<li>Example: suppose the table's coverage is <code>2005(1)2018</code>.<ul>
+<li>If a column appears only in 2012 and exists until 2018, we fill in its coverage as <code>2012(1)</code>.</li>
+<li>If a column disappears in 2013, we fill in its coverage as <code>(1)2013</code>.</li>
+<li>If a column exists in the same temporal coverage as the table, we fill in its coverage as <code>(1)</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Key metadata<ul>
+<li>Fill in the same pattern of columns, but with the reference being the corresponding column, not the table.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="cleaning-strings">Cleaning STRINGs</h2>
+<ul>
+<li>Categorical variables: initial uppercase and rest lowercase, with accents.</li>
+<li>Unstructured STRINGs: keep them as they are.</li>
+</ul>
+<h2 id="value-formats">Value formats</h2>
+<ul>
+<li>Decimal: American format, i.e., always <code>.</code> (dot) instead of <code>,</code> (comma).</li>
+<li>Date: <code>YYYY-MM-DD</code></li>
+<li>Time (24h): <code>HH:MM:SS</code></li>
+<li>Datetime (<a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a>): <code>YYYY-MM-DDTHH:MM:SS.sssZ</code></li>
+<li>Null value: <code>""</code> (csv), <code>NULL</code> (Python), <code>NA</code> (R), <code>.</code> or <code>""</code> (Stata)</li>
+<li>Proportion/percentage: between 0-100</li>
+</ul>
+<h2 id="table-partitioning">Table partitioning</h2>
+<h3 id="what-is-partitioning-and-what-is-its-goal"><strong>What is partitioning and what is its goal?</strong></h3>
+<p>In a nutshell, partitioning a table is dividing it into multiple blocks/parts. The central objective is to reduce financial costs and increase performance, as the larger the volume of data, the greater the storage and query costs.</p>
+<p>The reduction in costs and the increase in performance mainly occur because partitioning allows the data set to be reorganized into small <strong>grouped blocks</strong>. In practice, by performing the partitioning, it is possible to avoid that a query traverses the entire table just to bring a small data slice.</p>
+<p>An example of our beloved RAIS:</p>
+<ul>
+<li>Without using partition filtering:</li>
+</ul>
+<p>For this case, Bigquery scanned all (*) columns and rows of the dataset. It's worth noting that this cost is still not very large, as the base has already been partitioned. If this dataset hadn't passed through the partition process, this query would have cost a lot more money and time, as it involves a considerable volume of data.</p>
+<p><img alt="image" src="https://user-images.githubusercontent.com/58278652/185815101-68ed5797-fff8-4968-84e2-e6a47bba58d0.png" /></p>
+<ul>
+<li>With partition filtering:</li>
+</ul>
+<p>Here, we filter by the partitioned columns <code>year</code> and <code>state_code</code>. As a result, Bigquery only <strong>queries</strong> and <strong>returns</strong> the values from the <strong>year</strong> folder and the <strong>state_code</strong> subfolder.</p>
+<p><img alt="image" src="https://user-images.githubusercontent.com/58278652/185815135-fb012a2c-535b-457e-af2a-7984961168b3.png" /></p>
+<h3 id="when-should-a-table-be-partitioned"><strong>When should a table be partitioned?</strong></h3>
+<p>The first question that arises when dealing with partitioning is: <em>from which number of lines a table should be partitioned?</em> The documentation of <a href="https://cloud.google.com/bigquery/docs/partitioned-tables?hl=pt-br">GCP </a> does not define a quantity <em>x</em> or <em>y</em>  of lines that should be partitioned. The ideal is that tables are partitioned, with few exceptions. For example, tables with less than 10,000 lines, which will no longer receive data ingestion, do not have high storage and processing costs and, therefore, there is no need to be partitioned.</p>
+<h3 id="how-to-partition-a-table"><strong>How to partition a table?</strong></h3>
+<p>If the data is stored locally, it is necessary:</p>
+<ol>
+<li>Create the partitioned folders in your <code>/output</code> folder, using the language you are using.</li>
+</ol>
+<p>Example of a partitioned table by <code>year</code> and <code>month</code>, using <code>python</code>:</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">2005</span><span class="p">,</span> <span class="mi">2020</span><span class="p">)]:</span>
+  <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">)]:</span>
+    <span class="n">partition</span> <span class="o">=</span> <span class="n">output</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;table_id/year=</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">/month=</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">partition</span><span class="p">):</span>
+      <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">partition</span><span class="p">)</span>
+</code></pre></div>
+2. Save the partitioned files.</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">2005</span><span class="p">,</span> <span class="mi">2020</span><span class="p">)]:</span>
+  <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">)]:</span>
+    <span class="n">df_partition</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># The .copy is not necessary, it&#39;s just a good practice</span>
+    <span class="n">df_partition</span> <span class="o">=</span> <span class="n">df_partition</span><span class="p">[</span><span class="n">df_partition</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">month</span><span class="p">]</span>
+    <span class="n">df_partition</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># It&#39;s necessary to exclude the columns used for partitioning</span>
+    <span class="n">partition</span> <span class="o">=</span> <span class="n">output</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;table_id/year=</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">/month=</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s1">/table.csv&#39;</span>
+    <span class="n">df_partition</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">partition</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">na_rep</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p>Examples of partitioned tables in <code>R</code>:</p>
+<ul>
+<li><a href="https://github.com/basedosdados/sdk/blob/master/bases/br_ibge_pnadc/code/microdados.R">PNADC</a></li>
+<li><a href="https://github.com/basedosdados/sdk/blob/master/bases/br_ibge_pam/code/permanentes_usando_api.R">PAM</a></li>
+</ul>
+<p>Example of how to partition a table in <code>SQL</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">dataset_id</span><span class="p">.</span><span class="n">table_id</span><span class="o">`</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">year</span><span class="w">  </span><span class="n">INT64</span><span class="p">,</span>
+<span class="w">    </span><span class="k">month</span><span class="w">  </span><span class="n">INT64</span><span class="p">,</span>
+<span class="w">    </span><span class="n">col1</span><span class="w"> </span><span class="n">STRING</span><span class="p">,</span>
+<span class="w">    </span><span class="n">col1</span><span class="w"> </span><span class="n">STRING</span>
+<span class="p">)</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">year</span><span class="p">,</span><span class="w"> </span><span class="k">month</span>
+<span class="k">OPTIONS</span><span class="w"> </span><span class="p">(</span><span class="n">Description</span><span class="o">=</span><span class="s1">&#39;Description of the table&#39;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="important-rules-for-partitioning"><strong>Important rules for partitioning.</strong></h3>
+<ul>
+<li>
+<p>The types of columns that BigQuery accepts as partitioning are:</p>
+<ul>
+<li><strong>Time unit column</strong>: tables are partitioned based on a <code>TIMESTAMP</code>, <code>DATE</code> or <code>DATETIME</code> column.</li>
+<li><strong>Processing time</strong>: tables are partitioned based on the <code>data/time</code> stamp when BigQuery processes the data.</li>
+<li><strong>Range of integers</strong>: tables are partitioned based on a column of integers.</li>
+</ul>
+</li>
+<li>
+<p>The types of columns that BigQuery <strong>does not</strong> accept as partitioning are: <code>BOOL</code>, <code>FLOAT64</code>, <code>BYTES</code>, etc.</p>
+</li>
+<li>
+<p>BigQuery accepts up to 4,000 partitions per table.</p>
+</li>
+<li>
+<p>In our BD, tables are usually partitioned by: <code>year</code>, <code>month</code>, <code>quarter</code>, and <code>state_code</code>.</p>
+</li>
+<li>
+<p>Note that when partitioning a table, it is necessary to exclude the corresponding column. Example: it is necessary to exclude the <code>year</code> column when partitioning by <code>year</code>.</p>
+</li>
+</ul>
+<h2 id="number-of-bases-per-pull-request">Number of bases per <em>pull request</em></h2>
+<p>Pull requests on Github should include a maximum of one dataset, but can include more than one base. In other words, they can involve one or more tables within the same dataset.</p>
+<h2 id="dictionaries">Dictionaries</h2>
+<ul>
+<li>Each base includes only one dictionary (which covers one or more tables).</li>
+<li>For each table, column, and temporal coverage, each key maps uniquely to a value.</li>
+<li>Keys cannot have null values.</li>
+<li>Dictionaries must cover all available keys in the original tables.</li>
+<li>Keys can only have zeros to the left when the variable's number of digits has meaning. When the variable is <code>enum</code> default, we exclude the zeros to the left.<ul>
+<li>Example: we keep the zero to the left of the variable <code>br_bd_diretorios_brasil.cbo_2002:cbo_2002</code>, which has six digits, because the first digit <code>0</code> means the category is from the <code>grand group = "Members of the armed forces, police, and firefighters"</code>.</li>
+<li>For other cases, such as <code>br_inep_censo_escolar.stage:stage_education</code>, we exclude the zeros to the left. In other words, we change <code>01</code> to <code>1</code>.</li>
+</ul>
+</li>
+<li>Values are standardized: without extra spaces, initial uppercase and rest lowercase, etc.</li>
+</ul>
+<h3 id="how-to-fill-in-the-table-dictionary-metadata"><strong>How to fill in the table dictionary metadata?</strong></h3>
+<ul>
+<li>Do not fill in the <em><code>spatial_coverage</code></em> (<code>spatial_coverage</code>), i.e., leave the field empty.</li>
+<li>Do not fill in the <em><code>temporal_coverage</code></em> (<code>temporal_coverage</code>), i.e., leave the field empty.</li>
+<li>Do not fill in the <em><code>observation_level</code></em> (<code>observation_level</code>), i.e., leave the field empty.</li>
+</ul>
+<h2 id="directories">Directories</h2>
+<p>Directories are the fundamental building blocks of our <em>datalake</em>. Our rules for managing directories are:</p>
+<ul>
+<li>Directories represent <em>entities</em> of the repository that have primary keys (e.g., <code>state</code>, <code>municipality</code>, <code>school</code>) and time-based units (e.g., <code>data</code>, <code>time</code>, <code>day</code>, <code>month</code>, <code>year</code>).</li>
+<li>Each directory table has at least one primary key with unique values and no nulls. Examples: <code>municipality:municipality_id</code>, <code>state:state_code</code>.</li>
+<li>Variable names with the <code>id_</code> prefix are reserved for primary keys of entities.</li>
+</ul>
+<p>See all the <a href="https://basedosdados.org/dataset?organization=br-bd&amp;order_by=score&amp;q=%22directories%22">tables already available here.</a></p>
+<h3 id="how-to-fill-in-the-directory-table-metadata"><strong>How to fill in the directory table metadata?</strong></h3>
+<ul>
+<li>Fill in the <em><code>spatial_coverage</code></em> (<code>spatial_coverage</code>), which is the maximum spatial unit that the table covers. Example: sa.br, which means that the spatial aggregation level of the table is Brazil.</li>
+<li>Do not fill in the <em><code>temporal_coverage</code></em> (<code>temporal_coverage</code>), i.e., leave the field empty.</li>
+<li>Fill in the <em><code>observation_level</code></em> (<code>observation_level</code>), which consists of the observation level of the table, i.e., what each line represents.</li>
+<li>Do not fill in the <em><code>temporal_coverage</code></em> (<code>temporal_coverage</code>) of the columns of the table, i.e., leave the field empty.</li>
+</ul>
+<h2 id="raw-data-sources">Raw Data Sources</h2>
+<p>The field refers to the data in the raw data source, which has not yet passed through the Data Basis methodology, i.e., our <code>_input_</code>. When you click on it, the idea is to redirect the user to the original data source page. Our rules for managing the raw data sources are:</p>
+<ul>
+<li>Include the name of the external link that leads to the raw data source. As a default, this name should be the organization's name or the portal's name that stores the data. Examples: <code>Educational Statistics: Open Data from Inep</code>, <code>Penn World Tables: Groningen Growth and Development Centre</code>.</li>
+<li>Fill in the raw data source metadata: Description, URL, Language, Has Structured Data, Has an API, Is Free, Requires Registration, Availability, Requires IP from Some Country, License Type, Temporal Coverage, Spatial Coverage, and Observation Level.</li>
+</ul>
+<h2 id="thought-of-improvements-for-the-standards-defined"><strong>Thought of improvements for the standards defined?</strong></h2>
+<p>Open an <a href="https://github.com/basedosdados/sdk/labels/docs">issue on our Github</a> or send a message on <a href="https://discord.gg/huKWpsVYx4">Discord</a> to talk to us :)</p>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/basedosdados" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53C87.4 130.8 165 172.4 252.1 176.9c-1.6-7.8-2.6-15.9-2.6-24C249.5 95.1 296.3 48 354.4 48c30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://discord.com/invite/huKWpsVYx4" target="_blank" rel="noopener" title="discord.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/basedosdados/sdk" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/basedosdados" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://chat.whatsapp.com/HXWgdFc1RmwCoblly5KPBZ" target="_blank" rel="noopener" title="chat.whatsapp.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157m-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1s56.2 81.2 56.1 130.5c0 101.8-84.9 184.6-186.6 184.6m101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7s-12.5-30.1-17.1-41.2c-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2s-9.7 1.4-14.8 6.9c-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4s4.6-24.1 3.2-26.4c-1.3-2.5-5-3.9-10.5-6.6"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://t.me/joinchat/OKWc3RnClXnq2hq-8o0h_w" target="_blank" rel="noopener" title="t.me" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M256 8a248 248 0 1 0 0 496 248 248 0 1 0 0-496m115 168.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7.2-.7.3-3.1-1.2-4.4s-3.6-.8-5.1-.5c-2.2.5-37.1 23.5-104.6 69.1-9.9 6.8-18.9 10.1-26.9 9.9-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3.6-4.5 6.7-9 18.4-13.7 72.3-31.5 120.5-52.3 144.6-62.3 68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6.5 9.6 2.9 2 1.7 3.2 4.1 3.5 6.7.5 3.2.6 6.5.4 9.8z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["header.autohide", "navigation.sections", "navigation.top", "toc.integrate"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": 2.0}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+        <script src="../../assets/js/termynal.js"></script>
+      
+        <script src="../../assets/js/custom.js"></script>
+      
+    
+  </body>
+</html>
