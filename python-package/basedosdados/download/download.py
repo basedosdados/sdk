@@ -6,9 +6,9 @@ import re
 import shutil
 import sys
 import time
-import typing as ty
 from functools import lru_cache, partialmethod
 from pathlib import Path
+from typing import Optional, TypedDict, Union
 
 import pandas as pd
 from google.cloud import bigquery, bigquery_storage_v1, storage
@@ -30,13 +30,13 @@ from basedosdados.exceptions import (
 )
 
 
-class GoogleClient(ty.TypedDict):
+class _GoogleClient(TypedDict):
     bigquery: bigquery_client.Client
     storage: storage_client.Client
 
 
 def _set_config_variables(
-    billing_project_id: ty.Optional[str],
+    billing_project_id: Optional[str],
     from_file: bool,
 ) -> tuple[str, bool]:
     """Set billing_project_id and from_file variables."""
@@ -50,35 +50,32 @@ def _set_config_variables(
 
 def read_sql(
     query: str,
-    billing_project_id: ty.Optional[str] = None,
+    billing_project_id: Optional[str] = None,
     from_file: bool = False,
     reauth: bool = False,
     use_bqstorage_api: bool = False,
 ) -> pd.DataFrame:
-    """Load data from BigQuery using a query. Just a wrapper around pandas.read_gbq.
+    """
+    Load data from BigQuery using a query. Just a wrapper around
+    `pandas.read_gbq`.
 
     Args:
-        query (sql):
-            Valid SQL Standard Query to basedosdados
-        billing_project_id (str): Optional.
-            Project that will be billed. Find your Project ID here
-            https://console.cloud.google.com/projectselector2/home/dashboard
-        from_file (boolean): Optional.
-            Uses the credentials from file, located in `~/.basedosdados/credentials/
-        reauth (boolean): Optional.
-            Re-authorize Google Cloud Project in case you need to change user or
-            reset configurations.
-        use_bqstorage_api (boolean): Optional.
-            Use the BigQuery Storage API to download query results quickly, but
-            at an increased cost(https://cloud.google.com/bigquery/docs/reference/storage/).
-            To use this API, first enable it in the Cloud Console(https://console.cloud.google.com/apis/library/bigquerystorage.googleapis.com).
-            You must also have the bigquery.readsessions.create permission on
+        query: Valid SQL Standard Query to basedosdados.
+        billing_project_id: Project that will be billed. Find your Project ID
+            [here](https://console.cloud.google.com/projectselector2/home/dashboard).
+        from_file: Uses the credentials from file, located in
+            `~/.basedosdados/credentials/`.
+        reauth: Re-authorize Google Cloud Project in case you need to change
+            user or reset configurations.
+        use_bqstorage_api: Use the BigQuery Storage API to download query
+            results quickly, but at an increased cost. [More info](https://cloud.google.com/bigquery/docs/reference/storage/).
+            To use this API, first enable it in the Cloud Console:
+            [Enable API](https://console.cloud.google.com/apis/library/bigquerystorage.googleapis.com).
+            You must also have the `bigquery.readsessions.create` permission on
             the project you are billing queries to.
 
     Returns:
-        pd.DataFrame:
-            Query result
-
+        Query result as a pandas DataFrame.
     """
     billing_project_id, from_file = _set_config_variables(
         billing_project_id=billing_project_id,
@@ -125,46 +122,39 @@ def read_sql(
 def read_table(
     dataset_id: str,
     table_id: str,
-    billing_project_id: ty.Optional[str] = None,
+    billing_project_id: Optional[str] = None,
     query_project_id: str = "basedosdados",
-    limit: ty.Optional[int] = None,
+    limit: Optional[int] = None,
     from_file: bool = False,
     reauth: bool = False,
     use_bqstorage_api: bool = False,
 ) -> pd.DataFrame:
-    """Load data from BigQuery using dataset_id and table_id.
+    """
+    Load data from BigQuery using `dataset_id` and `table_id`.
 
     Args:
-        dataset_id (str):
-            Dataset id available in basedosdados. It should always come with
-            table_id.
-        table_id (str):
-            Table id available in basedosdados.dataset_id.
-            It should always come with dataset_id.
-        billing_project_id (str): Optional.
-            Project that will be billed. Find your Project ID here
-            https://console.cloud.google.com/projectselector2/home/dashboard
-        query_project_id (str): Optional.
-            Which project the table lives. You can change this you want to query
-            different projects.
-        limit (int): Optional.
-            Number of rows to read from table.
-        from_file (boolean): Optional.
-            Uses the credentials from file, located in `~/.basedosdados/credentials/
-        reauth (boolean): Optional.
-            Re-authorize Google Cloud Project in case you need to change user or
-            reset configurations.
-        use_bqstorage_api (boolean): Optional.
-            Use the BigQuery Storage API to download query results quickly, but
-            at an increased cost(https://cloud.google.com/bigquery/docs/reference/storage/).
-            To use this API, first enable it in the Cloud Console(https://console.cloud.google.com/apis/library/bigquerystorage.googleapis.com).
-            You must also have the bigquery.readsessions.create permission on
+        dataset_id: Dataset id available in basedosdados. It should always come
+            with `table_id`.
+        table_id: Table id available in `basedosdados.dataset_id`. It should
+            always come with `dataset_id`.
+        billing_project_id: Project that will be billed. Find your Project ID
+            [here](https://console.cloud.google.com/projectselector2/home/dashboard).
+        query_project_id: Which project the table lives. You can change this if
+            you want to query different projects.
+        limit: Number of rows to read from table.
+        from_file: Uses the credentials from file, located in
+            `~/.basedosdados/credentials/`.
+        reauth: Re-authorize Google Cloud Project in case you need to change
+            user or reset configurations.
+        use_bqstorage_api: Use the BigQuery Storage API to download query
+            results quickly, but at an increased cost. [More info](https://cloud.google.com/bigquery/docs/reference/storage/).
+            To use this API, first enable it in the Cloud Console:
+            [Enable API](https://console.cloud.google.com/apis/library/bigquerystorage.googleapis.com).
+            You must also have the `bigquery.readsessions.create` permission on
             the project you are billing queries to.
 
     Returns:
-        pd.DataFrame:
-            Query result
-
+        Query result as a pandas DataFrame.
     """
     billing_project_id, from_file = _set_config_variables(
         billing_project_id=billing_project_id,
@@ -188,18 +178,19 @@ def read_table(
 
 
 def download(
-    savepath: ty.Union[str, Path],
-    query: ty.Optional[str] = None,
-    dataset_id: ty.Optional[str] = None,
-    table_id: ty.Optional[str] = None,
-    billing_project_id: ty.Optional[str] = None,
+    savepath: Union[str, Path],
+    query: Optional[str] = None,
+    dataset_id: Optional[str] = None,
+    table_id: Optional[str] = None,
+    billing_project_id: Optional[str] = None,
     query_project_id: str = "basedosdados",
-    limit: ty.Optional[int] = None,
+    limit: Optional[int] = None,
     from_file: bool = False,
     reauth: bool = False,
     compression: str = "GZIP",
 ) -> None:
-    """Download table or query result from basedosdados BigQuery (or other).
+    """
+    Download table or query result from basedosdados BigQuery (or other).
 
     * Using a **query**:
 
@@ -215,39 +206,29 @@ def download(
 
 
     Args:
-        savepath (str, pathlib.PosixPath):
-            savepath must be a file path. Only supports `.csv`.
-        query (str): Optional.
-            Valid SQL Standard Query to basedosdados. If query is available,
-            dataset_id and table_id are not required.
-        dataset_id (str): Optional.
-            Dataset id available in basedosdados. It should always come with
-            table_id.
-        table_id (str): Optional.
-            Table id available in basedosdados.dataset_id.
-            It should always come with dataset_id.
-        billing_project_id (str): Optional.
-            Project that will be billed. Find your Project ID here
-            https://console.cloud.google.com/projectselector2/home/dashboard
-        query_project_id (str): Optional.
-            Which project the table lives. You can change this you want to query
-            different projects.
-        limit (int): Optional
-            Number of rows.
-        from_file (boolean): Optional.
-            Uses the credentials from file, located in `~/.basedosdados/credentials/
-        reauth (boolean): Optional.
-            Re-authorize Google Cloud Project in case you need to change user
-            or reset configurations.
-        compression (str): Optional.
-            Compression type. Only `GZIP` is available for now.
+        savepath: File path to save the result. Only supports `.csv`.
+        query: Valid SQL Standard Query to basedosdados. If query is available,
+            `dataset_id` and `table_id` are not required.
+        dataset_id: Dataset id available in basedosdados. It should always come
+            with `table_id`.
+        table_id: Table id available in `basedosdados.dataset_id`. It should
+            always come with `dataset_id`.
+        billing_project_id: Project that will be billed. Find your Project ID
+            [here](https://console.cloud.google.com/projectselector2/home/dashboard).
+        query_project_id: Which project the table lives. You can change this if
+            you want to query different projects.
+        limit: Number of rows.
+        from_file: Uses the credentials from file, located in
+            `~/.basedosdados/credentials/`.
+        reauth: Re-authorize Google Cloud Project in case you need to change
+            user or reset configurations.
+        compression: Compression type. Only `GZIP` is available for now.
 
     Returns:
         None
 
     Raises:
-        Exception: If either table_id, dataset_id or query are empty.
-
+        Exception: If either `table_id`, `dataset_id` or `query` are empty.
     """
     billing_project_id, from_file = _set_config_variables(
         billing_project_id=billing_project_id,
@@ -307,7 +288,7 @@ def download(
 
 
 def _direct_download(
-    client: GoogleClient,
+    client: _GoogleClient,
     dataset_id: str,
     table_id: str,
     savepath: Path,
@@ -315,30 +296,27 @@ def _direct_download(
     compression: str = "GZIP",
     extract: bool = True,
 ):
-    """Download file to disk without the requirement of loading it in memory.
+    """
+    Download file to disk without the requirement of loading it in memory.
 
-    Creates a temporary file based on the `table_id` and the time of
-    execution. Also create a temporary bucket using the `dataset_id`
-    and the time of execution. Move the table to the temporary file and
-    download it to disk. In the end, remove the temporary bucket.
+    Creates a temporary file based on the `table_id` and the time of execution.
+    Also creates a temporary bucket using the `dataset_id` and the time of
+    execution. Moves the table to the temporary file and downloads it to disk.
+    In the end, removes the temporary bucket.
 
     Args:
-        client (GoogleClient):
-            BigQuery and Storage clients.
-        dataset_id (str):
-            Dataset id available in project_id.
-        table_id (str):
-            Table id available in project_id.dataset_id.
-        savepath (str, `pathlib.PosixPath`):
-            Local path in which file should be stored in disk.
-        project_id (str, optional):
-            In case you want to use to query another project, by default 'basedosdados'
-        compression (str, optional):
-            Compression type to use for exported files.
-            Can be one of ["NONE"|"GZIP"]. Defaults to GZIP.
-        extract (bool, optional):
-            Whether to extract the gzip file.
+        client: BigQuery and Storage clients.
+        dataset_id: Dataset id available in `project_id`.
+        table_id: Table id available in `project_id.dataset_id`.
+        savepath: Local path in which file should be stored in disk.
+        project_id: In case you want to query another project, by default
+            'basedosdados'.
+        compression: Compression type to use for exported files. Can be one of
+            ["NONE"|"GZIP"]. Defaults to GZIP.
+        extract: Whether to extract the gzip file.
 
+    Returns:
+        None
     """
     time_hash = str(hash(time.time()))
 
@@ -384,19 +362,17 @@ def _direct_download(
 
 
 def _download_blob_from_bucket(
-    client: GoogleClient,
+    client: _GoogleClient,
     bucket_name: str,
     savepath: Path,
 ) -> None:
-    """Download a blob from a bucket to the path specified.
+    """
+    Download a blob from a bucket to the path specified.
 
     Args:
-        client (GoogleClient):
-            BigQuery and Storage clients.
-        bucket_name (str):
-            Name of the bucket for the file to be stored.
-        savepath (str):
-            Local path in which file should be stored in disk.
+        client: BigQuery and Storage clients.
+        bucket_name: Name of the bucket for the file to be stored.
+        savepath: Local path in which file should be stored in disk.
 
     Returns:
         None
@@ -407,14 +383,13 @@ def _download_blob_from_bucket(
         blob.download_to_filename(filepath)
 
 
-def _create_bucket(client: GoogleClient, bucket_name: str) -> None:
-    """Create a new buket in a specific location with standard storage class.
+def _create_bucket(client: _GoogleClient, bucket_name: str) -> None:
+    """
+    Create a new bucket in a specific location with standard storage class.
 
     Args:
-        client (GoogleClient):
-            BigQuery and Storage clients.
-        bucket_name (str):
-            Name of the bucket to be created.
+        client: BigQuery and Storage clients.
+        bucket_name: Name of the bucket to be created.
 
     Returns:
         None
@@ -429,16 +404,14 @@ def _create_bucket(client: GoogleClient, bucket_name: str) -> None:
     storage_client.create_bucket(bucket, location="US")
 
 
-def _delete_bucket(client: GoogleClient, bucket_name: str) -> None:
+def _delete_bucket(client: _GoogleClient, bucket_name: str) -> None:
     """Forceably deletes a bucket.
 
     This method deletes all blobs from a bucket.
 
     Args:
-        client (GoogleClient):
-            BigQuery and Storage clients.
-        bucket_name (str):
-            Name of the bucket to be deleted.
+        client: BigQuery and Storage clients.
+        bucket_name: Name of the bucket to be deleted.
 
     Returns:
         None
@@ -460,32 +433,27 @@ def _delete_bucket(client: GoogleClient, bucket_name: str) -> None:
 
 
 def _move_table_to_bucket(
-    client: GoogleClient,
+    client: _GoogleClient,
     dataset_id: str,
     table_id: str,
     blob_path: str,
     project_id: str = "basedosdados",
     compression: str = "GZIP",
 ) -> None:
-    """Move table from BigQuery to bucket.
+    """
+    Move table from BigQuery to bucket.
 
     Args:
-        client (GoogleClient):
-            BigQuery and Storage clients.
-        dataset_id (str):
-            Dataset id available in project_id.
-        table_id (str):
-            Table id available in project_id.dataset_id.
-        blob_path (str):
-            Path in bucket where the table will be stored.
-            Called ``destination_uri`` in the documentation in the form of
-            ``gs://<bucket_name>/<file_name.csv>``
-        project_id (str, optional):
-            In case you want to use to query another
-            project, defaults to 'basedosdados'
-        compression (str, optional):
-            Compression type to use for exported files.
-            Can be one of ["NONE"|"GZIP"]
+        client: BigQuery and Storage clients.
+        dataset_id: Dataset id available in `project_id`.
+        table_id: Table id available in `project_id.dataset_id`.
+        blob_path: Path in bucket where the table will be stored. Called
+            `destination_uri` in the documentation in the form of
+            `gs://<bucket_name>/<file_name.csv>`.
+        project_id: In case you want to query another project, defaults to
+            'basedosdados'.
+        compression: Compression type to use for exported files. Can be one of
+            ["NONE"|"GZIP"].
 
     Returns:
         None
@@ -508,7 +476,9 @@ def _move_table_to_bucket(
 
 
 def _gzip_extract(savepath: Path) -> None:
-    """Extract and replace gzip file."""
+    """
+    Extract and replace gzip file.
+    """
     try:
         for file in savepath.glob("*"):
             with gzip.open(file, "rb") as f_in:
@@ -521,7 +491,9 @@ def _gzip_extract(savepath: Path) -> None:
 
 
 def _join_files(tmp_savepath: Path, savepath: Path) -> None:
-    """Join all files in savepath."""
+    """
+    Join all files in savepath.
+    """
     files = list(tmp_savepath.glob("*.csv"))
     with savepath.open("a+") as targetfile:
         for i, file in enumerate(files):
@@ -535,12 +507,14 @@ def _join_files(tmp_savepath: Path, savepath: Path) -> None:
 
 
 def _is_table(
-    client: GoogleClient,
-    dataset_id: ty.Optional[str],
-    table_id: ty.Optional[str],
+    client: _GoogleClient,
+    dataset_id: Optional[str],
+    table_id: Optional[str],
     project_id: str,
 ) -> bool:
-    """Check whether a `table_id` is a view or not."""
+    """
+    Check whether a `table_id` is a view or not.
+    """
     if (dataset_id is None) or (table_id is None):
         return False
 
@@ -553,26 +527,29 @@ def _is_table(
 
 
 def _clean_name(string: str) -> str:
-    """Remove anything not a number or letter."""
+    """
+    Remove anything not a number or letter.
+    """
     pattern = r"[^a-zA-Z0-9]+"
     replace = ""
     return re.sub(pattern, replace, string)
 
 
 def _wait_for(job: bigquery.QueryJob) -> None:
-    """Wait for bigquery job to finish.
+    """
+    Wait for BigQuery job to finish.
 
     Args:
-        job (`bigquery.job`): bigquery job object from a
-        ``bigquery.Client().query()`` call.
-
+        job: `bigquery.job` object from a `bigquery.Client().query()` call.
     """
     while not job.done():
         time.sleep(1)
 
 
 def _sets_savepath(savepath: Path) -> Path:
-    """Set savepath accordingly."""
+    """
+    Set savepath accordingly.
+    """
     if savepath.suffix == ".csv":
         # make sure that path exists
         savepath.parent.mkdir(parents=True, exist_ok=True)
@@ -589,7 +566,9 @@ def _credentials(
     reauth: bool = False,
     scopes: list[str] = ["https://www.googleapis.com/auth/cloud-platform"],
 ):
-    """Get user credentials."""
+    """
+    Get user credentials.
+    """
     if "google.colab" in sys.modules:
         from google.colab import auth  # type: ignore
 
@@ -610,8 +589,10 @@ def _google_client(
     billing_project_id: str,
     from_file: bool,
     reauth: bool,
-) -> GoogleClient:
-    """Get Google Cloud client for bigquery and storage."""
+) -> _GoogleClient:
+    """
+    Get Google Cloud client for BigQuery and Storage.
+    """
     credentials = _credentials(from_file=from_file, reauth=reauth)
     return {
         "bigquery": bigquery.Client(
