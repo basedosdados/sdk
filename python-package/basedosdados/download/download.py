@@ -194,7 +194,7 @@ def download(
 
     * Using a **query**:
 
-        `download('select * from `basedosdados.br_suporte.diretorio_municipios` limit 10')`
+        `download('select * from basedosdados.br_suporte.diretorio_municipios limit 10')`
 
     * Using **dataset_id & table_id**:
 
@@ -223,9 +223,6 @@ def download(
         reauth: Re-authorize Google Cloud Project in case you need to change
             user or reset configurations.
         compression: Compression type. Only `GZIP` is available for now.
-
-    Returns:
-        None
 
     Raises:
         Exception: If either `table_id`, `dataset_id` or `query` are empty.

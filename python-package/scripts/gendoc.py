@@ -1,3 +1,8 @@
+import os
+import sys
+from pathlib import Path
+from typing import Optional, Union
+
 import docspec
 import docstring_to_markdown
 from pydoc_markdown.contrib.loaders.python import PythonLoader
@@ -19,8 +24,8 @@ def remove_private_method(class_: docspec.Class) -> docspec.Class:
 
 
 def process_node(
-    node: docspec.Class | docspec.Function,
-) -> docspec.Class | docspec.Function:
+    node: Union[docspec.Class, docspec.Function],
+) -> Union[docspec.Class, docspec.Function]:
     if isinstance(node, docspec.Class):
         return remove_private_method(node)
     elif isinstance(node, docspec.Function):
@@ -28,8 +33,8 @@ def process_node(
 
 
 def fmt_docstrings(
-    docstring: docspec.Docstring | None,
-) -> docspec.Docstring | None:
+    docstring: Optional[docspec.Docstring],
+) -> Optional[docspec.Docstring]:
     if docstring is None:
         return None
 
@@ -48,7 +53,9 @@ def remove_private_function_class(module: docspec.Module) -> docspec.Module:
     new_members: list[docspec._ModuleMemberType] = []
 
     for member in module.members:
-        if isinstance(member, (docspec.Class, docspec.Function)):
+        if isinstance(
+            member, (docspec.Class, docspec.Function)
+        ) and name_is_public(member.name):
             if isinstance(member, docspec.Class):
                 class_ = remove_private_method(member)
                 class_.docstring = fmt_docstrings(class_.docstring)
@@ -73,7 +80,7 @@ def remove_private_function_class(module: docspec.Module) -> docspec.Module:
     return module
 
 
-def generate():
+def generate(save_dir: Path):
     context = Context(directory=".")
     loader = PythonLoader(
         search_path=["basedosdados"],
@@ -116,12 +123,19 @@ order: 0
 # Python
 """
 
-    with open(
-        "api_reference_python.md",
-        "w",
-    ) as f:
-        f.write("\n".join([header, content]))
+    (save_dir / "api_reference_python.md").write_text(
+        "\n".join([header, content]), encoding="utf-8"
+    )
 
 
 if __name__ == "__main__":
-    generate()
+    save_path = "--save-path" in sys.argv
+    if not save_path:
+        raise Exception("Missing --save-path argument")
+
+    dir = Path(sys.argv[-1])
+
+    if not dir.is_dir():
+        raise Exception("--save-path must be a directory")
+
+    generate(dir)

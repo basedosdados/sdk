@@ -18,6 +18,13 @@ class Dataset(Base):
     """
 
     def __init__(self, dataset_id: str, **kwargs):
+        """
+        Initializes a new instance of the class with the specified dataset ID.
+
+        Args:
+            dataset_id: The identifier of the dataset. Hyphens in the ID will be replaced with underscores.
+            **kwargs: Additional keyword arguments to be passed to the superclass initializer.
+        """
         super().__init__(**kwargs)
         self.dataset_id = dataset_id.replace("-", "_")
 

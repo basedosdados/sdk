@@ -23,6 +23,19 @@ class Storage(Base):
     """
 
     def __init__(self, dataset_id: str, table_id: str, **kwargs):
+        """
+        Initializes the storage upload class with the specified dataset and table identifiers.
+
+        Args:
+            dataset_id: The identifier of the dataset. Hyphens will be replaced with underscores.
+            table_id: The identifier of the table. Hyphens will be replaced with underscores.
+            **kwargs: Additional keyword arguments to pass to the superclass initializer.
+
+        Attributes:
+            bucket: The storage bucket object used for staging.
+            dataset_id: The normalized dataset identifier.
+            table_id: The normalized table identifier.
+        """
         super().__init__(**kwargs)
 
         self.bucket = self.client["storage_staging"].bucket(self.bucket_name)

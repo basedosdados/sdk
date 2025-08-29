@@ -29,6 +29,22 @@ class Table(Base):
     """
 
     def __init__(self, dataset_id: str, table_id: str, **kwargs):
+        """
+        Initializes a new instance of the class with the specified dataset and table identifiers.
+
+        Args:
+            dataset_id: The identifier of the dataset. Hyphens will be replaced with underscores.
+            table_id: The identifier of the table. Hyphens will be replaced with underscores.
+            **kwargs: Additional keyword arguments to be passed to the superclass initializer.
+
+        Attributes:
+            table_id: The sanitized table identifier (hyphens replaced with underscores).
+            dataset_id: The sanitized dataset identifier (hyphens replaced with underscores).
+            table_full_name: Dictionary containing fully qualified table names for different environments:
+                - 'prod': Production BigQuery table name.
+                - 'staging': Staging BigQuery table name.
+                - 'all': Deep copy of the table_full_name dictionary.
+        """
         super().__init__(**kwargs)
 
         self.table_id = table_id.replace("-", "_")
