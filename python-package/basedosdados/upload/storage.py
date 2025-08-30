@@ -205,12 +205,12 @@ class Storage(Base):
 
         self._check_mode(mode)
 
-        mode = (
+        _mode = (
             ["raw", "staging", "header", "auxiliary_files", "architecture"]
             if mode == "all"
             else [mode]
         )
-        for m in mode:
+        for m in _mode:
             for filepath, part in tqdm(
                 list(zip(paths, parts)), desc="Uploading files"
             ):

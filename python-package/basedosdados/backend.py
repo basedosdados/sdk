@@ -244,7 +244,7 @@ class Backend(metaclass=SingletonMeta):
 
     def search(
         self, q: Optional[str] = None, page: int = 1, page_size: int = 10
-    ) -> list[dict]:
+    ) -> dict[str, Any]:
         """
         Search for datasets, querying all available metadata for the term `q`
 

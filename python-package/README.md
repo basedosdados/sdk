@@ -4,18 +4,10 @@
 
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-## Setup
-
-Clone o repositório:
+Depois de clonar o repositório entre na pasta local do repositório usando `cd sdk/python-package` e faça o setup do ambiente de desenvolvimento:
 
 ```sh
-git clone git@github.com:basedosdados/sdk.git
-```
-
-Entre na pasta local do repositório usando `cd sdk/python-package` e faça o setup do ambiente de desenvolvimento:
-
-```sh
-uv sync
+uv sync --all-groups
 ```
 
 ## Desenvolva uma nova feature

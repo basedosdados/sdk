@@ -93,7 +93,7 @@ class Table(Base):
 
     def _load_schema_from_json(
         self,
-        columns: Optional[list[dict[str, str]]] = None,
+        columns: list[dict[str, str]],
     ) -> list[SchemaField]:
         """
         Load schema from columns metadata.
