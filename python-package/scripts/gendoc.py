@@ -1,6 +1,18 @@
+"""
+Script to generate Markdown API documentation for selected Python packages.
+
+This script uses pydoc-markdown and docspec to load, process, and render
+documentation for specified modules and packages. It removes private classes,
+functions, and methods from the output, formats docstrings as Markdown, and
+writes the result to a file.
+
+Usage:
+    uv run scripts/gendoc.py --save-path <output_directory>
+"""
+
 import sys
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional
 
 import docspec
 import docstring_to_markdown
@@ -10,10 +22,28 @@ from pydoc_markdown.interfaces import Context
 
 
 def name_is_public(name: str) -> bool:
+    """
+    Determine if a name is considered public (not private or special).
+
+    Args:
+        name: The name to check.
+
+    Returns:
+        True if the name is public, False otherwise.
+    """
     return name[0] != "_" and name[1] != "_"
 
 
 def remove_private_method(class_: docspec.Class) -> docspec.Class:
+    """
+    Remove private methods from a class, keeping only public methods and __init__.
+
+    Args:
+        class_: The class to process.
+
+    Returns:
+        The class with private methods removed.
+    """
     class_.members = [
         i
         for i in class_.members
@@ -22,18 +52,18 @@ def remove_private_method(class_: docspec.Class) -> docspec.Class:
     return class_
 
 
-def process_node(
-    node: Union[docspec.Class, docspec.Function],
-) -> Union[docspec.Class, docspec.Function]:
-    if isinstance(node, docspec.Class):
-        return remove_private_method(node)
-    elif isinstance(node, docspec.Function):
-        return node
-
-
 def fmt_docstrings(
     docstring: Optional[docspec.Docstring],
 ) -> Optional[docspec.Docstring]:
+    """
+    Convert a docstring to Markdown and clean up header formatting.
+
+    Args:
+        docstring: The docstring to format.
+
+    Returns:
+        The formatted docstring.
+    """
     if docstring is None:
         return None
 
@@ -49,6 +79,15 @@ def fmt_docstrings(
 
 
 def remove_private_function_class(module: docspec.Module) -> docspec.Module:
+    """
+    Remove private classes and functions from a module, and format docstrings.
+
+    Args:
+        module: The module to process.
+
+    Returns:
+        The processed module.
+    """
     new_members: list[docspec._ModuleMemberType] = []
 
     for member in module.members:
@@ -80,6 +119,12 @@ def remove_private_function_class(module: docspec.Module) -> docspec.Module:
 
 
 def generate(save_dir: Path):
+    """
+    Generate Markdown API documentation and save it to the specified directory.
+
+    Args:
+        save_dir: The directory where the documentation will be saved.
+    """
     context = Context(directory=".")
     loader = PythonLoader(
         search_path=["basedosdados"],
