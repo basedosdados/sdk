@@ -106,11 +106,8 @@ def remove_private_function_class(module: docspec.Module) -> docspec.Module:
                 class_.members = class_methods
                 new_members.append(class_)
 
-            if isinstance(member, docspec.Function) and name_is_public(
-                member.name
-            ):
+            if isinstance(member, docspec.Function):
                 member.docstring = fmt_docstrings(member.docstring)
-
                 new_members.append(member)
 
     module.members = new_members

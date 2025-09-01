@@ -180,16 +180,13 @@ class Dataset(Base):
         Args:
             mode: Which dataset to create [`prod`|`staging`|`all`].
             if_exists: What to do if dataset exists
-
                 * `raise`: Raises Conflict exception
                 * `replace`: Drop all tables and replace dataset
                 * `update`: Update dataset description
                 * `pass`: Do nothing
-
             dataset_is_public: Control if prod dataset is public or not. By
                 default, staging datasets like `dataset_id_staging` are not
                 public.
-
             location: Location of dataset data. List of possible region names:
                 [BigQuery locations](https://cloud.google.com/bigquery/docs/locations)
 
