@@ -1,7 +1,7 @@
 Package: basedosdados
 Title: 'Base Dos Dados' R Client
 Version: 0.2.3
-Authors@R: 
+Authors@R:
     c(person(given = "Pedro",
              family = "Cavalcante",
              role = c("aut", "cre"),
@@ -16,12 +16,12 @@ Authors@R:
              role = c("aut"),
              email = "rodornelles@gmail.com",
              comment = c(ORCID = "0000-0003-3709-4760")))
-Description: An R interface to the 'Base dos Dados' API <https://basedosdados.github.io/sdk/py_reference_api/>). Authenticate your project, query our tables, save data to disk and memory, all from R.
+Description: An R interface to the 'Base dos Dados' API <https://basedosdados.org/docs/api_reference_python/>). Authenticate your project, query our tables, save data to disk and memory, all from R.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Imports: 
+Imports:
     purrr (>= 0.3.4),
     dplyr (>= 1.0.6),
     tibble (>= 3.1.1),
@@ -41,7 +41,7 @@ Imports:
     DBI (>= 1.1.1),
     typed (>= 0.0.1),
     methods
-Suggests: 
+Suggests:
     rmarkdown,
     knitr,
     testthat (>= 3.0.0)

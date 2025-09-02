@@ -1,5 +1,5 @@
 """
-Class for manage tables in Storage and Big Query
+Class for manage tables in Storage and BigQuery.
 """
 
 import contextlib
@@ -7,17 +7,16 @@ import inspect
 import textwrap
 from copy import deepcopy
 from functools import lru_cache
-
-
 from pathlib import Path
+from typing import Any, Optional, Union
 
 import google.api_core.exceptions
 from google.cloud import bigquery
 from google.cloud.bigquery import SchemaField
 from loguru import logger
 
-from basedosdados.exceptions import BaseDosDadosException
 from basedosdados.core.base import Base
+from basedosdados.exceptions import BaseDosDadosException
 from basedosdados.upload.connection import Connection
 from basedosdados.upload.dataset import Dataset
 from basedosdados.upload.datatypes import Datatype
@@ -29,7 +28,23 @@ class Table(Base):
     Manage tables in Google Cloud Storage and BigQuery.
     """
 
-    def __init__(self, dataset_id, table_id, **kwargs):
+    def __init__(self, dataset_id: str, table_id: str, **kwargs):
+        """
+        Initializes a new instance of the class with the specified dataset and table identifiers.
+
+        Args:
+            dataset_id: The identifier of the dataset. Hyphens will be replaced with underscores.
+            table_id: The identifier of the table. Hyphens will be replaced with underscores.
+            **kwargs: Additional keyword arguments to be passed to the superclass initializer.
+
+        Attributes:
+            table_id: The sanitized table identifier (hyphens replaced with underscores).
+            dataset_id: The sanitized dataset identifier (hyphens replaced with underscores).
+            table_full_name: Dictionary containing fully qualified table names for different environments:
+                - 'prod': Production BigQuery table name.
+                - 'staging': Staging BigQuery table name.
+                - 'all': Deep copy of the table_full_name dictionary.
+        """
         super().__init__(**kwargs)
 
         self.table_id = table_id.replace("-", "_")
@@ -42,16 +57,16 @@ class Table(Base):
 
     @property
     @lru_cache(256)
-    def table_config(self):
+    def table_config(self) -> dict[str, Any]:
         """
-        Load table config
+        Load table config.
         """
         # return self._load_yaml(self.table_folder / "table_config.yaml")
         return self.backend.get_table_config(self.dataset_id, self.table_id)
 
-    def _get_table_obj(self, mode):
+    def _get_table_obj(self, mode: str):
         """
-        Get table object from BigQuery
+        Get table object from BigQuery.
         """
 
         return self.client[f"bigquery_{mode}"].get_table(
@@ -59,8 +74,11 @@ class Table(Base):
         )
 
     def _is_partitioned(
-        self, data_sample_path=None, source_format=None, csv_delimiter=None
-    ):
+        self,
+        data_sample_path: Optional[Union[str, Path]] = None,
+        source_format: str = "csv",
+        csv_delimiter: str = ",",
+    ) -> bool:
         if data_sample_path is not None:
             table_columns = self._get_columns_from_data(
                 data_sample_path=data_sample_path,
@@ -75,8 +93,12 @@ class Table(Base):
 
     def _load_schema_from_json(
         self,
-        columns=None,
-    ):
+        columns: list[dict[str, str]],
+    ) -> list[SchemaField]:
+        """
+        Load schema from columns metadata.
+        """
+
         schema = []
 
         for col in columns:
@@ -95,10 +117,13 @@ class Table(Base):
         return schema
 
     def _load_staging_schema_from_data(
-        self, data_sample_path=None, source_format="csv", csv_delimiter=","
-    ):
+        self,
+        data_sample_path: Optional[Union[str, Path]] = None,
+        source_format: str = "csv",
+        csv_delimiter: str = ",",
+    ) -> list[SchemaField]:
         """
-        Generate schema from columns metadata in data sample
+        Generate schema from columns metadata in data sample.
         """
 
         if self.table_exists(mode="staging"):
@@ -119,11 +144,11 @@ class Table(Base):
             columns=table_columns.get("columns")
         )
 
-    def _load_schema_from_bq(self, mode="staging"):
+    def _load_schema_from_bq(self, mode: str = "staging") -> list[SchemaField]:
         """Load schema from table config
 
         Args:
-            mode (bool): Which dataset to create [prod|staging].
+            mode: Which dataset to create [`prod`|`staging`].
 
         """
         table_columns = self._get_columns_from_bq()
@@ -132,11 +157,13 @@ class Table(Base):
         )
         return self._load_schema_from_json(columns=columns)
 
-    def _load_schema_from_api(self, mode="staging"):
+    def _load_schema_from_api(
+        self, mode: str = "staging"
+    ) -> list[SchemaField]:
         """Load schema from table config
 
         Args:
-            mode (bool): Which dataset to create [prod|staging].
+            mode: Which dataset to create [`prod`|`staging`].
 
         """
         if self.table_exists(mode=mode):
@@ -155,21 +182,18 @@ class Table(Base):
 
     def _get_columns_from_data(
         self,
-        data_sample_path=None,
-        source_format="csv",
-        csv_delimiter=",",
-        mode="staging",
-    ):  # sourcery skip: low-code-quality
+        data_sample_path: Optional[Union[str, Path]] = None,
+        source_format: str = "csv",
+        csv_delimiter: str = ",",
+        mode: str = "staging",
+    ) -> dict[str, list[dict[str, str]]]:
         """
-        Get the partition columns from the structure of data_sample_path.
+        Get the partition columns from the structure of `data_sample_path`.
 
         Args:
-            data_sample_path (str, pathlib.PosixPath): Optional.
-                Data sample path to auto complete columns names
-                It supports Comma Delimited CSV, Apache Avro and
-                Apache Parquet.
-            source_format (str): Optional
-                Data source format. Only 'csv', 'avro' and 'parquet'
+            data_sample_path: Data sample path to auto complete columns names.
+                It supports Comma Delimited CSV, Apache Avro and Apache Parquet.
+            source_format: Data source format. Only 'csv', 'avro' and 'parquet'
                 are supported. Defaults to 'csv'.
         """
 
@@ -209,7 +233,7 @@ class Table(Base):
 
     def _get_columns_metadata_from_api(
         self,
-    ):
+    ) -> dict[str, list[dict[str, str]]]:
         """
         Get columns and partition columns from API.
         """
@@ -241,9 +265,9 @@ class Table(Base):
             ],
         }
 
-    def _parser_blobs_to_partition_dict(self) -> dict:
+    def _parser_blobs_to_partition_dict(self) -> Optional[dict[Any, Any]]:
         """
-        Extracts the partition information from the blobs.
+        Extract the partition information from the blobs.
         """
 
         if not self.table_exists(mode="staging"):
@@ -266,7 +290,12 @@ class Table(Base):
                         partitions_dict[key] = [value]
             return partitions_dict
 
-    def _get_columns_from_bq(self, mode="staging"):
+    def _get_columns_from_bq(
+        self, mode: str = "staging"
+    ) -> dict[str, list[dict[str, str]]]:
+        """
+        Get columns and partition columns from BigQuery.
+        """
         if not self.table_exists(mode=mode):
             msg = f"Table {self.dataset_id}.{self.table_id} does not exist in {mode}, please create first!"
             raise logger.error(msg)
@@ -299,9 +328,12 @@ class Table(Base):
                 for col in schema
                 if col.name in partition_columns
             ],
-        }
+        }  # pyright: ignore[reportReturnType]
 
     def _get_cross_columns_from_bq_api(self):
+        """
+        Get cross columns from BigQuery API.
+        """
         bq = self._get_columns_from_bq(mode="staging")
         bq_columns = bq.get("partition_columns") + bq.get("columns")
 
@@ -317,8 +349,10 @@ class Table(Base):
 
         return bq_columns
 
-    def _make_publish_sql(self):
-        """Create publish.sql with columns and bigquery_type"""
+    def _make_publish_sql(self) -> str:
+        """
+        Create `publish.sql` with columns and bigquery_type.
+        """
 
         # publish.sql header and instructions
         publish_txt = """
@@ -375,11 +409,12 @@ class Table(Base):
 
         return publish_txt
 
-    def table_exists(self, mode):
-        """Check if table exists in BigQuery.
+    def table_exists(self, mode: str) -> bool:
+        """
+        Check if table exists in BigQuery.
 
         Args:
-            mode (str): Which dataset to check [prod|staging].
+            mode: Which dataset to check [`prod`|`staging`].
         """
 
         try:
@@ -391,10 +426,12 @@ class Table(Base):
 
     def _get_biglake_connection(
         self,
-        set_biglake_connection_permissions=True,
-        location=None,
-        mode="staging",
-    ):
+        set_biglake_connection_permissions: bool = True,
+        location: Optional[str] = None,
+    ) -> Connection:
+        """
+        Get or create BigLake connection and set permissions if needed.
+        """
         connection = Connection(
             name="biglake", location=location, mode="staging"
         )
@@ -461,12 +498,12 @@ class Table(Base):
 
         return connection
 
-    def _get_table_description(self, mode="staging"):
-        """Adds table description to BigQuery table.
+    def _get_table_description(self, mode: str = "staging") -> str:
+        """
+        Get table description to BigQuery table.
 
         Args:
-            table_obj (google.cloud.bigquery.table.Table): Table object.
-            mode (str): Which dataset to check [prod|staging].
+            mode: Which dataset to check [`prod`|`staging`].
         """
         table_path = self.table_full_name["prod"]
         if mode == "staging":
@@ -484,30 +521,33 @@ class Table(Base):
 
     def create(
         self,
-        path=None,
-        source_format="csv",
-        csv_delimiter=",",
-        csv_skip_leading_rows=1,
-        csv_allow_jagged_rows=False,
-        if_table_exists="raise",
-        if_storage_data_exists="raise",
-        if_dataset_exists="pass",
-        dataset_is_public=True,
-        location=None,
-        chunk_size=None,
-        biglake_table=False,
-        set_biglake_connection_permissions=True,
-    ):
-        """Creates a BigQuery table in the staging dataset.
+        path: Optional[Union[str, Path]] = None,
+        source_format: str = "csv",
+        csv_delimiter: str = ",",
+        csv_skip_leading_rows: int = 1,
+        csv_allow_jagged_rows: bool = False,
+        if_table_exists: str = "raise",
+        if_storage_data_exists: str = "raise",
+        if_dataset_exists: str = "pass",
+        dataset_is_public: bool = True,
+        location: Optional[str] = None,
+        chunk_size: Optional[int] = None,
+        biglake_table: bool = False,
+        set_biglake_connection_permissions: bool = True,
+    ) -> None:
+        """
+        Creates a BigQuery table in the staging dataset.
 
         If a path is provided, data is automatically saved in storage,
-        and a datasets folder and BigQuery location are created, in addition to creating
-        the table and its configuration files.
+        and a datasets folder and BigQuery location are created, in addition to
+        creating the table and its configuration files.
 
-        The new table is located at `<dataset_id>_staging.<table_id>` in BigQuery.
+        The new table is located at `<dataset_id>_staging.<table_id>` in
+        BigQuery.
 
-        Data can be found in Storage at `<bucket_name>/staging/<dataset_id>/<table_id>/*`
-        and is used to build the table.
+        Data can be found in Storage at
+        `<bucket_name>/staging/<dataset_id>/<table_id>/*` and is used to build
+        the table.
 
         The following data types are supported:
 
@@ -516,46 +556,55 @@ class Table(Base):
         - Apache Parquet
 
         Data can also be partitioned following the Hive partitioning scheme
-        `<key1>=<value1>/<key2>=<value2>`; for example,
-        `year=2012/country=BR`. The partition is automatically detected by searching for `partitions`
-        in the `table_config.yaml` file.
+        `<key1>=<value1>/<key2>=<value2>`. For example,
+        `year=2012/country=BR`. The partition is automatically detected by
+        searching for `partitions` in the `table_config.yaml` file.
 
         Args:
-            path (str or pathlib.PosixPath): The path to the file to be uploaded to create the table.
-            source_format (str): Optional. The format of the data source. Only 'csv', 'avro', and 'parquet'
-                are supported. Defaults to 'csv'.
-            csv_delimiter (str): Optional.
-                The separator for fields in a CSV file. The separator can be any ISO-8859-1
-                single-byte character. Defaults to ','.
-            csv_skip_leading_rows(int): Optional.
-                The number of rows at the top of a CSV file that BigQuery will skip when loading the data.
-                Defaults to 1.
-            csv_allow_jagged_rows (bool): Optional.
-                Indicates if BigQuery should allow extra values that are not represented in the table schema.
-                Defaults to False.
-            if_table_exists (str): Optional. Determines what to do if the table already exists:
-
-                * 'raise' : Raises a Conflict exception
-                * 'replace' : Replaces the table
-                * 'pass' : Does nothing
-            if_storage_data_exists (str): Optional. Determines what to do if the data already exists on your bucket:
-
-                * 'raise' : Raises a Conflict exception
-                * 'replace' : Replaces the table
-                * 'pass' : Does nothing
-            if_dataset_exists (str): Optional. Determines what to do if the dataset already exists:
-
-                * 'raise' : Raises a Conflict exception
-                * 'replace' : Replaces the dataset
-                * 'pass' : Does nothing
-            dataset_is_public (bool): Optional. Controls if the prod dataset is public or not. By default, staging datasets like `dataset_id_staging` are not public.
-            location (str): Optional. The location of the dataset data. List of possible region names locations: https://cloud.google.com/bigquery/docs/locations
-            chunk_size (int): Optional. The size of a chunk of data whenever iterating (in bytes). This must be a multiple of 256 KB per the API specification.
-                If not specified, the chunk_size of the blob itself is used. If that is not specified, a default value of 40 MB is used.
-            biglake_table (bool): Optional. Sets this as a BigLake table. BigLake tables allow end-users to query from external data (such as GCS) even if
-                they don't have access to the source data. IAM is managed like any other BigQuery native table. See https://cloud.google.com/bigquery/docs/biglake-intro for more on BigLake.
-            set_biglake_connection_permissions (bool): Optional. If set to `True`, attempts to grant the BigLake connection service account access to the table's data in GCS.
-
+            path: The path to the file to be uploaded to create the table.
+            source_format: The format of the data source. Only 'csv', 'avro',
+                and 'parquet' are supported. Defaults to 'csv'.
+            csv_delimiter: The separator for fields in a CSV file. The
+                separator can be any ISO-8859-1 single-byte character. Defaults
+                to ','.
+            csv_skip_leading_rows: The number of rows at the top of a CSV file
+                that BigQuery will skip when loading the data. Defaults to 1.
+            csv_allow_jagged_rows: Indicates if BigQuery should allow extra
+                values that are not represented in the table schema. Defaults to
+                False.
+            if_table_exists: Determines what to do if the table already exists:
+                * `raise`: Raises a Conflict exception
+                * `replace`: Replaces the table
+                * `pass`: Does nothing
+            if_storage_data_exists: Determines what to do if the data already
+                exists on your bucket:
+                * `raise`: Raises a Conflict exception
+                * `replace`: Replaces the table
+                * `pass`: Does nothing
+            if_dataset_exists: Determines what to do if the dataset already
+                exists:
+                * `raise`: Raises a Conflict exception
+                * `replace`: Replaces the dataset
+                * `pass`: Does nothing
+            dataset_is_public: Controls if the prod dataset is public or not. By
+                default, staging datasets like `dataset_id_staging` are not
+                public.
+            location: The location of the dataset data. List of possible region
+                names: [BigQuery locations](https://cloud.google.com/bigquery/docs/locations)
+            chunk_size: The size of a chunk of data whenever iterating (in
+                bytes). This must be a multiple of 256 KB per the API
+                specification. If not specified, the chunk_size of the blob
+                itself is used. If that is not specified, a default value of 40
+                MB is used.
+            biglake_table: Sets this as a BigLake table. BigLake tables allow
+                end-users to query from external data (such as GCS) even if they
+                don't have access to the source data. IAM is managed like any
+                other BigQuery native table. See
+                [BigLake intro](https://cloud.google.com/bigquery/docs/biglake-intro)
+                for more on BigLake.
+            set_biglake_connection_permissions: If set to `True`, attempts to
+                grant the BigLake connection service account access to the
+                table's data in GCS.
         """
 
         if path is None:
@@ -608,7 +657,6 @@ class Table(Base):
             biglake_connection = self._get_biglake_connection(
                 set_biglake_connection_permissions=set_biglake_connection_permissions,
                 location=location,
-                mode="staging",
             )
             biglake_connection_id = biglake_connection.connection_id
 
@@ -696,13 +744,17 @@ class Table(Base):
         )
         # return None
 
-    def update(self, mode="prod", custom_schema=None):
-        """Updates BigQuery schema and description.
+    def update(
+        self,
+        mode: str = "prod",
+        custom_schema: Optional[list[dict[str, str]]] = None,
+    ) -> None:
+        """
+        Updates BigQuery schema and description.
+
         Args:
-            mode (str): Optional.
-                Table of which table to update [prod]
-            not_found_ok (bool): Optional.
-                What to do if table is not found
+            mode: Table of which table to update [`prod`].
+            not_found_ok: What to do if table is not found.
         """
 
         self._check_mode(mode)
@@ -732,32 +784,30 @@ class Table(Base):
         )
 
     def publish(
-        self, if_exists="raise", custom_publish_sql=None, custom_schema=None
-    ):
-        """Creates BigQuery table at production dataset.
+        self,
+        if_exists: str = "raise",
+        custom_publish_sql: Optional[str] = None,
+        custom_schema: Optional[list[dict[str, str]]] = None,
+    ) -> None:
+        """
+        Creates BigQuery table at production dataset.
 
         Table should be located at `<dataset_id>.<table_id>`.
 
         It creates a view that uses the query from
         `<metadata_path>/<dataset_id>/<table_id>/publish.sql`.
 
-        Make sure that all columns from the query also exists at
+        Make sure that all columns from the query also exist at
         `<metadata_path>/<dataset_id>/<table_id>/table_config.sql`, including
         the partitions.
 
         Args:
-            if_exists (str): Optional.
-                What to do if table exists.
-
-                * 'raise' : Raises Conflict exception
-                * 'replace' : Replace table
-                * 'pass' : Do nothing
-
-        Todo:
-
-            * Check if all required fields are filled
+            if_exists: What to do if table exists.
+                * `raise`: Raises Conflict exception
+                * `replace`: Replace table
+                * `pass`: Do nothing
         """
-        # TODO: review this method
+        # TODO: review this method. Check if all required fields are filled
 
         if if_exists == "replace" and self.table_exists(mode="prod"):
             self.delete(mode="prod")
@@ -783,11 +833,12 @@ class Table(Base):
             action="published",
         )
 
-    def delete(self, mode="all"):
-        """Deletes table in BigQuery.
+    def delete(self, mode: str = "all") -> None:
+        """
+        Deletes table in BigQuery.
 
         Args:
-            mode (str): Table of which table to delete [prod|staging]
+            mode: Table of which table to delete [`prod`|`staging`].
         """
 
         self._check_mode(mode)
@@ -816,34 +867,33 @@ class Table(Base):
 
     def append(
         self,
-        filepath,
-        partitions=None,
-        if_exists="replace",
-        chunk_size=None,
+        filepath: Union[str, Path],
+        partitions: Optional[Union[str, dict[str, str]]] = None,
+        if_exists: str = "replace",
+        chunk_size: Optional[int] = None,
         **upload_args,
-    ):
-        """Appends new data to existing BigQuery table.
+    ) -> None:
+        """
+        Appends new data to existing BigQuery table.
 
         As long as the data has the same schema. It appends the data in the
         filepath to the existing table.
 
         Args:
-            filepath (str or pathlib.PosixPath): Where to find the file that you want to upload to create a table with
-            partitions (str, pathlib.PosixPath, dict): Optional.
-                Hive structured partition as a string or dict
-
-                * str : `<key>=<value>/<key2>=<value2>`
+            filepath: Where to find the file that you want to upload to create a
+                table with.
+            partitions: Hive structured partition as a string or dict.
+                * str: `<key>=<value>/<key2>=<value2>`
                 * dict: `dict(key=value, key2=value2)`
-            if_exists (str): 0ptional.
-                What to do if data with same name exists in storage
-
-                * 'raise' : Raises Conflict exception
-                * 'replace' : Replace table
-                * 'pass' : Do nothing
-            chunk_size (int): Optional
-                The size of a chunk of data whenever iterating (in bytes).
-                This must be a multiple of 256 KB per the API specification.
-                If not specified, the chunk_size of the blob itself is used. If that is not specified, a default value of 40 MB is used.
+            if_exists: What to do if data with same name exists in storage.
+                * `raise`: Raises Conflict exception
+                * `replace`: Replace table
+                * `pass`: Do nothing
+            chunk_size: The size of a chunk of data whenever iterating (in
+                bytes). This must be a multiple of 256 KB per the API
+                specification. If not specified, the chunk_size of the blob
+                itself is used. If that is not specified, a default value of 40
+                MB is used.
         """
         if not self.table_exists("staging"):
             raise BaseDosDadosException(
