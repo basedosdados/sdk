@@ -22,18 +22,7 @@ from basedosdados.exceptions import (
 )
 
 
-class SingletonMeta(type):
-    """Singleton Meta to avoid multiple instances of a class"""
-
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super().__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-class Backend(metaclass=SingletonMeta):
+class Backend:
     def __init__(
         self,
         search_url: Optional[str] = None,
