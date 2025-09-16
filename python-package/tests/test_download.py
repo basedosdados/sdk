@@ -12,7 +12,6 @@ from pandas_gbq.gbq import GenericGBQException
 from basedosdados import download, read_sql, read_table
 from basedosdados.exceptions import (
     BaseDosDadosException,
-    BaseDosDadosInvalidProjectIDException,
 )
 
 TEST_PROJECT_ID = "basedosdados-dev"
@@ -106,9 +105,7 @@ def test_read_sql_invalid_billing_project_id():
     id is not valid.
     """
 
-    pattern = r"You are using an invalid `billing_project_id`"
-
-    with pytest.raises(BaseDosDadosInvalidProjectIDException, match=pattern):
+    with pytest.raises(GenericGBQException):
         read_sql(
             query="select * from `basedosdados.br_ibge_pib.municipio` limit 10",
             billing_project_id="inexistent_project_id",
@@ -152,7 +149,11 @@ def test_read_sql_inexistent_dataset():
             from_file=True,
         )
 
-    assert "Reason: 404 Not found: Dataset" in str(excinfo.value)
+    assert "Reason: 404 POST" in str(excinfo.value)
+    assert (
+        "Not found: Dataset basedosdados-dev:br_ibge_inexistent was not found"
+        in str(excinfo.value)
+    )
 
 
 def test_read_sql_inexistent_table():
@@ -168,7 +169,11 @@ def test_read_sql_inexistent_table():
             from_file=True,
         )
 
-    assert "Reason: 404 Not found: Table" in str(excinfo.value)
+    assert "Reason: 404 POST" in str(excinfo.value)
+    assert (
+        "Not found: Table basedosdados:br_ibge_pib.inexistent was not found"
+        in str(excinfo.value)
+    )
 
 
 def test_read_sql_syntax_error():
@@ -184,7 +189,7 @@ def test_read_sql_syntax_error():
             from_file=True,
         )
 
-    assert "Reason: 400 Syntax error" in str(excinfo.value)
+    assert "Reason: 400 POST" in str(excinfo.value)
 
 
 def test_read_sql_out_of_bound_date():

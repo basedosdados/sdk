@@ -22,19 +22,12 @@ from basedosdados.exceptions import (
 )
 
 
-class SingletonMeta(type):
-    """Singleton Meta to avoid multiple instances of a class"""
-
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super().__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-class Backend(metaclass=SingletonMeta):
-    def __init__(self, search_url: str = None, graphql_url: str = None):
+class Backend:
+    def __init__(
+        self,
+        search_url: Optional[str] = None,
+        graphql_url: Optional[str] = None,
+    ):
         """
         Backend class to communicate with the backend.
 
@@ -49,8 +42,8 @@ class Backend(metaclass=SingletonMeta):
 
     def get_datasets(
         self,
-        dataset_id: str = None,
-        dataset_name: str = None,
+        dataset_id: Optional[str] = None,
+        dataset_name: Optional[str] = None,
         page: int = 1,
         page_size: int = 10,
     ):
@@ -123,9 +116,9 @@ class Backend(metaclass=SingletonMeta):
 
     def get_tables(
         self,
-        dataset_id: str = None,
-        table_id: str = None,
-        table_name: str = None,
+        dataset_id: Optional[str] = None,
+        table_id: Optional[str] = None,
+        table_name: Optional[str] = None,
         page: int = 1,
         page_size: int = 10,
     ):
@@ -182,9 +175,9 @@ class Backend(metaclass=SingletonMeta):
 
     def get_columns(
         self,
-        table_id: str = None,
-        column_id: str = None,
-        column_name: str = None,
+        table_id: Optional[str] = None,
+        column_id: Optional[str] = None,
+        column_name: Optional[str] = None,
         page: int = 1,
         page_size: int = 10,
     ):
@@ -239,8 +232,8 @@ class Backend(metaclass=SingletonMeta):
         )
 
     def search(
-        self, q: str = None, page: int = 1, page_size: int = 10
-    ) -> list[dict]:
+        self, q: Optional[str] = None, page: int = 1, page_size: int = 10
+    ) -> dict[str, Any]:
         """
         Search for datasets, querying all available metadata for the term `q`
 

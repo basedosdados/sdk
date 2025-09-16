@@ -391,7 +391,7 @@ class Base:
         raise Exception(
             f"Argument {mode} not supported. "
             f"Enter one of the following: "
-            f'{",".join(ACCEPTED_MODES)}'
+            f"{','.join(ACCEPTED_MODES)}"
         )
 
     def _get_project_id(self, mode: str) -> str:

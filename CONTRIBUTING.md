@@ -34,29 +34,5 @@ Acesso o guia de contribuição para cada pacote:
   1. Mudei a função X para fazer Y
   2. Troquei o nome da variavel Z
 - Referência aos issues atendidos ser possível
-- Documentação e Docstrings
+- Documentação (Docstrings)
 - Testes
-
-## Documentação
-
-Para rodar a documentação em `docs` localmente você precisa instalar as dependências [Python](./python-package/README.md)
-
-Acesse a pasta `docs/` na raiz do projeto e execute
-
-```bash
-mkdocs serve # Acesse http://localhost:8000/
-```
-
-Atualize os docs adicionando ou editando os arquivos `.md` em `docs/`.
-
-Para adicionar seu arquivo no sumário da documentação, adicione-o em `mkdocs.yml` sob a chave `nav`:
-
-```yaml
-nav:
-  - Home:
-      - Aprenda sobre a BD: index.md
-      - BigQuery: access_data_bq.md
-      - Pacotes: access_data_packages.md
-      - Contribua: colab.md
-      - [Seu novo título]: <seu_arquivo>.md
-```
