@@ -1,6 +1,8 @@
 Package: basedosdados
 Title: 'Base Dos Dados' R Client
 Version: 0.2.3
+Author: Pedro Cavalcante [aut, cre], Daniel Herszenhut [aut], Rodrigo Dornelles [aut]
+Maintainer: Pedro Cavalcante <pedrocolrj@gmail.com>
 Authors@R: 
     c(person(given = "Pedro",
              family = "Cavalcante",
