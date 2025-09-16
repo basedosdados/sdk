@@ -3,6 +3,7 @@ Module for manage dataset to the server.
 """
 
 from functools import lru_cache
+from typing import Any, Optional
 
 from google.api_core.exceptions import Conflict
 from google.cloud import bigquery
@@ -16,19 +17,26 @@ class Dataset(Base):
     Manage datasets in BigQuery.
     """
 
-    def __init__(self, dataset_id, **kwargs):
+    def __init__(self, dataset_id: str, **kwargs):
+        """
+        Initializes a new instance of the class with the specified dataset ID.
+
+        Args:
+            dataset_id: The identifier of the dataset. Hyphens in the ID will be replaced with underscores.
+            **kwargs: Additional keyword arguments to be passed to the superclass initializer.
+        """
         super().__init__(**kwargs)
         self.dataset_id = dataset_id.replace("-", "_")
 
     @property
     @lru_cache
-    def dataset_config(self):
+    def dataset_config(self) -> dict[str, Any]:
         """
         Dataset config file.
         """
         return self.backend.get_dataset_config(self.dataset_id)
 
-    def _loop_modes(self, mode="all"):
+    def _loop_modes(self, mode: str = "all"):
         """
         Loop modes.
         """
@@ -36,17 +44,22 @@ class Dataset(Base):
         def dataset_tag(m):
             return f"_{m}" if m == "staging" else ""
 
-        mode = ["prod", "staging"] if mode == "all" else [mode]
+        mode_ = ["prod", "staging"] if mode == "all" else [mode]
         return (
             {
                 "client": self.client[f"bigquery_{m}"],
                 "id": f"{self.client[f'bigquery_{m}'].project}.{self.dataset_id}{dataset_tag(m)}",
                 "mode": m,
             }
-            for m in mode
+            for m in mode_
         )
 
-    def _setup_dataset_object(self, dataset_id, location=None, mode="staging"):
+    def _setup_dataset_object(
+        self,
+        dataset_id: str,
+        location: Optional[str] = None,
+        mode: str = "staging",
+    ) -> bigquery.Dataset:
         """
         Setup dataset object.
         """
@@ -75,12 +88,17 @@ class Dataset(Base):
         dataset.location = location
         return dataset
 
-    def publicize(self, mode="all", dataset_is_public=True):
-        """Changes IAM configuration to turn BigQuery dataset public.
+    def publicize(
+        self, mode: str = "all", dataset_is_public: bool = True
+    ) -> None:
+        """
+        Changes IAM configuration to turn BigQuery dataset public.
 
         Args:
-            mode (bool): Which dataset to create [prod|staging|all].
-            dataset_is_public (bool): Control if prod dataset is public or not. By default staging datasets like `dataset_id_staging` are not public.
+            mode: Which dataset to create [`prod`|`staging`|`all`].
+            dataset_is_public: Control if prod dataset is public or not. By
+                default, staging datasets like `dataset_id_staging` are not
+                public.
         """
 
         for m in self._loop_modes(mode):
@@ -129,7 +147,7 @@ class Dataset(Base):
                 action="publicized",
             )
 
-    def exists(self, mode="staging"):
+    def exists(self, mode: str = "staging") -> bool:
         """
         Check if dataset exists.
         """
@@ -144,34 +162,33 @@ class Dataset(Base):
 
     def create(
         self,
-        mode="all",
-        if_exists="raise",
-        dataset_is_public=True,
-        location=None,
-    ):
-        """Creates BigQuery datasets given `dataset_id`.
+        mode: str = "all",
+        if_exists: str = "raise",
+        dataset_is_public: bool = True,
+        location: Optional[str] = None,
+    ) -> None:
+        """
+        Creates BigQuery datasets given `dataset_id`.
 
         It can create two datasets:
 
-        * `<dataset_id>` (mode = 'prod')
-        * `<dataset_id>_staging` (mode = 'staging')
+        * `<dataset_id>` (mode = `prod`)
+        * `<dataset_id>_staging` (mode = `staging`)
 
-        If `mode` is all, it creates both.
+        If `mode` is `all`, it creates both.
 
         Args:
-            mode (str): Optional. Which dataset to create [prod|staging|all].
-            if_exists (str): Optional. What to do if dataset exists
-
-                * raise : Raises Conflict exception
-                * replace : Drop all tables and replace dataset
-                * update : Update dataset description
-                * pass : Do nothing
-
-            dataset_is_public (bool): Control if prod dataset is public or not. By default staging datasets like `dataset_id_staging` are not public.
-
-            location (str): Optional. Location of dataset data.
-                List of possible region names locations: https://cloud.google.com/bigquery/docs/locations
-
+            mode: Which dataset to create [`prod`|`staging`|`all`].
+            if_exists: What to do if dataset exists
+                * `raise`: Raises Conflict exception
+                * `replace`: Drop all tables and replace dataset
+                * `update`: Update dataset description
+                * `pass`: Do nothing
+            dataset_is_public: Control if prod dataset is public or not. By
+                default, staging datasets like `dataset_id_staging` are not
+                public.
+            location: Location of dataset data. List of possible region names:
+                [BigQuery locations](https://cloud.google.com/bigquery/docs/locations)
 
         Raises:
             Warning: Dataset already exists and if_exists is set to `raise`
@@ -215,11 +232,13 @@ class Dataset(Base):
                     f"Dataset {self.dataset_id} already exists"
                 ) from e
 
-    def delete(self, mode="all"):
-        """Deletes dataset in BigQuery. Toogle mode to choose which dataset to delete.
+    def delete(self, mode: str = "all") -> None:
+        """
+        Deletes dataset in BigQuery. Toggle mode to choose which dataset to
+        delete.
 
         Args:
-            mode (str): Optional.  Which dataset to delete [prod|staging|all]
+            mode: Which dataset to delete [`prod`|`staging`|`all`]
         """
 
         for m in self._loop_modes(mode):
@@ -234,14 +253,17 @@ class Dataset(Base):
                 action="deleted",
             )
 
-    def update(self, mode="all", location=None):
-        """Update dataset description. Toogle mode to choose which dataset to update.
+    def update(
+        self, mode: str = "all", location: Optional[str] = None
+    ) -> None:
+        """
+        Update dataset description. Toggle mode to choose which dataset to
+        update.
 
         Args:
-            mode (str): Optional. Which dataset to update [prod|staging|all]
-            location (str): Optional. Location of dataset data.
-                List of possible region names locations: https://cloud.google.com/bigquery/docs/locations
-
+            mode: Which dataset to update [`prod`|`staging`|`all`]
+            location: Location of dataset data. List of possible region names:
+                [BigQuery locations](https://cloud.google.com/bigquery/docs/locations)
         """
 
         for m in self._loop_modes(mode):

@@ -1,60 +1,33 @@
 """
-Functions to get metadata from BD's API
+Functions to get metadata from BD's API.
 """
 
-from functools import wraps
+from typing import Optional
 
 from basedosdados.backend import Backend
 
 
-def check_input(f):
-    """Checks if the number of inputs is valid"""
-
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        if sum([a is not None for a in args]) > 1:
-            raise ValueError("At most one of the inputs must be non null")
-        return f(*args, **kwargs)
-
-    return wrapper
-
-
-def inject_backend(f):
-    """Inject backend instance if doesn't exists"""
-
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        if "backend" not in kwargs:
-            kwargs["backend"] = Backend()
-        return f(*args, **kwargs)
-
-    return wrapper
-
-
-@check_input
-@inject_backend
 def get_datasets(
-    dataset_id: str = None,
-    dataset_name: str = None,
+    dataset_id: Optional[str] = None,
+    dataset_name: Optional[str] = None,
     page: int = 1,
     page_size: int = 10,
-    backend: Backend = None,
+    backend: Optional[Backend] = None,
 ) -> list[dict]:
     """
-    Get a list of available datasets,
-    either by `dataset_id` or `dataset_name`
+    Get a list of available datasets, either by `dataset_id` or `dataset_name`.
 
     Args:
-        dataset_id(str): dataset slug in google big query (gbq).
-        dataset_name(str): dataset name in base dos dados metadata.
-
-        page(int): page for pagination.
-        page_size(int): page size for pagination.
-        backend(Backend): backend instance, injected automatically.
+        dataset_id: Dataset slug in Google BigQuery (GBQ).
+        dataset_name: Dataset name in Base dos Dados metadata.
+        page: Page for pagination.
+        page_size: Page size for pagination.
+        backend: Backend instance, injected automatically.
 
     Returns:
-        dict: List of datasets.
+        List of datasets.
     """
+    backend = Backend() if backend is None else backend
     result = backend.get_datasets(dataset_id, dataset_name, page, page_size)
     for item in result.get("items", []) or []:
         item["organization"] = item.get("organization", {}).get("name")
@@ -67,64 +40,61 @@ def get_datasets(
     return result
 
 
-@check_input
-@inject_backend
 def get_tables(
-    dataset_id: str = None,
-    table_id: str = None,
-    table_name: str = None,
+    dataset_id: Optional[str] = None,
+    table_id: Optional[str] = None,
+    table_name: Optional[str] = None,
     page: int = 1,
     page_size: int = 10,
-    backend: Backend = None,
+    backend: Optional[Backend] = None,
 ) -> list[dict]:
     """
-    Get a list of available tables,
-    either by `dataset_id`, `table_id` or `table_name`
+    Get a list of available tables, either by `dataset_id`, `table_id` or
+    `table_name`.
 
     Args:
-        dataset_id(str): dataset slug in google big query (gbq).
-        table_id(str): table slug in google big query (gbq).
-        table_name(str): table name in base dos dados metadata.
-
-        page(int): page for pagination.
-        page_size(int): page size for pagination.
-        backend(Backend): backend instance, injected automatically.
+        dataset_id: Dataset slug in Google BigQuery (GBQ).
+        table_id: Table slug in Google BigQuery (GBQ).
+        table_name: Table name in Base dos Dados metadata.
+        page: Page for pagination.
+        page_size: Page size for pagination.
+        backend: Backend instance, injected automatically.
 
     Returns:
-        dict: List of tables.
+        List of tables.
     """
 
+    backend = Backend() if backend is None else backend
     return backend.get_tables(
         dataset_id, table_id, table_name, page, page_size
     )
 
 
-@check_input
-@inject_backend
 def get_columns(
-    table_id: str = None,
-    column_id: str = None,
-    columns_name: str = None,
+    table_id: Optional[str] = None,
+    column_id: Optional[str] = None,
+    columns_name: Optional[str] = None,
     page: int = 1,
     page_size: int = 10,
-    backend: Backend = None,
+    backend: Optional[Backend] = None,
 ) -> list[dict]:
     """
-    Get a list of available columns,
-    either by `table_id`, `column_id` or `column_name`
+    Get a list of available columns, either by `table_id`, `column_id` or
+    `column_name`.
 
     Args:
-        table_id(str): table slug in google big query (gbq).
-        column_id(str): column slug in google big query (gbq).
-        column_name(str): table name in base dos dados metadata.
-
-        page(int): page for pagination.
-        page_size(int): page size for pagination.
-        backend(Backend): backend instance, injected automatically.
+        table_id: Table slug in Google BigQuery (GBQ).
+        column_id: Column slug in Google BigQuery (GBQ).
+        column_name: Column name in Base dos Dados metadata.
+        page: Page for pagination.
+        page_size: Page size for pagination.
+        backend: Backend instance, injected automatically.
 
     Returns:
-        dict: List of tables.
+        List of columns.
     """
+
+    backend = Backend() if backend is None else backend
 
     result = backend.get_columns(
         table_id, column_id, columns_name, page, page_size
@@ -134,27 +104,26 @@ def get_columns(
     return result
 
 
-@check_input
-@inject_backend
 def search(
-    q: str = None,
+    q: Optional[str] = None,
     page: int = 1,
     page_size: int = 10,
-    backend: Backend = None,
+    backend: Optional[Backend] = None,
 ) -> list[dict]:
     """
-    Search for datasets, querying all available metadata for the term `q`
+    Search for datasets, querying all available metadata for the term `q`.
 
     Args:
-        q(str): search term.
-
-        page(int): page for pagination.
-        page_size(int): page size for pagination.
-        backend(Backend): backend instance, injected automatically.
+        q: Search term.
+        page: Page for pagination.
+        page_size: Page size for pagination.
+        backend: Backend instance, injected automatically.
 
     Returns:
-        dict: List of datasets and metadata.
+        List of datasets and metadata.
     """
+    backend = Backend() if backend is None else backend
+
     items = []
     for item in backend.search(q, page, page_size).get("results", []):
         items.append(

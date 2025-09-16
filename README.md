@@ -1,7 +1,7 @@
 <!-- Header -->
 <p align="center">
   <a href="https://basedosdados.org">
-    <img src="docs/docs/pt/images/bd_minilogo.png" width="340" alt="Base dos Dados">
+    <img src="https://storage.googleapis.com/basedosdados-website/logos/bd_minilogo.png" width="340" alt="Base dos Dados">
   </a>
 </p>
 
@@ -60,10 +60,9 @@ missão de universalizar o acesso a dados de qualidade para todes.
     width="15"> [Códigos de análises publicadas nas redes, workshops e artigos ↗](http://github.com/basedosdados/analises)
   - <img src="https://github.com/gauravghongde/social-icons/blob/master/PNG/Color/Youtube.png?raw=true" width="15">  [Youtube ↗](https://www.youtube.com/c/BasedosDados)
   - <img
-    src="https://github.com/gauravghongde/social-icons/blob/master/PNG/Color/Medium.png?raw=true"
-    width="15">  [Medium ↗](http://dev.to/basedosdados)
-- [⚙️ Desenvolvimento](#desenvolvimento)
-- [👥 Como contribuir ↗](https://basedosdados.github.io/sdk/colab_data/)
+    src="https://storage.googleapis.com/basedosdados-website/logos/bd_minilogo.png"
+    width="15">  [Blog ↗](https://basedosdados.org/blog)
+- [👥 Como contribuir ↗](#contribua)
 - [💚 Apoie o projeto! ↗](https://apoia.se/basedosdados)
 
 ## Como citar o projeto
@@ -87,6 +86,12 @@ Com pip:
 pip install basedosdados
 ```
 
+Com uv:
+
+```sh
+uv add basedosdados
+```
+
 Com poetry:
 
 ```sh
@@ -103,7 +108,7 @@ df = bd.read_table('br_ibge_pib', 'municipio', billing_project_id="<YOUR-PROJECT
 
 > Caso esteja acessando da primeira vez, vão aparecer alguns passos na tela para autenticar seu projeto - basta segui-los!
 >
-> É necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos).
+> É necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.org/docs/access_data_bq#bigquery).
 >
 > Se possível, armazene suas credenciais em um arquivo `dotenv`: `"billing_project_id=<suas_credenciais_do_projeto>" >> .env`
 
@@ -143,7 +148,7 @@ FROM `basedosdados.br_bd_diretorios_brasil.municipio`
 df = bd.read_sql(query=query)
 ```
 
-Para saber mais, veja os [exemplos](https://github.com/basedosdados/analises/tree/main/artigos) ou a [documentação da API](https://basedosdados.github.io/sdk/api_reference_python/)
+Para saber mais, veja os [exemplos](https://github.com/basedosdados/analises/blob/main/artigos_%26_tutoriais/README.md) ou a [documentação da API](https://basedosdados.org/docs/api_reference_python)
 
 ## Criando múltiplas configurações
 
@@ -248,7 +253,7 @@ get_table_description("br_sp_alesp", "deputado")
 ## Atenção
 
 > Caso esteja acessando da primeira vez, vão aparecer alguns passos na tela para autenticar seu projeto com sua conta google e possivelmente na [Tidyverse API](https://www.tidyverse.org/google_privacy_policy/) - basta segui-los! As credenciais ficam armazenadas no computador então usuários com mais de uma máquina talvez precisem autenticar mais de uma vez.
-> É necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud](https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos).
+> É necessário criar um projeto para que você possa fazer as queries no nosso repositório. Ter um projeto é de graça e basta ter uma conta Google (seu gmail por exemplo). [Veja aqui como criar um projeto no Google Cloud]https://basedosdados.org/docs/access_data_bq#bigquery).
 > Se possível, armazene suas credenciais em um arquivo `dotenv`, em bash o comando é `"billing_project_id=<suas_credenciais_do_projeto>" >> .env`. [Veja aqui como criar um arquivo dotenv](https://towardsdatascience.com/using-dotenv-to-hide-sensitive-information-in-r-8b878fa72020).
 
 ## Contribua

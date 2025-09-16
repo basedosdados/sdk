@@ -1,11 +1,12 @@
 """
-Class for managing the files in cloud storage.
+Class for managing the files in Google Cloud Storage.
 """
 
 import sys
 import time
 import traceback
 from pathlib import Path
+from typing import Optional, Union
 
 from loguru import logger
 from tqdm import tqdm
@@ -21,7 +22,20 @@ class Storage(Base):
     Manage files on Google Cloud Storage.
     """
 
-    def __init__(self, dataset_id, table_id, **kwargs):
+    def __init__(self, dataset_id: str, table_id: str, **kwargs):
+        """
+        Initializes the storage upload class with the specified dataset and table identifiers.
+
+        Args:
+            dataset_id: The identifier of the dataset. Hyphens will be replaced with underscores.
+            table_id: The identifier of the table. Hyphens will be replaced with underscores.
+            **kwargs: Additional keyword arguments to pass to the superclass initializer.
+
+        Attributes:
+            bucket: The storage bucket object used for staging.
+            dataset_id: The normalized dataset identifier.
+            table_id: The normalized table identifier.
+        """
         super().__init__(**kwargs)
 
         self.bucket = self.client["storage_staging"].bucket(self.bucket_name)
@@ -29,7 +43,7 @@ class Storage(Base):
         self.table_id = table_id.replace("-", "_")
 
     @staticmethod
-    def _resolve_partitions(partitions):
+    def _resolve_partitions(partitions: Union[str, dict[str, str]]) -> str:
         if isinstance(partitions, dict):
             return "/".join(f"{k}={v}" for k, v in partitions.items()) + "/"
 
@@ -59,9 +73,14 @@ class Storage(Base):
             f"Partitions format or type not accepted: {partitions}"
         )
 
-    def _build_blob_name(self, filename, mode, partitions=None):
+    def _build_blob_name(
+        self,
+        filename: str,
+        mode: str,
+        partitions: Optional[Union[str, dict[str, str]]] = None,
+    ) -> str:
         """
-        Builds the blob name.
+        Build the blob name.
         """
 
         # table folder
@@ -76,23 +95,22 @@ class Storage(Base):
 
         return blob_name
 
-    def init(self, replace=False, very_sure=False):
-        """Initializes bucket and folders.
+    def init(self, replace: bool = False, very_sure: bool = False) -> None:
+        """
+        Initialize bucket and folders.
 
         Folder should be:
 
-        * `raw` : that contains really raw data
+        * `raw` : contains raw data
         * `staging` : preprocessed data ready to upload to BigQuery
 
         Args:
-            replace (bool): Optional.
-                Whether to replace if bucket already exists
-            very_sure (bool): Optional.
-                Are you aware that everything is going to be erased if you
+            replace: Whether to replace if bucket already exists.
+            very_sure: Are you aware that everything will be erased if you
                 replace the bucket?
 
         Raises:
-            Warning: very_sure argument is still False.
+            Warning: `very_sure` argument is still False.
         """
 
         if replace:
@@ -113,63 +131,50 @@ class Storage(Base):
 
     def upload(
         self,
-        path,
-        mode="all",
-        partitions=None,
-        if_exists="raise",
-        chunk_size=None,
+        path: Union[str, Path],
+        mode: str = "all",
+        partitions: Optional[Union[str, dict[str, str]]] = None,
+        if_exists: str = "raise",
+        chunk_size: Optional[int] = None,
         **upload_args,
-    ):
-        """Upload to storage at `<bucket_name>/<mode>/<dataset_id>/<table_id>`. You can:
+    ) -> None:
+        """
+        Upload to storage at `<bucket_name>/<mode>/<dataset_id>/<table_id>`.
 
-        * Add a single **file** setting `path = <file_path>`.
+        You can:
 
-        * Add a **folder** with multiple files setting `path =
-          <folder_path>`. *The folder should just contain the files and
-          no folders.*
-
-        * Add **partitioned files** setting `path = <folder_path>`.
-          This folder must follow the hive partitioning scheme i.e.
+        * Add a single file: `path = <file_path>`
+        * Add a folder: `path = <folder_path>`. The folder should only contain
+          files, not folders.
+        * Add partitioned files: `path = <folder_path>`. This folder must follow
+          the hive partitioning scheme, e.g.
           `<table_id>/<key>=<value>/<key2>=<value2>/<partition>.csv`
-          (ex: `mytable/country=brasil/year=2020/mypart.csv`).
 
         *Remember all files must follow a single schema.* Otherwise, things
         might fail in the future.
 
-        There are 6 modes:
+        Modes:
 
-        * `raw` : should contain raw files from datasource
-        * `staging` : should contain pre-treated files ready to upload to BiqQuery
-        * `header`: should contain the header of the tables
-        * `auxiliary_files`: should contain auxiliary files from eache table
-        * `architecture`: should contain the architecture sheet of the tables
+        * `raw` : raw files from datasource
+        * `staging` : pre-treated files ready to upload to BigQuery
+        * `header`: header of the tables
+        * `auxiliary_files`: auxiliary files from each table
+        * `architecture`: architecture sheet of the tables
         * `all`: if no treatment is needed, use `all`.
 
         Args:
-            path (str or pathlib.PosixPath): Where to find the file or
-                folder that you want to upload to storage
-
-            mode (str): Folder of which dataset to update [raw|staging|header|auxiliary_files|architecture|all]
-
-            partitions (str, pathlib.PosixPath, or dict): Optional.
-                *If adding a single file*, use this to add it to a specific partition.
-
-                * str : `<key>=<value>/<key2>=<value2>`
-                * dict: `dict(key=value, key2=value2)`
-
-            if_exists (str): Optional.
-                What to do if data exists
-
-                * 'raise' : Raises Conflict exception
-                * 'replace' : Replace table
-                * 'pass' : Do nothing
-            chunk_size (int): Optional
-                The size of a chunk of data whenever iterating (in bytes).
-                This must be a multiple of 256 KB per the API specification.
-                If not specified, the chunk_size of the blob itself is used. If that is not specified, a default value of 40 MB is used.
-
-            upload_args ():
-                Extra arguments accepted by [`google.cloud.storage.blob.Blob.upload_from_file`](https://googleapis.dev/python/storage/latest/blobs.html?highlight=upload_from_filename#google.cloud.storage.blob.Blob.upload_from_filename)
+            path: Where to find the file or folder to upload to storage.
+            mode: Folder of which dataset to update
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`all`]
+            partitions: If adding a single file, use this to add it to a
+                specific partition. Can be a string or dict.
+            if_exists: What to do if data exists.
+                * `raise`: Raises Conflict exception
+                * `replace`: Replace table
+                * `pass`: Do nothing
+            chunk_size: The size of a chunk of data when iterating (in bytes).
+            upload_args: Extra arguments accepted by
+                [`google.cloud.storage.blob.Blob.upload_from_file`](https://googleapis.dev/python/storage/latest/blobs.html?highlight=upload_from_filename#google.cloud.storage.blob.Blob.upload_from_filename)
         """
 
         if (self.dataset_id is None) or (self.table_id is None):
@@ -200,12 +205,12 @@ class Storage(Base):
 
         self._check_mode(mode)
 
-        mode = (
+        _mode = (
             ["raw", "staging", "header", "auxiliary_files", "architecture"]
             if mode == "all"
             else [mode]
         )
-        for m in mode:
+        for m in _mode:
             for filepath, part in tqdm(
                 list(zip(paths, parts)), desc="Uploading files"
             ):
@@ -240,49 +245,43 @@ class Storage(Base):
 
     def download(
         self,
-        filename="*",
-        savepath: Path = Path("."),
-        partitions=None,
-        mode="staging",
-        if_not_exists="raise",
-    ):
-        """Download files from Google Storage from path `mode`/`dataset_id`/`table_id`/`partitions`/`filename` and replicate folder hierarchy
-        on save,
+        filename: str = "*",
+        savepath: Union[Path, str] = Path("."),
+        partitions: Optional[Union[str, dict[str, str]]] = None,
+        mode: str = "staging",
+        if_not_exists: str = "raise",
+    ) -> None:
+        """
+        Download files from Google Storage from path
+        `mode/dataset_id/table_id/partitions/filename` and replicate folder
+        hierarchy on save.
 
-        There are 5 modes:
-        * `raw` : should contain raw files from datasource
-        * `staging` : should contain pre-treated files ready to upload to BiqQuery
-        * `header`: should contain the header of the tables
-        * `auxiliary_files`: should contain auxiliary files from eache table
-        * `architecture`: should contain the architecture sheet of the tables
+        Modes:
 
-        You can also use the `partitions` argument to choose files from a partition
+        * `raw` : raw files from datasource
+        * `staging` : pre-treated files ready to upload to BigQuery
+        * `header`: header of the tables
+        * `auxiliary_files`: auxiliary files from each table
+        * `architecture`: architecture sheet of the tables
+
+        You can use the `partitions` argument to choose files from a partition.
 
         Args:
-            filename (str): Optional
-                Specify which file to download. If "*" , downloads all files within the bucket folder. Defaults to "*".
-
-            savepath (str):
-                Where you want to save the data on your computer. Must be a path to a directory.
-
-            partitions (str, dict): Optional
-                If downloading a single file, use this to specify the partition path from which to download.
-
-                * str : `<key>=<value>/<key2>=<value2>`
-                * dict: `dict(key=value, key2=value2)`
-
-
-            mode (str): Optional
-                Folder of which dataset to update.[raw|staging|header|auxiliary_files|architecture]
-
-            if_not_exists (str): Optional.
-                What to do if data not found.
-
-                * 'raise' : Raises FileNotFoundError.
-                * 'pass' : Do nothing and exit the function
+            filename: Specify which file to download. If `"*"`, downloads all
+                files within the bucket folder. Defaults to `"*"`.
+            savepath: Where to save the data on your computer. Must be a path to
+                a directory.
+            partitions: If downloading a single file, use this to specify the
+                partition path from which to download. Can be a string `<key>=<value>/<key2>=<value2>` or dict `dict(key=value, key2=value2)`.
+            mode: Folder of which dataset to update.
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`]
+            if_not_exists: What to do if data not found.
+                * `raise`: Raises FileNotFoundError.
+                * `pass`: Do nothing and exit the function.
 
         Raises:
-            FileNotFoundError: If the given path `<mode>/<dataset_id>/<table_id>/<partitions>/<filename>` could not be found or there are no files to download.
+            FileNotFoundError: If the given path `<mode>/<dataset_id>/<table_id>/<partitions>/<filename>` could not be found or there are
+                no files to download.
         """
 
         # Prefix to locate files within the bucket
@@ -330,33 +329,33 @@ class Storage(Base):
             path={str(savepath)},
         )
 
-    def delete_file(self, filename, mode, partitions=None, not_found_ok=False):
-        """Deletes file from path `<bucket_name>/<mode>/<dataset_id>/<table_id>/<partitions>/<filename>`.
+    def delete_file(
+        self,
+        filename: str,
+        mode: str,
+        partitions: Optional[Union[str, dict[str, str]]] = None,
+        not_found_ok: bool = False,
+    ) -> None:
+        """
+        Delete file from path `<bucket_name>/<mode>/<dataset_id>/<table_id>/<partitions>/<filename>`.
 
         Args:
-            filename (str): Name of the file to be deleted
-
-            mode (str): Folder of which dataset to update [raw|staging|header|auxiliary_files|architecture|all]
-
-            partitions (str, pathlib.PosixPath, or dict): Optional.
-                Hive structured partition as a string or dict
-
-                * str : `<key>=<value>/<key2>=<value2>`
-                * dict: `dict(key=value, key2=value2)`
-
-            not_found_ok (bool): Optional.
-                What to do if file not found
+            filename: Name of the file to be deleted.
+            mode: Folder of which dataset to update
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`all`]
+            partitions: Hive structured partition as a string `<key>=<value>/<key2>=<value2>` or dict `dict(key=value, key2=value2)`.
+            not_found_ok: What to do if file not found.
         """
 
         self._check_mode(mode)
 
-        mode = (
+        mode_ = (
             ["raw", "staging", "header", "auxiliary_files", "architecture"]
             if mode == "all"
             else [mode]
         )
 
-        for m in mode:
+        for m in mode_:
             blob = self.bucket.blob(
                 self._build_blob_name(filename, m, partitions)
             )
@@ -369,27 +368,30 @@ class Storage(Base):
         logger.success(
             " {object} {filename}_{mode} was {action}!",
             filename=filename,
-            mode=mode,
+            mode=mode_,
             object="File",
             action="deleted",
         )
 
     def delete_table(
-        self, mode="staging", bucket_name=None, not_found_ok=False
-    ):
-        """Deletes a table from storage, sends request in batches.
+        self,
+        mode: str = "staging",
+        bucket_name: Optional[str] = None,
+        not_found_ok: bool = False,
+    ) -> None:
+        """
+        Delete a table from storage, sends request in batches.
 
         Args:
-            mode (str): Folder of which dataset to update [raw|staging|header|auxiliary_files|architecture]
-                Folder of which dataset to update. Defaults to "staging".
+            mode: Folder of which dataset to update
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`]
+            bucket_name: The bucket name from which to delete the table. If
+                None, defaults to the bucket initialized when instantiating the
+                Storage object.
+            not_found_ok: What to do if table not found.
 
-            bucket_name (str):
-                The bucket name from which to delete the table. If None, defaults to the bucket initialized when instantiating the Storage object.
-                (You can check it with the Storage().bucket property)
-
-            not_found_ok (bool): Optional.
-                What to do if table not found
-
+        Raises:
+            FileNotFoundError: If the requested table could not be found.
         """
 
         prefix = f"{mode}/{self.dataset_id}/{self.table_id}/"
@@ -443,27 +445,26 @@ class Storage(Base):
 
     def copy_table(
         self,
-        source_bucket_name="basedosdados",
-        destination_bucket_name=None,
-        mode="staging",
-        new_table_id=None,
-    ):
-        """Copies table from a source bucket to your bucket, sends request in batches.
+        source_bucket_name: str = "basedosdados",
+        destination_bucket_name: Optional[str] = None,
+        mode: str = "staging",
+        new_table_id: Optional[str] = None,
+    ) -> None:
+        """
+        Copy table from a source bucket to your bucket, sends request in
+        batches.
 
         Args:
-            source_bucket_name (str):
-                The bucket name from which to copy data. You can change it
-                to copy from other external bucket.
-
-            destination_bucket_name (str): Optional
-                The bucket name where data will be copied to.
-                If None, defaults to the bucket initialized when instantiating the Storage object (You can check it with the
-                Storage().bucket property)
-
-            mode (str): Folder of which dataset to update [raw|staging|header|auxiliary_files|architecture]
-                Folder of which dataset to update. Defaults to "staging".
-            new_table_id (str): Optional.
-                New table id to be copied to. If None, defaults to the table id initialized when instantiating the Storage object.
+            source_bucket_name: The bucket name from which to copy data. You can
+                change it to copy from another external bucket.
+            destination_bucket_name: The bucket name where data will be copied
+                to. If None, defaults to the bucket initialized when
+                instantiating the Storage object. You can check it with the
+                `Storage().bucket` property.
+            mode: Folder of which dataset to update
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`]
+            new_table_id: New table id to be copied to. If None, defaults to the
+                table id initialized when instantiating the Storage object.
         """
 
         source_table_ref = list(

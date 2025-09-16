@@ -90,6 +90,6 @@ def break_file(filepath: str, columns: list, chunksize: int = 1000000) -> None:
             os.makedirs(subfolder)
         # save chunk
         chunk.to_csv(
-            os.path.join(subfolder, f'{filename.split(".")[0]}_{i}.csv'),
+            os.path.join(subfolder, f"{filename.split('.')[0]}_{i}.csv"),
             index=False,
         )
