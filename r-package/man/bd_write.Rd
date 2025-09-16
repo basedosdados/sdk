@@ -38,7 +38,7 @@ ut also the longer the time to load the data. See also: \code{\link[readr:read_r
 String containing the path to the created file.
 }
 \description{
-Writes a remote table to disk that was called via {bdplyr}.
+Writes a remote table to disk that was called via \{bdplyr\}.
 It will collect the data and write to disk in the chosen format.
 You will only need this function if you have not yet collected the data
 using the \code{\link[=bd_collect]{bd_collect()}}.
@@ -49,7 +49,7 @@ writing a tibble to disk.
 
 As helpers, the \code{\link[=bd_write_rds]{bd_write_rds()}} and \code{\link[=bd_write_csv]{bd_write_csv()}} functions make it
 easier to write in these formats, more common in everyday life, calling
-writing functions from \code{{readr}} package.
+writing functions from \code{\{readr\}} package.
 }
 \examples{
 \dontrun{
