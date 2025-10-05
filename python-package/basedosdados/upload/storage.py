@@ -519,10 +519,21 @@ class Storage(Base):
                     time.sleep(5)
                     traceback.print_exc(file=sys.stderr)
         logger.success(
-            " {object} {object_id}_{mode} was {action} to {new_object_id}_{mode}!",
-            object_id=self.table_id,
-            new_object_id=new_table_id if new_table_id else self.table_id,
-            mode=mode,
-            object="Table",
-            action="copied",
+        " {object} {object_id}_{mode} was {action} to {new_object_id}_{mode}!",
+        object_id=self.table_id,
+        new_object_id=new_table_id if new_table_id else self.table_id,
+        mode=mode,
+        object="Table",
+        action="copied",
+            )
+
+        target_table = new_table_id if new_table_id else self.table_id
+        dest_bucket_name = destination_bucket_name if destination_bucket_name else self.bucket_name
+
+        console_url = (
+            f"https://console.cloud.google.com/storage/browser/"
+            f"{dest_bucket_name}/{mode}/{self.dataset_id}/{target_table}"
         )
+
+        logger.success(f"Checkout at: {console_url}")
+
