@@ -15,7 +15,7 @@ git clone git@github.com:USERNAME/sdk.git
 
 Acesso o guia de contribuição para cada pacote:
 
-- [Python Package](./python-package/README.md)
+- [Python Package](./python-package/CONTRIBUTING.md)
 - [R Package](./r-package/README.md)
 - [Stata Package](./stata-package/README.md)
 

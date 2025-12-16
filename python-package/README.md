@@ -1,61 +1,106 @@
-# Python Package
+# basedosdados
 
-## Requisitos
+**basedosdados** is a Python package that provides easy access to Brazil’s largest open data lake, hosted on Google BigQuery. It allows you to query, download, and analyze high-quality, ready-to-use public datasets with minimal setup.
 
-- [uv](https://docs.astral.sh/uv/getting-started/installation/)
+## Installation
 
-Depois de clonar o repositório entre na pasta local do repositório usando `cd sdk/python-package` e faça o setup do ambiente de desenvolvimento:
+Install from PyPI:
 
-```sh
-uv sync --all-groups
+```bash
+pip install basedosdados
 ```
 
-## Desenvolva uma nova feature
+Or using [uv](https://github.com/astral-sh/uv):
 
-1. Abra uma branch com o nome issue-<X>
-2. Faça as modificações necessárias
-3. Suba o Pull Request apontando para a branch `python-next-minor` ou `python-next-patch`.
-   Sendo, minor e patch referentes ao bump da versão: v1.5.7 --> v\<major>.\<minor>.\<patch>.
-4. O nome do PR deve seguir o padrão
-   `[infra] <titulo explicativo>`
+```bash
+uv add basedosdados
+```
 
-## O que uma modificação precisa ter
+Or with [poetry](https://python-poetry.org/):
 
-- Resolver o problema
-- Lista de modificações efetuadas
-  1. Mudei a função X para fazer Y
-  2. Troquei o nome da variavel Z
-- Referência aos issues atendidos
-- Documentação e Docstrings
-- Testes
+```bash
+poetry add basedosdados
+```
 
-## Versionamento
+## Quickstart
 
-**Para publicar uma nova versão do pacote é preciso seguir os seguintes passos:**
+### Access a table
 
-1. Fazer o pull da branch:
+```python
+import basedosdados as bd
 
-   ```bash
-   git pull origin [python-version]
-   ```
+df = bd.read_table('br_ibge_pib', 'municipio', billing_project_id="<YOUR-PROJECT>")
+```
 
-   Onde `[python-version]` é a branch da nova versão do pacote.
+> On first use, you will be prompted to authenticate your Google Cloud project. [See how to create a project here.](https://basedosdados.org/docs/access_data_bq#bigquery)
 
-2. [Atualize a versão do pacote](https://docs.astral.sh/uv/guides/package/#updating-your-version)
+### Run a SQL query
 
-3. Push para branch:
+```python
+import basedosdados as bd
 
-   ```sh
-   git push origin [python-version]
-   ```
+query = """
+SELECT *
+FROM `basedosdados.br_tse_eleicoes.bens_candidato`
+WHERE ano = 2020
+AND sigla_uf = 'TO'
+"""
 
-4. Publicação do pacote no PyPI (exige usuário e senha):
-   Para publicar o pacote no PyPI, use:
+df = bd.read_sql(query, billing_project_id="<YOUR-PROJECT>")
+```
 
-   ```sh
-   uv publish
-   ```
+### Set global configuration
 
-5. Faz merge da branch para a master
-6. Faz release usando a UI do GitHub
-7. Atualizar versão do pacote usada internamente
+You can set your billing project globally to avoid passing it every time:
+
+```python
+import basedosdados as bd
+
+bd.config.billing_project_id = "<YOUR-PROJECT-ID>"
+
+query = """
+SELECT *
+FROM `basedosdados.br_bd_diretorios_brasil.municipio`
+"""
+
+df = bd.read_sql(query=query)
+```
+
+### Download query results to CSV
+
+```python
+import basedosdados as bd
+
+query = """
+SELECT ano, id_municipio, pib
+FROM `basedosdados.br_ibge_pib.municipio`
+WHERE ano = 2010
+"""
+
+bd.download("pib_2010.csv", query=query, billing_project_id="<YOUR-PROJECT>")
+```
+
+## Documentation
+
+- [API Reference](https://basedosdados.org/docs/api_reference_python)
+
+## Advanced: Multiple Configurations
+
+If you need to use multiple service accounts or configurations, you can manage them by renaming the config folder and setting `bd.config.project_config_path`:
+
+```python
+import basedosdados as bd
+bd.config.project_config_path = "/home/user/.bd_my_other_account"
+```
+
+## Contributing
+
+See our [contribution guide](CONTRIBUTING.md) for how to help improve this package.
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+> Part of the [Base dos Dados](https://basedosdados.org) project – universalizing access to quality data in Brazil.

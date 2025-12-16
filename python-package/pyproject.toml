@@ -1,12 +1,23 @@
 [project]
 name = "basedosdados"
 version = "2.0.2"
-description = "Organizar e facilitar o acesso a dados brasileiros através de tabelas públicas no BigQuery."
+description = "Organize and facilitate access to Brazilian data through public tables on BigQuery."
 authors = [
     { name = "Joao Carabetta", email = "joao.carabetta@gmail.com" },
     { name = "Ricardo Dahis" },
     { name = "Diego Oliveira" },
 ]
+maintainers = [
+    { name = "Pedro Castro", email = "pedro.castro@basedosdados.org" },
+]
+readme = "README.md"
+keywords = ["basedosdados", "bigquery", "datalake"]
+classifiers = [
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+license = { file = "LICENSE" }
 requires-python = ">=3.9"
 dependencies = [
     "google-api-python-client>=2.86",
@@ -26,17 +37,25 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pre-commit>=3.3.3", "ruff>=0.8.5", "semgrep>=1.36.0", "taskipy>=1.12.0"]
-docs = [
+dev = [
+    "pre-commit>=3.3.3",
+    "ruff>=0.8.5",
     "docstring-to-markdown>=0.17",
     "pydoc-markdown>=4.8.2",
+    "pytest>=7.2.1",
+    "pytest-order>=1.3.0",
 ]
-test = ["pytest>=7.2.1", "pytest-order>=1.3.0"]
 
 [project.optional-dependencies]
 all = ["gql", "pandavro", "requests-toolbelt"]
 avro = ["pandavro"]
 upload = ["gql", "requests-toolbelt"]
+
+[project.urls]
+repository = "https://github.com/basedosdados/sdk"
+documentation = "https://basedosdados.org/docs/api_reference_python"
+issues = "https://github.com/basedosdados/sdk/issues"
+source = "https://github.com/basedosdados/sdk/tree/master/python-package"
 
 [build-system]
 requires = ["hatchling"]
