@@ -302,10 +302,9 @@ class Backend:
         dataset_id = self._get_dataset_id_from_name(dataset_id)
         if dataset_id:
             variables = {"dataset_id": dataset_id}
-            response = self._execute_query(query=query, variables=variables)
-            return self._simplify_response(response).get("allDataset")[
-                "items"
-            ][0]
+            return self._execute_query(query=query, variables=variables)[
+                "allDataset"
+            ]["items"][0]
         else:
             return {}
 
@@ -364,10 +363,9 @@ class Backend:
 
         if table_id:
             variables = {"table_id": table_id}
-            response = self._execute_query(query=query, variables=variables)
-            return self._simplify_response(response).get("allTable")["items"][
-                0
-            ]
+            return self._execute_query(query=query, variables=variables)[
+                "allTable"
+            ]["items"][0]
         else:
             return {}
 
@@ -390,7 +388,7 @@ class Backend:
 
         variables = {"gcp_dataset_id": gcp_dataset_id}
         response = self._execute_query(query=query, variables=variables)
-        r = {} if response is None else self._simplify_response(response)
+        r = {} if response is None else response
         if r.get("allCloudtable") != []:
             return (
                 r.get("allCloudtable")["items"][0]
@@ -424,7 +422,7 @@ class Backend:
             }
 
             response = self._execute_query(query=query, variables=variables)
-            r = {} if response is None else self._simplify_response(response)
+            r = {} if response is None else response
             if r.get("allCloudtable", []) != []:
                 return (
                     r.get("allCloudtable")["items"][0].get("table").get("_id")
