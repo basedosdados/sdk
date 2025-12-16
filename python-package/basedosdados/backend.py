@@ -507,11 +507,11 @@ class Backend:
         try:
             response = client_.execute(gql(query), variable_values=variables)
         except Exception as e:
-            logger.error(
-                f"The API URL in the config.toml file may be incorrect "
-                f"or the API might be temporarily unavailable!\n"
-                f"Error executing query: {e}."
+            msg = (
+                "The API URL in the config.toml file may be incorrect "
+                "or the API might be temporarily unavailable!\n"
             )
+            raise BaseDosDadosException(msg) from e
         return self._simplify_response(response or {}, page, page_size)
 
     def _simplify_response(

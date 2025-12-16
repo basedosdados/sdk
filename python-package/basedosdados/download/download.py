@@ -40,6 +40,14 @@ def _set_config_variables(
     from_file: bool,
 ) -> tuple[str, bool]:
     """Set billing_project_id and from_file variables."""
+
+    if (
+        billing_project_id is None
+        and config.billing_project_id is None
+        and not from_file
+    ):
+        raise BaseDosDadosNoBillingProjectIDException
+
     # standard billing_project_id configuration
     billing_project_id = billing_project_id or config.billing_project_id
     # standard from_file configuration
@@ -104,7 +112,7 @@ def read_sql(
         if re.match("Reason: 400 POST .* [Pp]roject[ ]*I[Dd]", str(e)):
             raise BaseDosDadosInvalidProjectIDException from e
 
-        raise
+        raise e
 
     except PyDataCredentialsError as e:
         raise BaseDosDadosAuthorizationException from e
@@ -116,7 +124,7 @@ def read_sql(
         )
         if no_billing_id:
             raise BaseDosDadosNoBillingProjectIDException from e
-        raise
+        raise e
 
 
 def read_table(
