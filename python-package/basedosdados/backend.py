@@ -110,9 +110,9 @@ class Backend:
         if extra:
             query = query.replace("$offset)", f"$offset, {extra})")
 
-        return self._execute_query(query, variables, page, page_size).get(
-            "allDataset"
-        )
+        return self._execute_query(
+            query=query, variables=variables, page=page, page_size=page_size
+        ).get("allDataset")
 
     def get_tables(
         self,
@@ -169,9 +169,9 @@ class Backend:
         if extra:
             query = query.replace("$offset)", f"$offset, {extra})")
 
-        return self._execute_query(query, variables, page, page_size).get(
-            "allTable"
-        )
+        return self._execute_query(
+            query=query, variables=variables, page=page, page_size=page_size
+        ).get("allTable")
 
     def get_columns(
         self,
@@ -227,9 +227,9 @@ class Backend:
         if extra:
             query = query.replace("$offset)", f"$offset, {extra})")
 
-        return self._execute_query(query, variables, page, page_size).get(
-            "allColumn"
-        )
+        return self._execute_query(
+            query=query, variables=variables, page=page, page_size=page_size
+        ).get("allColumn")
 
     def search(
         self, q: Optional[str] = None, page: int = 1, page_size: int = 10
@@ -299,9 +299,9 @@ class Backend:
                 }
             }
         """
-        dataset_id = self._get_dataset_id_from_name(dataset_id)
-        if dataset_id:
-            variables = {"dataset_id": dataset_id}
+        dataset_id_from_name = self._get_dataset_id_from_name(dataset_id)
+        if dataset_id_from_name is not None:
+            variables = {"dataset_id": dataset_id_from_name}
             return self._execute_query(query=query, variables=variables)[
                 "allDataset"
             ]["items"][0]
@@ -357,19 +357,19 @@ class Backend:
                 }
             }
         """
-        table_id = self._get_table_id_from_name(
+        table_id_from_name = self._get_table_id_from_name(
             gcp_dataset_id=dataset_id, gcp_table_id=table_id
         )
 
-        if table_id:
-            variables = {"table_id": table_id}
+        if table_id_from_name is not None:
+            variables = {"table_id": table_id_from_name}
             return self._execute_query(query=query, variables=variables)[
                 "allTable"
             ]["items"][0]
         else:
             return {}
 
-    def _get_dataset_id_from_name(self, gcp_dataset_id):
+    def _get_dataset_id_from_name(self, gcp_dataset_id: str) -> Optional[str]:
         query = """
             query ($gcp_dataset_id: String!){
                 allCloudtable(gcpDatasetId: $gcp_dataset_id) {
@@ -400,7 +400,9 @@ class Backend:
         logger.info(msg)
         return None
 
-    def _get_table_id_from_name(self, gcp_dataset_id, gcp_table_id):
+    def _get_table_id_from_name(
+        self, gcp_dataset_id: str, gcp_table_id: str
+    ) -> Optional[str]:
         query = """
             query ($gcp_dataset_id: String!, $gcp_table_id: String!){
                 allCloudtable(gcpDatasetId: $gcp_dataset_id, gcpTableId: $gcp_table_id) {
@@ -424,9 +426,8 @@ class Backend:
             response = self._execute_query(query=query, variables=variables)
             r = {} if response is None else response
             if r.get("allCloudtable", []) != []:
-                return (
-                    r.get("allCloudtable")["items"][0].get("table").get("_id")
-                )
+                return r["allCloudtable"]["items"][0]["table"]["_id"]
+
         msg = f"No table {gcp_table_id} found in {gcp_dataset_id}. Please create in {self.graphql_url}"
         logger.info(msg)
         return None
@@ -465,7 +466,7 @@ class Backend:
     def _execute_query(
         self,
         query: str,
-        variables: Optional[Dict[str, str]] = None,
+        variables: Optional[Dict[str, Any]] = None,
         client: Optional["Client"] = None,  # type: ignore
         headers: Optional[Dict[str, str]] = None,
         page: int = 1,
