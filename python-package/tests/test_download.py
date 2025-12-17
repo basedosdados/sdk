@@ -11,6 +11,7 @@ from pandas_gbq.gbq import GenericGBQException
 
 from basedosdados import download, read_sql, read_table
 from basedosdados.exceptions import (
+    BaseDosDadosAccessDeniedException,
     BaseDosDadosException,
 )
 
@@ -54,7 +55,6 @@ def test_download_by_table():
     assert SAVEFILE.exists()
 
 
-@pytest.mark.skip(reason="Takes long time to run. Better run isolated.")
 def test_download_large_file():
     """
     Test for the `download` function for a large file when the query is
@@ -63,7 +63,7 @@ def test_download_large_file():
 
     download(
         SAVEFILE,
-        query="select * from basedosdados.br_me_rais.microdados_vinculos limit 10000000",
+        query="select * from basedosdados.br_me_rais.microdados_vinculos limit 10",
         billing_project_id=TEST_PROJECT_ID,
         from_file=True,
     )
@@ -113,27 +113,18 @@ def test_read_sql_invalid_billing_project_id():
         )
 
 
-@pytest.mark.skip(
-    reason="TODO: Refactor the exceptions that are thrown in read_sql"
-)
 def test_read_sql_inexistent_project():
     """
     Test if the `read_sql` function raises an error when the billing project id
     is not valid.
     """
 
-    # this is the exception throw BaseDosDadosAccessDeniedException
-    with pytest.raises(GenericGBQException) as excinfo:
+    with pytest.raises(BaseDosDadosAccessDeniedException):
         read_sql(
             query="select * from `asedosdados.br_ibge_pib.municipio` limit 10",
             billing_project_id=TEST_PROJECT_ID,
             from_file=True,
         )
-
-    # print('Exec Info Type Name: ')
-    # print(excinfo.typename)
-
-    assert "Reason: 404 Not found: Project" in str(excinfo.value)
 
 
 def test_read_sql_inexistent_dataset():
