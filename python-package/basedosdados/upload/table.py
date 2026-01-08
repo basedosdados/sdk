@@ -298,7 +298,7 @@ class Table(Base):
         """
         if not self.table_exists(mode=mode):
             msg = f"Table {self.dataset_id}.{self.table_id} does not exist in {mode}, please create first!"
-            raise logger.error(msg)
+            raise BaseDosDadosException(msg)
         else:
             schema = self._get_table_obj(mode=mode).schema
 
@@ -441,19 +441,11 @@ class Table(Base):
                 connection.create()
                 logger.success("BigLake connection created!")
             except google.api_core.exceptions.Forbidden as exc:
-                logger.error(
-                    "You don't have permission to create a BigLake connection. "
-                    "Please contact an admin to create one for you."
-                )
                 raise BaseDosDadosException(
                     "You don't have permission to create a BigLake connection. "
                     "Please contact an admin to create one for you."
                 ) from exc
             except Exception as exc:
-                logger.error(
-                    "Something went wrong while creating the BigLake connection. "
-                    "Please contact an admin to create one for you."
-                )
                 raise BaseDosDadosException(
                     "Something went wrong while creating the BigLake connection. "
                     "Please contact an admin to create one for you."
@@ -466,13 +458,6 @@ class Table(Base):
                 connection.set_biglake_permissions()
                 logger.success("Permissions set successfully!")
             except google.api_core.exceptions.Forbidden as exc:
-                logger.error(
-                    "Could not set permissions for BigLake service account. "
-                    "Please make sure you have permissions to grant roles/storage.objectViewer"
-                    f" to the BigLake service account. ({connection.service_account})."
-                    " If you don't, please ask an admin to do it for you or set "
-                    "set_biglake_connection_permissions=False."
-                )
                 raise BaseDosDadosException(
                     "Could not set permissions for BigLake service account. "
                     "Please make sure you have permissions to grant roles/storage.objectViewer"
@@ -481,13 +466,6 @@ class Table(Base):
                     "set_biglake_connection_permissions=False."
                 ) from exc
             except Exception as exc:
-                logger.error(
-                    "Something went wrong while setting permissions for BigLake service account. "
-                    "Please make sure you have permissions to grant roles/storage.objectViewer"
-                    f" to the BigLake service account. ({connection.service_account})."
-                    " If you don't, please ask an admin to do it for you or set "
-                    "set_biglake_connection_permissions=False."
-                )
                 raise BaseDosDadosException(
                     "Something went wrong while setting permissions for BigLake service account. "
                     "Please make sure you have permissions to grant roles/storage.objectViewer"
