@@ -1,13 +1,20 @@
 
-set_billing_id(readline("Insira um billing project id: "))
 
-ex_query <- function(n = 5) {
+if (!basedosdados::get_billing_id()) {
 
-  glue::glue("select * from `basedosdados.br_ibge_pib.municipio` LIMIT {n}")
+  basedosdados::set_billing_id(readline("Insira um billing project id: "))
 
 }
 
-test_that("download escreve arquivos recebendo uma query ou nome de tabela", {
+
+ex_query <- function(n = 5) {
+
+  glue::glue("select * from br_tse_eleicoes.candidatos LIMIT {n}")
+
+}
+
+testthat::test_that(
+  "download escreve arquivos recebendo uma query ou nome de tabela", {
 
   testthat::skip_on_cran()
 
@@ -34,7 +41,8 @@ test_that("download escreve arquivos recebendo uma query ou nome de tabela", {
 
 })
 
-test_that("download permite escolher o conteúdo de NAs", {
+testthat::test_that(
+  "download permite escolher o conteúdo de NAs", {
 
   testthat::skip_on_cran()
 
@@ -60,7 +68,8 @@ test_that("download permite escolher o conteúdo de NAs", {
 
 })
 
-test_that("download permite escolher tamanho de página", {
+testthat::test_that(
+  "download permite escolher tamanho de página", {
 
   testthat::skip_on_cran()
 
@@ -76,7 +85,8 @@ test_that("download permite escolher tamanho de página", {
 
 })
 
-test_that("download valida nomes de arquivos sem extensão", {
+testthat::test_that(
+  "download valida nomes de arquivos sem extensão", {
 
   testthat::skip_on_cran()
 
@@ -88,7 +98,8 @@ test_that("download valida nomes de arquivos sem extensão", {
   })
 
 
-test_that("read_sql e read_table retornam um tibble com as propriedades esperadas", {
+testthat::test_that(
+  "read_sql e read_table retornam um tibble com as propriedades esperadas", {
 
   testthat::skip_on_cran()
 
@@ -106,7 +117,8 @@ test_that("read_sql e read_table retornam um tibble com as propriedades esperada
 
 })
 
-test_that("read_sql e read_table falham com input inapropriado", {
+testthat::test_that(
+  "read_sql e read_table falham com input inapropriado", {
 
   testthat::skip_on_cran()
 

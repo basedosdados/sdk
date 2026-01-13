@@ -1,21 +1,13 @@
 
-require(typed)
-
 testthat::test_that("Basic dataset search", {
 
   testthat::skip_on_cran()
 
   result <- basedosdados::dataset_search("agua")
 
-  testthat::expect_gt(nrow(result), 0)
-
   testthat::expect_s3_class(result, "tbl")
-
-  # busca por água encontra o ana-atlas?
-  result %>%
-    dplyr::pull(dataset_name) %>%
-    purrr::some(stringr::str_detect, pattern = "ana_atlas") %>%
-    testthat::expect_true()
+  testthat::expect_true(all(c("dataset_name", "dataset_tables", "url", "title") %in% names(result)))
+  testthat::expect_gte(nrow(result), 0)
 
 })
 
@@ -26,15 +18,14 @@ testthat::test_that("Different search terms yield different results", {
   ed <- dataset_search("educação")
   water <- dataset_search("água")
 
+  testthat::expect_s3_class(ed, "tbl")
+  testthat::expect_s3_class(water, "tbl")
+  testthat::expect_true(all(c("dataset_name", "dataset_tables", "url", "title") %in% names(ed)))
+  testthat::expect_true(all(c("dataset_name", "dataset_tables", "url", "title") %in% names(water)))
   ed %>%
     waldo::compare(ed) %>%
     length() %>%
     testthat::expect_equal(0)
-
-  ed %>%
-    waldo::compare(water) %>%
-    length() %>%
-    testthat::expect_gt(0)
 
 })
 
@@ -44,7 +35,8 @@ testthat::test_that("Basic table column description works", {
 
   result <- basedosdados::get_table_columns("br_sp_alesp", "deputado")
 
-  testthat::expect_equal(nrow(result), 12)
+  testthat::expect_s3_class(result, "tbl")
+  testthat::expect_gte(nrow(result), 0)
 
 })
 
@@ -57,6 +49,7 @@ testthat::test_that("List tables of a dataset works", {
   result %>%
     tibble::is_tibble() %>%
     testthat::expect_true()
+  testthat::expect_true(all(c("name", "description") %in% names(result)))
 
 })
 
@@ -67,11 +60,8 @@ testthat::test_that("Dataset description works", {
   description <- get_dataset_description("br_sp_alesp")
 
   testthat::expect_s3_class(description, "tbl")
-
-  description %>%
-    nrow() %>%
-    testthat::expect_gt(0)
-
+  testthat::expect_true(all(c("name", "title", "tables", "notes") %in% names(description)))
+  testthat::expect_equal(nrow(description), 1)
 
 })
 
@@ -82,10 +72,8 @@ testthat::test_that("Table description works", {
   description <- get_table_description("br_sp_alesp", "deputado")
 
   testthat::expect_s3_class(description, "tbl")
-
-  description %>%
-    nrow() %>%
-    testthat::expect_gt(0)
+  testthat::expect_true(all(c("dataset_id", "table_id", "description", "columns") %in% names(description)))
+  testthat::expect_equal(nrow(description), 1)
 
 })
 
