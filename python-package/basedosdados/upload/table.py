@@ -498,8 +498,6 @@ class Table(Base):
 
     def create(
         self,
-        folder : str = 'staging',
-        project_gcp : str = 'staging',
         path: Optional[Union[str, Path]] = None,
         source_format: str = "csv",
         csv_delimiter: str = ",",
@@ -512,6 +510,8 @@ class Table(Base):
         location: Optional[str] = None,
         chunk_size: Optional[int] = None,
         biglake_table: bool = False,
+        folder : str = 'staging',
+        project_gcp : str = 'staging',
         set_biglake_connection_permissions: bool = True,
     ) -> None:
         """
@@ -524,9 +524,8 @@ class Table(Base):
         The new table is located at `<dataset_id>_staging.<table_id>` in
         BigQuery.
 
-        Data can be found in Storage at
-        `<bucket_name>/<folder>/<dataset_id>/<table_id>/*` and is used to build
-        the table.
+        Data can be found in Storage at `<bucket_name>/<folder>/<dataset_id>/<table_id>/*` and is used to build the table.
+        If 
 
         The following data types are supported:
 
@@ -560,6 +559,7 @@ class Table(Base):
                 * `raise`: Raises a Conflict exception
                 * `replace`: Replaces the table
                 * `pass`: Does nothing
+            
             if_dataset_exists: Determines what to do if the dataset already
                 exists:
                 * `raise`: Raises a Conflict exception
@@ -581,6 +581,11 @@ class Table(Base):
                 other BigQuery native table. See
                 [BigLake intro](https://cloud.google.com/bigquery/docs/biglake-intro)
                 for more on BigLake.
+            Project: Sets Project in gcloud. Default = `staging`
+                Staging = basedosdados-dev
+                Prod = basedosdados
+            Folder: Bucket folder name. Default `<bucket_name>/staging/<dataset_id>/<table_id>/*`
+                If you want to upload data to the ´basedosdados-consultoria´ bucket, we advise you to follow the following standardization: `<bucket_name>/<name_organization>/<dataset_id>/<table_id>/*`
             set_biglake_connection_permissions: If set to `True`, attempts to
                 grant the BigLake connection service account access to the
                 table's data in GCS.
