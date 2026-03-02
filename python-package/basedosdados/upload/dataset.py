@@ -147,22 +147,22 @@ class Dataset(Base):
                 action="publicized",
             )
 
-    def exists(self, mode: str = "staging") -> bool:
+    def exists(self, project_gcp: str = "staging") -> bool:
         """
         Check if dataset exists.
         """
         ref_dataset_id = (
-            self.dataset_id if mode == "prod" else self.dataset_id + "_staging"
+            self.dataset_id if project_gcp == "prod" else self.dataset_id + "_staging"
         )
         try:
-            ref = self.client[f"bigquery_{mode}"].get_dataset(ref_dataset_id)
+            ref = self.client[f"bigquery_{project_gcp}"].get_dataset(ref_dataset_id)
         except Exception:
             ref = None
         return bool(ref)
 
     def create(
         self,
-        mode: str = "all",
+        project_gcp: str = "staging",
         if_exists: str = "raise",
         dataset_is_public: bool = True,
         location: Optional[str] = None,
@@ -195,18 +195,18 @@ class Dataset(Base):
         """
 
         # Set dataset_id to the ID of the dataset to create.
-        for m in self._loop_modes(mode):
+        for m in self._loop_modes(project_gcp):
             if if_exists == "replace":
-                self.delete(mode=m["mode"])
+                self.delete(project_gcp=m["mode"])
             elif if_exists == "update":
-                self.update(mode=m["mode"])
+                self.update(project_gcp=m["mode"])
                 continue
 
             # Send the dataset to the API for creation, with an explicit timeout.
             # Raises google.api_core.exceptions.Conflict if the Dataset already
             # exists within the project.
             try:
-                if not self.exists(mode=m["mode"]):
+                if not self.exists(project_gcp=m["mode"]):
                     # Construct a full Dataset object to send to the API.
                     dataset_obj = self._setup_dataset_object(
                         dataset_id=m["id"], location=location, mode=m["mode"]

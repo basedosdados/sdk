@@ -64,13 +64,13 @@ class Table(Base):
         # return self._load_yaml(self.table_folder / "table_config.yaml")
         return self.backend.get_table_config(self.dataset_id, self.table_id)
 
-    def _get_table_obj(self, mode: str):
+    def _get_table_obj(self, project: str = 'staging'):
         """
         Get table object from BigQuery.
         """
 
-        return self.client[f"bigquery_{mode}"].get_table(
-            self.table_full_name[mode]
+        return self.client[f"bigquery_{project}"].get_table(
+            self.table_full_name[project]
         )
 
     def _is_partitioned(
@@ -78,13 +78,13 @@ class Table(Base):
         data_sample_path: Optional[Union[str, Path]] = None,
         source_format: str = "csv",
         csv_delimiter: str = ",",
+        mode : str = 'staging'
     ) -> bool:
         if data_sample_path is not None:
             table_columns = self._get_columns_from_data(
                 data_sample_path=data_sample_path,
                 source_format=source_format,
                 csv_delimiter=csv_delimiter,
-                mode="staging",
             )
         else:
             table_columns = self._get_columns_metadata_from_api()
@@ -119,6 +119,7 @@ class Table(Base):
     def _load_staging_schema_from_data(
         self,
         data_sample_path: Optional[Union[str, Path]] = None,
+        project : str = "staging",
         source_format: str = "csv",
         csv_delimiter: str = ",",
     ) -> list[SchemaField]:
@@ -126,7 +127,7 @@ class Table(Base):
         Generate schema from columns metadata in data sample.
         """
 
-        if self.table_exists(mode="staging"):
+        if self.table_exists(project=project):
             logger.warning(
                 " {object} {object_id} allready exists, replacing schema!",
                 object_id=self.table_id,
@@ -137,7 +138,6 @@ class Table(Base):
             data_sample_path=data_sample_path,
             source_format=source_format,
             csv_delimiter=csv_delimiter,
-            mode="staging",
         )
 
         return self._load_schema_from_json(
@@ -185,7 +185,6 @@ class Table(Base):
         data_sample_path: Optional[Union[str, Path]] = None,
         source_format: str = "csv",
         csv_delimiter: str = ",",
-        mode: str = "staging",
     ) -> dict[str, list[dict[str, str]]]:
         """
         Get the partition columns from the structure of `data_sample_path`.
@@ -291,16 +290,16 @@ class Table(Base):
             return partitions_dict
 
     def _get_columns_from_bq(
-        self, mode: str = "staging"
+        self, project: str = "staging"
     ) -> dict[str, list[dict[str, str]]]:
         """
         Get columns and partition columns from BigQuery.
         """
-        if not self.table_exists(mode=mode):
-            msg = f"Table {self.dataset_id}.{self.table_id} does not exist in {mode}, please create first!"
+        if not self.table_exists(project=project):
+            msg = f"Table {self.dataset_id}.{self.table_id} does not exist in {project}, please create first!"
             raise BaseDosDadosException(msg)
         else:
-            schema = self._get_table_obj(mode=mode).schema
+            schema = self._get_table_obj(project=project).schema
 
         partition_dict = self._parser_blobs_to_partition_dict()
 
@@ -330,11 +329,11 @@ class Table(Base):
             ],
         }  # pyright: ignore[reportReturnType]
 
-    def _get_cross_columns_from_bq_api(self):
+    def _get_cross_columns_from_bq_api(self, project : str = 'staging'):
         """
         Get cross columns from BigQuery API.
         """
-        bq = self._get_columns_from_bq(mode="staging")
+        bq = self._get_columns_from_bq(project=project)
         bq_columns = bq.get("partition_columns") + bq.get("columns")
 
         api = self._get_columns_metadata_from_api()
@@ -409,7 +408,7 @@ class Table(Base):
 
         return publish_txt
 
-    def table_exists(self, mode: str) -> bool:
+    def table_exists(self, project: str = 'staging') -> bool:
         """
         Check if table exists in BigQuery.
 
@@ -418,7 +417,7 @@ class Table(Base):
         """
 
         try:
-            ref = self._get_table_obj(mode=mode)
+            ref = self._get_table_obj(project=project)
         except google.api_core.exceptions.NotFound:
             ref = None
 
@@ -476,7 +475,7 @@ class Table(Base):
 
         return connection
 
-    def _get_table_description(self, mode: str = "staging") -> str:
+    def _get_table_description(self, project: str = "staging") -> str:
         """
         Get table description to BigQuery table.
 
@@ -484,7 +483,7 @@ class Table(Base):
             mode: Which dataset to check [`prod`|`staging`].
         """
         table_path = self.table_full_name["prod"]
-        if mode == "staging":
+        if project == "staging":
             description = f"staging table for `{table_path}`"
         else:
             try:
@@ -499,6 +498,8 @@ class Table(Base):
 
     def create(
         self,
+        folder : str = 'staging',
+        project_gcp : str = 'staging',
         path: Optional[Union[str, Path]] = None,
         source_format: str = "csv",
         csv_delimiter: str = ",",
@@ -524,7 +525,7 @@ class Table(Base):
         BigQuery.
 
         Data can be found in Storage at
-        `<bucket_name>/staging/<dataset_id>/<table_id>/*` and is used to build
+        `<bucket_name>/<folder>/<dataset_id>/<table_id>/*` and is used to build
         the table.
 
         The following data types are supported:
@@ -583,13 +584,14 @@ class Table(Base):
             set_biglake_connection_permissions: If set to `True`, attempts to
                 grant the BigLake connection service account access to the
                 table's data in GCS.
-        """
+        """    
 
         if path is None:
             # Look if table data already exists at Storage
+
             data = self.client["storage_staging"].list_blobs(
                 self.bucket_name,
-                prefix=f"staging/{self.dataset_id}/{self.table_id}",
+                prefix=f"{folder}/{self.dataset_id}/{self.table_id}",
             )
 
             # Raise: Cannot create table without external data
@@ -597,6 +599,8 @@ class Table(Base):
                 raise BaseDosDadosException(
                     "You must provide a path for uploading data"
                 )
+        
+        
 
         # Add data to storage
         if isinstance(
@@ -613,7 +617,7 @@ class Table(Base):
                 bucket_name=self.bucket_name,
             ).upload(
                 path=path,
-                mode="staging",
+                folder=folder,
                 if_exists=if_storage_data_exists,
                 chunk_size=chunk_size,
             )
@@ -626,7 +630,7 @@ class Table(Base):
 
         dataset_obj.create(
             if_exists=if_dataset_exists,
-            mode="all",
+            project_gcp=project_gcp,
             location=location,
             dataset_is_public=dataset_is_public,
         )
@@ -638,11 +642,12 @@ class Table(Base):
             )
             biglake_connection_id = biglake_connection.connection_id
 
-        table = bigquery.Table(self.table_full_name["staging"])
+        table = bigquery.Table(self.table_full_name[project_gcp])
 
-        table.description = self._get_table_description(mode="staging")
+        table.description = self._get_table_description(project=[project_gcp])
 
         table.external_data_configuration = Datatype(
+
             dataset_id=self.dataset_id,
             table_id=self.table_id,
             schema=self._load_staging_schema_from_data(
@@ -654,8 +659,8 @@ class Table(Base):
             csv_skip_leading_rows=csv_skip_leading_rows,
             csv_delimiter=csv_delimiter,
             csv_allow_jagged_rows=csv_allow_jagged_rows,
-            mode="staging",
             bucket_name=self.bucket_name,
+            project_gcp=project_gcp,
             partitioned=self._is_partitioned(
                 data_sample_path=path,
                 source_format=source_format,
@@ -679,7 +684,7 @@ class Table(Base):
         table_ref = None
         with contextlib.suppress(google.api_core.exceptions.NotFound):
             table_ref = self.client["bigquery_staging"].get_table(
-                self.table_full_name["staging"]
+                self.table_full_name[project_gcp]
             )
 
         if isinstance(table_ref, google.cloud.bigquery.table.Table):
@@ -691,8 +696,8 @@ class Table(Base):
                     "Table already exists, choose replace if you want to overwrite it"
                 )
 
-        if if_table_exists == "replace" and self.table_exists(mode="staging"):
-            self.delete(mode="staging")
+        if if_table_exists == "replace" and self.table_exists(project=project_gcp):
+            self.delete(project=project_gcp)
 
         try:
             self.client["bigquery_staging"].create_table(table)
@@ -734,10 +739,8 @@ class Table(Base):
             mode: Table of which table to update [`prod`].
             not_found_ok: What to do if table is not found.
         """
-
-        self._check_mode(mode)
-
-        table = self._get_table_obj(mode)
+        
+        table = self._get_table_obj("prod")
 
         table.description = self._get_table_description()
 
@@ -811,7 +814,7 @@ class Table(Base):
             action="published",
         )
 
-    def delete(self, mode: str = "all") -> None:
+    def delete(self, project: str = "staging") -> None:
         """
         Deletes table in BigQuery.
 
@@ -819,26 +822,26 @@ class Table(Base):
             mode: Table of which table to delete [`prod`|`staging`].
         """
 
-        self._check_mode(mode)
-
-        if mode == "all":
-            for m, n in self.table_full_name[mode].items():
+        if project == "prod":
+            for m, n in self.table_full_name[project].items():
                 self.client[f"bigquery_{m}"].delete_table(n, not_found_ok=True)
+
                 logger.info(
-                    " {object} {object_id}_{mode} was {action}!",
+                    " {object} {object_id}_{project} was {action}!",
                     object_id=self.table_id,
-                    mode=m,
+                    project=m,
                     object="Table",
                     action="deleted",
                 )
         else:
-            self.client[f"bigquery_{mode}"].delete_table(
-                self.table_full_name[mode], not_found_ok=True
+            self.client[f"bigquery_{project}"].delete_table(
+                self.table_full_name[project], not_found_ok=True
             )
+
             logger.info(
-                " {object} {object_id}_{mode} was {action}!",
+                " {object} {object_id}_{project} was {action}!",
                 object_id=self.table_id,
-                mode=mode,
+                project=project,
                 object="Table",
                 action="deleted",
             )
