@@ -377,7 +377,7 @@ class Base:
         Checks if the folder is valid
         """
         ACCEPTED_MODES = [
-            "all"
+            "all",
             "staging",
             "raw",
             "header",
