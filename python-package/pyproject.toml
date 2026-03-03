@@ -1,6 +1,6 @@
 [project]
 name = "basedosdados"
-version = "2.0.2"
+version = "2.0.3"
 description = "Organize and facilitate access to Brazilian data through public tables on BigQuery."
 authors = [
     { name = "Joao Carabetta", email = "joao.carabetta@gmail.com" },
