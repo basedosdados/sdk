@@ -589,10 +589,12 @@ class Table(Base):
 
         if path is None:
             # Look if table data already exists at Storage
-            data = self.client["storage_staging"].bucket(
-                self.bucket_name, user_project=self.billing_project_id
-            ).list_blobs(
-                prefix=f"staging/{self.dataset_id}/{self.table_id}",
+            data = (
+                self.client["storage_staging"]
+                .bucket(self.bucket_name, user_project=self.billing_project_id)
+                .list_blobs(
+                    prefix=f"staging/{self.dataset_id}/{self.table_id}",
+                )
             )
 
             # Raise: Cannot create table without external data

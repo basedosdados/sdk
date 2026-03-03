@@ -52,7 +52,8 @@ class Base:
         self._config_log(config.verbose)
         self.bucket_name = bucket_name or self.config["bucket_name"]
         self.billing_project_id = (
-            billing_project_id or self.config["gcloud-projects"]["staging"]["name"]
+            billing_project_id
+            or self.config["gcloud-projects"]["staging"]["name"]
         )
         self.uri = f"gs://{self.bucket_name}" + "/staging/{dataset}/{table}/*"
         self._backend = Backend(self.config.get("api", {}).get("url", None))
