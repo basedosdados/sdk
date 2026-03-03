@@ -273,8 +273,10 @@ class Table(Base):
             return
         blobs = (
             self.client["storage_staging"]
-            .bucket(self.bucket_name)
-            .list_blobs(prefix=f"staging/{self.dataset_id}/{self.table_id}/")
+            .bucket(self.bucket_name, user_project=self.billing_project_id)
+            .list_blobs(
+                prefix=f"staging/{self.dataset_id}/{self.table_id}/",
+            )
         )
         partitions_dict = {}
         # only needs the first bloob
@@ -564,7 +566,7 @@ class Table(Base):
                 exists:
                 * `raise`: Raises a Conflict exception
                 * `replace`: Replaces the dataset
-                * `pass`: Does nothing
+                * `pass`: Do nothing
             dataset_is_public: Controls if the prod dataset is public or not. By
                 default, staging datasets like `dataset_id_staging` are not
                 public.

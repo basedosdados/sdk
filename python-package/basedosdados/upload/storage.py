@@ -38,7 +38,9 @@ class Storage(Base):
         """
         super().__init__(**kwargs)
 
-        self.bucket = self.client["storage_staging"].bucket(self.bucket_name)
+        self.bucket = self.client["storage_staging"].bucket(
+            self.bucket_name, user_project=self.billing_project_id
+        )
         self.dataset_id = dataset_id.replace("-", "_")
         self.table_id = table_id.replace("-", "_")
 
@@ -124,7 +126,9 @@ class Storage(Base):
                 )
             self.bucket.delete(force=True)
 
-        self.client["storage_staging"].create_bucket(self.bucket)
+        self.client["storage_staging"].create_bucket(
+            self.bucket, user_project=self.billing_project_id
+        )
 
         for folder in ["staging/", "raw/"]:
             self.bucket.blob(folder).upload_from_string("")
@@ -391,7 +395,7 @@ class Storage(Base):
         if bucket_name is not None:
             table_blobs = list(
                 self.client["storage_staging"]
-                .bucket(f"{bucket_name}")
+                .bucket(f"{bucket_name}", user_project=self.billing_project_id)
                 .list_blobs(prefix=prefix)
             )
 
@@ -475,7 +479,7 @@ class Storage(Base):
 
         else:
             destination_bucket = self.client["storage_staging"].bucket(
-                destination_bucket_name
+                destination_bucket_name, user_project=self.billing_project_id
             )
 
         # Divides source_table_ref list for maximum batch request size
