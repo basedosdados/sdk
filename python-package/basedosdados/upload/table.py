@@ -274,8 +274,10 @@ class Table(Base):
             return
         blobs = (
             self.client["storage_staging"]
-            .bucket(self.bucket_name)
-            .list_blobs(prefix=f"staging/{self.dataset_id}/{self.table_id}/")
+            .bucket(self.bucket_name, user_project=self.billing_project_id)
+            .list_blobs(
+                prefix=f"staging/{self.dataset_id}/{self.table_id}/",
+            )
         )
         partitions_dict = {}
         # only needs the first bloob
@@ -558,12 +560,12 @@ class Table(Base):
                 exists on your bucket:
                 * `raise`: Raises a Conflict exception
                 * `replace`: Replaces the table
-                * `pass`: Does nothing
+                * `pass`: Do nothing
             if_dataset_exists: Determines what to do if the dataset already
                 exists:
                 * `raise`: Raises a Conflict exception
                 * `replace`: Replaces the dataset
-                * `pass`: Does nothing
+                * `pass`: Do nothing
             dataset_is_public: Controls if the prod dataset is public or not. By
                 default, staging datasets like `dataset_id_staging` are not
                 public.
@@ -587,9 +589,12 @@ class Table(Base):
 
         if path is None:
             # Look if table data already exists at Storage
-            data = self.client["storage_staging"].list_blobs(
-                self.bucket_name,
-                prefix=f"staging/{self.dataset_id}/{self.table_id}",
+            data = (
+                self.client["storage_staging"]
+                .bucket(self.bucket_name, user_project=self.billing_project_id)
+                .list_blobs(
+                    prefix=f"staging/{self.dataset_id}/{self.table_id}",
+                )
             )
 
             # Raise: Cannot create table without external data
