@@ -144,7 +144,9 @@ class Table(Base):
             columns=table_columns.get("columns")
         )
 
-    def _load_schema_from_bq(self, project_gcp: str = "staging") -> list[SchemaField]:
+    def _load_schema_from_bq(
+        self, project_gcp: str = "staging"
+    ) -> list[SchemaField]:
         """Load schema from table config
 
         Args:

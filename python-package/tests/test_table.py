@@ -242,7 +242,9 @@ def test_create_no_path_error():
     Teste if error is raised when no path is provided
     """
 
-    Dataset(dataset_id=dataset_id).create(project_gcp="staging", if_exists="pass")
+    Dataset(dataset_id=dataset_id).create(
+        project_gcp="staging", if_exists="pass"
+    )
 
     with pytest.raises(FileNotFoundError):
         table.create("dev-api", if_storage_data_exists="raise")
