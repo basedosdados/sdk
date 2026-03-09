@@ -271,7 +271,7 @@ class Table(Base):
         Extract the partition information from the blobs.
         """
 
-        if not self.table_exists(mode="staging"):
+        if not self.table_exists(project_gcp="staging"):
             return
         blobs = (
             self.client["storage_staging"]
@@ -417,7 +417,7 @@ class Table(Base):
         Check if table exists in BigQuery.
 
         Args:
-            mode: Which dataset to check [`prod`|`staging`].
+            project_gcp: Which dataset to check [`prod`|`staging`].
         """
 
         try:
@@ -436,7 +436,7 @@ class Table(Base):
         Get or create BigLake connection and set permissions if needed.
         """
         connection = Connection(
-            name="biglake", location=location, mode="staging"
+            name="biglake", location=location, project_gcp="staging"
         )
         if not connection.exists:
             try:
@@ -727,9 +727,9 @@ class Table(Base):
             ) from exc
 
         logger.success(
-            "{object} {object_id} was {action} in {mode}!",
+            "{object} {object_id} was {action} in {project_gcp}!",
             object_id=self.table_id,
-            mode="staging",
+            project_gcp="staging",
             object="Table",
             action="created",
         )
@@ -737,27 +737,27 @@ class Table(Base):
 
     def update(
         self,
-        mode: str = "prod",
+        project_gcp: str = "prod",
         custom_schema: Optional[list[dict[str, str]]] = None,
     ) -> None:
         """
         Updates BigQuery schema and description.
 
         Args:
-            mode: Table of which table to update [`prod`].
+            project_gcp: Table of which table to update [`prod`].
             not_found_ok: What to do if table is not found.
         """
 
-        table = self._get_table_obj("prod")
+        table = self._get_table_obj(project_gcp="prod")
 
         table.description = self._get_table_description()
 
         # when mode is staging the table schema already exists
-        if mode == "prod" and custom_schema is None:
+        if project_gcp == "prod" and custom_schema is None:
             table.schema = self._load_schema_from_json(
                 columns=self._get_cross_columns_from_bq_api()
             )
-        if mode == "prod" and custom_schema is not None:
+        if project_gcp == "prod" and custom_schema is not None:
             table.schema = self._load_schema_from_json(custom_schema)
 
         fields = ["description", "schema"]
@@ -765,9 +765,9 @@ class Table(Base):
         self.client["bigquery_prod"].update_table(table, fields=fields)
 
         logger.success(
-            " {object} {object_id} was {action} in {mode}!",
+            " {object} {object_id} was {action} in {project_gcp}!",
             object_id=self.table_id,
-            mode=mode,
+            project_gcp=project_gcp,
             object="Table",
             action="updated",
         )
@@ -798,15 +798,15 @@ class Table(Base):
         """
         # TODO: review this method. Check if all required fields are filled
 
-        if if_exists == "replace" and self.table_exists(mode="prod"):
-            self.delete(mode="prod")
+        if if_exists == "replace" and self.table_exists(project_gcp="prod"):
+            self.delete(project_gcp="prod")
 
         publish_sql = self._make_publish_sql()
 
         # create view using API metadata
         if custom_publish_sql is None:
             self.client["bigquery_prod"].query(publish_sql).result()
-            self.update(mode="prod")
+            self.update(project_gcp="prod")
 
         # create view using custon query
         if custom_publish_sql is not None:
