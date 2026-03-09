@@ -157,19 +157,19 @@ class Storage(Base):
         *Remember all files must follow a single schema.* Otherwise, things
         might fail in the future.
 
-        Modes:
+        folder:
 
         * `raw` : raw files from datasource
         * `staging` : pre-treated files ready to upload to BigQuery
         * `header`: header of the tables
         * `auxiliary_files`: auxiliary files from each table
         * `architecture`: architecture sheet of the tables
-        * `all`: if no treatment is needed, use `all`.
+        * `name organization`: If you are working on any external project
 
         Args:
             path: Where to find the file or folder to upload to storage.
-            mode: Folder of which dataset to update
-                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`all`]
+            folder: Folder of which dataset to update
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`name organization`]
             partitions: If adding a single file, use this to add it to a
                 specific partition. Can be a string or dict.
             if_exists: What to do if data exists.
@@ -207,10 +207,11 @@ class Storage(Base):
             paths = [path]
             parts = [partitions or None]
 
+        self._check_folder(folder)
+
         for filepath, part in tqdm(
             list(zip(paths, parts)), desc="Uploading files"
         ):
-            breakpoint()
             blob_name = self._build_blob_name(filepath.name, folder, part)
 
             blob = self.bucket.blob(blob_name, chunk_size=chunk_size)
@@ -345,21 +346,12 @@ class Storage(Base):
 
         self._check_folder(folder)
 
-        folder_ = (
-            ["raw", "staging", "header", "auxiliary_files", "architecture"]
-            if folder == "all"
-            else [folder]
+        blob = self.bucket.blob(
+            self._build_blob_name(filename, folder, partitions)
         )
 
-        for m in folder_:
-            blob = self.bucket.blob(
-                self._build_blob_name(filename, m, partitions)
-            )
-
-            if blob.exists() or not blob.exists() and not not_found_ok:
-                blob.delete()
-            else:
-                return
+        if blob.exists() or not blob.exists() and not not_found_ok:
+            blob.delete()
 
         logger.success(
             " {object} {filename}_{folder} was {action}!",

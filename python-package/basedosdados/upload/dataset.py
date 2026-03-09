@@ -152,10 +152,14 @@ class Dataset(Base):
         Check if dataset exists.
         """
         ref_dataset_id = (
-            self.dataset_id if project_gcp == "prod" else self.dataset_id + "_staging"
+            self.dataset_id
+            if project_gcp == "prod"
+            else self.dataset_id + "_staging"
         )
         try:
-            ref = self.client[f"bigquery_{project_gcp}"].get_dataset(ref_dataset_id)
+            ref = self.client[f"bigquery_{project_gcp}"].get_dataset(
+                ref_dataset_id
+            )
         except Exception:
             ref = None
         return bool(ref)

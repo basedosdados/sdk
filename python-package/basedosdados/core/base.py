@@ -35,6 +35,7 @@ class Base:
         bucket_name=None,
         billing_project_id=None,
         overwrite_cli_config=False,
+        folder="staging",
     ):
         """
         Initialize the class
@@ -55,7 +56,7 @@ class Base:
             billing_project_id
             or self.config["gcloud-projects"]["staging"]["name"]
         )
-        self.uri = f"gs://{self.bucket_name}" + "/staging/{dataset}/{table}/*"
+        self.uri = f"gs://{self.bucket_name}" + "/{folder}/{dataset}/{table}/*"
         self._backend = Backend(self.config.get("api", {}).get("url", None))
 
     @property
@@ -377,25 +378,18 @@ class Base:
         )
 
     @staticmethod
-    def _check_folder(folder : str = 'staging'):
+    def _check_folder(folder: str = "staging"):
         """
         Checks if the folder is valid
         """
-        ACCEPTED_MODES = [
-            "all",
-            "staging",
-            "raw",
-            "header",
-            "auxiliary_files",
-            "architecture",
-        ]
-        if folder in ACCEPTED_MODES:
+        if folder is not None and isinstance(folder, str):
             return
-        
-        else:
-            print(f"build new folder {folder}")
-            return folder
-        
+
+        raise Exception(
+            "This folder does not accept values ​​equal to None and different from string."
+            "We recommend the following names for the folder:"
+            "'staging', 'raw', 'header', 'auxiliary_files', 'architecture' or organization_name"
+        )
 
     def _get_project_id(self, project_gcp: str) -> str:
         """
