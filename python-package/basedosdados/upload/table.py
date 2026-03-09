@@ -144,7 +144,7 @@ class Table(Base):
             columns=table_columns.get("columns")
         )
 
-    def _load_schema_from_bq(self, mode: str = "staging") -> list[SchemaField]:
+    def _load_schema_from_bq(self, project_gcp: str = "staging") -> list[SchemaField]:
         """Load schema from table config
 
         Args:
@@ -158,7 +158,7 @@ class Table(Base):
         return self._load_schema_from_json(columns=columns)
 
     def _load_schema_from_api(
-        self, mode: str = "staging"
+        self, project_gcp: str = "staging"
     ) -> list[SchemaField]:
         """Load schema from table config
 
@@ -166,7 +166,7 @@ class Table(Base):
             mode: Which dataset to create [`prod`|`staging`].
 
         """
-        if self.table_exists(mode=mode):
+        if self.table_exists(project_gcp=project_gcp):
             logger.warning(
                 " {object} {object_id} allready exists, replacing schema!",
                 object_id=self.table_id,
