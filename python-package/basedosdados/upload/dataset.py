@@ -236,55 +236,55 @@ class Dataset(Base):
                     f"Dataset {self.dataset_id} already exists"
                 ) from e
 
-    def delete(self, mode: str = "all") -> None:
+    def delete(self, project_gcp: str = "staging") -> None:
         """
         Deletes dataset in BigQuery. Toggle mode to choose which dataset to
         delete.
 
         Args:
-            mode: Which dataset to delete [`prod`|`staging`|`all`]
+            project_gcp: Which dataset to delete [`prod`|`staging`]
         """
 
-        for m in self._loop_modes(mode):
+        for m in self._loop_modes(project_gcp):
             m["client"].delete_dataset(
                 m["id"], delete_contents=True, not_found_ok=True
             )
             logger.info(
-                " {object} {object_id}_{mode} was {action}!",
+                " {object} {object_id}_{project_gcp} was {action}!",
                 object_id=self.dataset_id,
-                mode=m["mode"],
+                project_gcp=m["mode"],
                 object="Dataset",
                 action="deleted",
             )
 
     def update(
-        self, mode: str = "all", location: Optional[str] = None
+        self, project_gcp: str = "staging", location: Optional[str] = None
     ) -> None:
         """
         Update dataset description. Toggle mode to choose which dataset to
         update.
 
         Args:
-            mode: Which dataset to update [`prod`|`staging`|`all`]
+            project_gcp: Which dataset to update [`prod`|`staging`]
             location: Location of dataset data. List of possible region names:
                 [BigQuery locations](https://cloud.google.com/bigquery/docs/locations)
         """
 
-        for m in self._loop_modes(mode):
+        for m in self._loop_modes(project_gcp):
             # Send the dataset to the API to update, with an explicit timeout.
             # Raises google.api_core.exceptions.Conflict if the Dataset already
             # exists within the project.
             m["client"].update_dataset(
                 self._setup_dataset_object(
-                    m["id"], location=location, mode=m["mode"]
+                    m["id"], location=location, project_gcp=m["mode"]
                 ),
                 fields=["description"],
             )  # Make an API request.
 
             logger.success(
-                " {object} {object_id}_{mode} was {action}!",
+                " {object} {object_id}_{project_gcp} was {action}!",
                 object_id=self.dataset_id,
-                mode=m["mode"],
+                project_gcp=m["mode"],
                 object="Dataset",
                 action="updated",
             )
