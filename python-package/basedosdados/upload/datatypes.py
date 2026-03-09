@@ -32,7 +32,8 @@ class Datatype:
         csv_skip_leading_rows=1,
         csv_delimiter=",",
         csv_allow_jagged_rows=False,
-        mode="staging",
+        project_gcp="staging",
+        folder="staging",
         bucket_name=None,
         partitioned=False,
         biglake_connection_id=None,
@@ -43,8 +44,11 @@ class Datatype:
         self.csv_delimiter = csv_delimiter
         self.csv_skip_leading_rows = csv_skip_leading_rows
         self.csv_allow_jagged_rows = csv_allow_jagged_rows
-        self.mode = mode
-        self.uri = f"gs://{bucket_name}/staging/{self.dataset_id}/{table_id}/*"
+        self.folder = folder
+        self.project = project_gcp
+        self.uri = (
+            f"gs://{bucket_name}/{self.folder}/{self.dataset_id}/{table_id}/*"
+        )
         self.partitioned = partitioned
         self.biglake_connection_id = biglake_connection_id
 

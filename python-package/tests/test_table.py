@@ -207,11 +207,10 @@ def test_get_columns_from_data():
     """
     Test if get the columns from data
     """
-    out = table._get_columns_from_data(csv_path, mode="staging")
+    out = table._get_columns_from_data(csv_path)
     out2 = table._get_columns_from_data(
         data_sample_path="tests/sample_data/table",
         source_format="csv",
-        mode="staging",
     )
 
     assert isinstance(out, dict)
@@ -242,7 +241,9 @@ def test_create_no_path_error():
     Teste if error is raised when no path is provided
     """
 
-    Dataset(dataset_id=dataset_id).create(mode="staging", if_exists="pass")
+    Dataset(dataset_id=dataset_id).create(
+        project_gcp="staging", if_exists="pass"
+    )
 
     with pytest.raises(FileNotFoundError):
         table.create("dev-api", if_storage_data_exists="raise")
@@ -307,7 +308,7 @@ def test_delete_all():
     """
     Test delete method with all modes
     """
-    table.delete("all")
+    table.delete("staging")
 
     assert not table.table_exists("staging")
     assert not table.table_exists("prod")

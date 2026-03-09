@@ -78,7 +78,7 @@ class Storage(Base):
     def _build_blob_name(
         self,
         filename: str,
-        mode: str,
+        folder: str,
         partitions: Optional[Union[str, dict[str, str]]] = None,
     ) -> str:
         """
@@ -86,7 +86,7 @@ class Storage(Base):
         """
 
         # table folder
-        blob_name = f"{mode}/{self.dataset_id}/{self.table_id}/"
+        blob_name = f"{folder}/{self.dataset_id}/{self.table_id}/"
 
         # add partition folder
         if partitions is not None:
@@ -136,14 +136,14 @@ class Storage(Base):
     def upload(
         self,
         path: Union[str, Path],
-        mode: str = "all",
+        folder: str = "staging",
         partitions: Optional[Union[str, dict[str, str]]] = None,
         if_exists: str = "raise",
         chunk_size: Optional[int] = None,
         **upload_args,
     ) -> None:
         """
-        Upload to storage at `<bucket_name>/<mode>/<dataset_id>/<table_id>`.
+        Upload to storage at `<bucket_name>/<folder>/<dataset_id>/<table_id>`.
 
         You can:
 
@@ -157,19 +157,19 @@ class Storage(Base):
         *Remember all files must follow a single schema.* Otherwise, things
         might fail in the future.
 
-        Modes:
+        folder:
 
         * `raw` : raw files from datasource
         * `staging` : pre-treated files ready to upload to BigQuery
         * `header`: header of the tables
         * `auxiliary_files`: auxiliary files from each table
         * `architecture`: architecture sheet of the tables
-        * `all`: if no treatment is needed, use `all`.
+        * `name organization`: If you are working on any external project
 
         Args:
             path: Where to find the file or folder to upload to storage.
-            mode: Folder of which dataset to update
-                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`all`]
+            folder: Folder of which dataset to update
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`name organization`]
             partitions: If adding a single file, use this to add it to a
                 specific partition. Can be a string or dict.
             if_exists: What to do if data exists.
@@ -207,60 +207,53 @@ class Storage(Base):
             paths = [path]
             parts = [partitions or None]
 
-        self._check_mode(mode)
+        self._check_folder(folder)
 
-        _mode = (
-            ["raw", "staging", "header", "auxiliary_files", "architecture"]
-            if mode == "all"
-            else [mode]
-        )
-        for m in _mode:
-            for filepath, part in tqdm(
-                list(zip(paths, parts)), desc="Uploading files"
-            ):
-                blob_name = self._build_blob_name(filepath.name, m, part)
+        for filepath, part in tqdm(
+            list(zip(paths, parts)), desc="Uploading files"
+        ):
+            blob_name = self._build_blob_name(filepath.name, folder, part)
 
-                blob = self.bucket.blob(blob_name, chunk_size=chunk_size)
+            blob = self.bucket.blob(blob_name, chunk_size=chunk_size)
+            if not blob.exists() or if_exists == "replace":
+                upload_args["timeout"] = upload_args.get("timeout", None)
 
-                if not blob.exists() or if_exists == "replace":
-                    upload_args["timeout"] = upload_args.get("timeout", None)
+                blob.upload_from_filename(str(filepath), **upload_args)
 
-                    blob.upload_from_filename(str(filepath), **upload_args)
+            elif if_exists == "pass":
+                pass
 
-                elif if_exists == "pass":
-                    pass
-
-                else:
-                    raise BaseDosDadosException(
-                        f"Data already exists at {self.bucket_name}/{blob_name}. "
-                        "If you are using Storage.upload then set if_exists to "
-                        "'replace' to overwrite data \n"
-                        "If you are using Table.create then set if_storage_data_exists "
-                        "to 'replace' to overwrite data."
-                    )
-
-                logger.success(
-                    " {object} {filename}_{mode} was {action}!",
-                    filename=filepath.name,
-                    mode=m,
-                    object="File",
-                    action="uploaded",
+            else:
+                raise BaseDosDadosException(
+                    f"Data already exists at {self.bucket_name}/{blob_name}. "
+                    "If you are using Storage.upload then set if_exists to "
+                    "'replace' to overwrite data \n"
+                    "If you are using Table.create then set if_storage_data_exists "
+                    "to 'replace' to overwrite data."
                 )
+
+            logger.success(
+                "{object} {filename} in folder {folder} was {action}!",
+                filename=filepath.name,
+                folder=folder,
+                object="File",
+                action="uploaded",
+            )
 
     def download(
         self,
         filename: str = "*",
         savepath: Union[Path, str] = Path("."),
         partitions: Optional[Union[str, dict[str, str]]] = None,
-        mode: str = "staging",
+        folder: str = "staging",
         if_not_exists: str = "raise",
     ) -> None:
         """
         Download files from Google Storage from path
-        `mode/dataset_id/table_id/partitions/filename` and replicate folder
+        `folder/dataset_id/table_id/partitions/filename` and replicate folder
         hierarchy on save.
 
-        Modes:
+        folders:
 
         * `raw` : raw files from datasource
         * `staging` : pre-treated files ready to upload to BigQuery
@@ -277,19 +270,19 @@ class Storage(Base):
                 a directory.
             partitions: If downloading a single file, use this to specify the
                 partition path from which to download. Can be a string `<key>=<value>/<key2>=<value2>` or dict `dict(key=value, key2=value2)`.
-            mode: Folder of which dataset to update.
+            folder: Folder of which dataset to update.
                 [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`]
             if_not_exists: What to do if data not found.
                 * `raise`: Raises FileNotFoundError.
                 * `pass`: Do nothing and exit the function.
 
         Raises:
-            FileNotFoundError: If the given path `<mode>/<dataset_id>/<table_id>/<partitions>/<filename>` could not be found or there are
+            FileNotFoundError: If the given path `<folder>/<dataset_id>/<table_id>/<partitions>/<filename>` could not be found or there are
                 no files to download.
         """
 
         # Prefix to locate files within the bucket
-        prefix = f"{mode}/{self.dataset_id}/{self.table_id}/"
+        prefix = f"{folder}/{self.dataset_id}/{self.table_id}/"
 
         # Add specific partition to search prefix
         if partitions:
@@ -325,9 +318,9 @@ class Storage(Base):
             blob.download_to_filename(filename=save_file_path)
 
         logger.success(
-            " {object} {object_id}_{mode} was {action} at: {path}!",
+            " {object} {object_id}_{folder} was {action} at: {path}!",
             object_id=self.dataset_id,
-            mode=mode,
+            folder=folder,
             object="File",
             action="downloaded",
             path={str(savepath)},
@@ -336,12 +329,12 @@ class Storage(Base):
     def delete_file(
         self,
         filename: str,
-        mode: str,
+        folder: str,
         partitions: Optional[Union[str, dict[str, str]]] = None,
         not_found_ok: bool = False,
     ) -> None:
         """
-        Delete file from path `<bucket_name>/<mode>/<dataset_id>/<table_id>/<partitions>/<filename>`.
+        Delete file from path `<bucket_name>/<folder>/<dataset_id>/<table_id>/<partitions>/<filename>`.
 
         Args:
             filename: Name of the file to be deleted.
@@ -351,35 +344,26 @@ class Storage(Base):
             not_found_ok: What to do if file not found.
         """
 
-        self._check_mode(mode)
+        self._check_folder(folder)
 
-        mode_ = (
-            ["raw", "staging", "header", "auxiliary_files", "architecture"]
-            if mode == "all"
-            else [mode]
+        blob = self.bucket.blob(
+            self._build_blob_name(filename, folder, partitions)
         )
 
-        for m in mode_:
-            blob = self.bucket.blob(
-                self._build_blob_name(filename, m, partitions)
-            )
-
-            if blob.exists() or not blob.exists() and not not_found_ok:
-                blob.delete()
-            else:
-                return
+        if blob.exists() or not blob.exists() and not not_found_ok:
+            blob.delete()
 
         logger.success(
-            " {object} {filename}_{mode} was {action}!",
+            " {object} {filename}_{folder} was {action}!",
             filename=filename,
-            mode=mode_,
+            folder=folder,
             object="File",
             action="deleted",
         )
 
     def delete_table(
         self,
-        mode: str = "staging",
+        folder: str = "staging",
         bucket_name: Optional[str] = None,
         not_found_ok: bool = False,
     ) -> None:
@@ -398,7 +382,7 @@ class Storage(Base):
             FileNotFoundError: If the requested table could not be found.
         """
 
-        prefix = f"{mode}/{self.dataset_id}/{self.table_id}/"
+        prefix = f"{folder}/{self.dataset_id}/{self.table_id}/"
 
         if bucket_name is not None:
             table_blobs = list(
@@ -440,9 +424,9 @@ class Storage(Base):
                     counter += 1
                     traceback.print_exc(file=sys.stderr)
         logger.success(
-            " {object} {object_id}_{mode} was {action}!",
+            " {object} {object_id}_{folder} was {action}!",
             object_id=self.table_id,
-            mode=mode,
+            folder=folder,
             object="Table",
             action="deleted",
         )
@@ -451,7 +435,7 @@ class Storage(Base):
         self,
         source_bucket_name: str = "basedosdados",
         destination_bucket_name: Optional[str] = None,
-        mode: str = "staging",
+        folder: str = "staging",
         new_table_id: Optional[str] = None,
     ) -> None:
         """
@@ -465,7 +449,7 @@ class Storage(Base):
                 to. If None, defaults to the bucket initialized when
                 instantiating the Storage object. You can check it with the
                 `Storage().bucket` property.
-            mode: Folder of which dataset to update
+            folder: Folder of which dataset to update
                 [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`]
             new_table_id: New table id to be copied to. If None, defaults to the
                 table id initialized when instantiating the Storage object.
@@ -473,8 +457,8 @@ class Storage(Base):
 
         source_table_ref = list(
             self.client["storage_staging"]
-            .bucket(source_bucket_name, user_project=self.billing_project_id)
-            .list_blobs(prefix=f"{mode}/{self.dataset_id}/{self.table_id}/")
+            .bucket(source_bucket_name)
+            .list_blobs(prefix=f"{folder}/{self.dataset_id}/{self.table_id}/")
         )
 
         if not source_table_ref:
@@ -523,10 +507,10 @@ class Storage(Base):
                     time.sleep(5)
                     traceback.print_exc(file=sys.stderr)
         logger.success(
-            " {object} {object_id}_{mode} was {action} to {new_object_id}_{mode}!",
+            " {object} {object_id}_{folder} was {action} to {new_object_id}_{folder}!",
             object_id=self.table_id,
             new_object_id=new_table_id if new_table_id else self.table_id,
-            mode=mode,
+            folder=folder,
             object="Table",
             action="copied",
         )

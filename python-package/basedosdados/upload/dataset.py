@@ -36,7 +36,7 @@ class Dataset(Base):
         """
         return self.backend.get_dataset_config(self.dataset_id)
 
-    def _loop_modes(self, mode: str = "all"):
+    def _loop_modes(self, project_gcp: str = "all"):
         """
         Loop modes.
         """
@@ -44,28 +44,30 @@ class Dataset(Base):
         def dataset_tag(m):
             return f"_{m}" if m == "staging" else ""
 
-        mode_ = ["prod", "staging"] if mode == "all" else [mode]
+        _project_gcp = (
+            ["prod", "staging"] if project_gcp == "all" else [project_gcp]
+        )
         return (
             {
                 "client": self.client[f"bigquery_{m}"],
                 "id": f"{self.client[f'bigquery_{m}'].project}.{self.dataset_id}{dataset_tag(m)}",
                 "mode": m,
             }
-            for m in mode_
+            for m in _project_gcp
         )
 
     def _setup_dataset_object(
         self,
         dataset_id: str,
         location: Optional[str] = None,
-        mode: str = "staging",
+        project_gcp: str = "staging",
     ) -> bigquery.Dataset:
         """
         Setup dataset object.
         """
 
         dataset = bigquery.Dataset(dataset_id)
-        if mode == "staging":
+        if project_gcp == "staging":
             dataset_path = dataset_id.replace("_staging", "")
             description = f"staging dataset for `{dataset_path}`"
             labels = {"staging": True}
@@ -89,19 +91,19 @@ class Dataset(Base):
         return dataset
 
     def publicize(
-        self, mode: str = "all", dataset_is_public: bool = True
+        self, project_gcp: str = "all", dataset_is_public: bool = True
     ) -> None:
         """
         Changes IAM configuration to turn BigQuery dataset public.
 
         Args:
-            mode: Which dataset to create [`prod`|`staging`|`all`].
+            project_gcp: Which dataset to create [`prod`|`staging`].
             dataset_is_public: Control if prod dataset is public or not. By
                 default, staging datasets like `dataset_id_staging` are not
                 public.
         """
 
-        for m in self._loop_modes(mode):
+        for m in self._loop_modes(project_gcp):
             dataset = m["client"].get_dataset(m["id"])
             entries = dataset.access_entries
             # TODO https://github.com/basedosdados/sdk/pull/1020
@@ -140,29 +142,33 @@ class Dataset(Base):
                 dataset.access_entries = entries
             m["client"].update_dataset(dataset, ["access_entries"])
             logger.success(
-                " {object} {object_id}_{mode} was {action}!",
+                " {object} {object_id}_{project_gcp} was {action}!",
                 object_id=self.dataset_id,
-                mode=m["mode"],
+                project_gcp=m["mode"],
                 object="Dataset",
                 action="publicized",
             )
 
-    def exists(self, mode: str = "staging") -> bool:
+    def exists(self, project_gcp: str = "staging") -> bool:
         """
         Check if dataset exists.
         """
         ref_dataset_id = (
-            self.dataset_id if mode == "prod" else self.dataset_id + "_staging"
+            self.dataset_id
+            if project_gcp == "prod"
+            else self.dataset_id + "_staging"
         )
         try:
-            ref = self.client[f"bigquery_{mode}"].get_dataset(ref_dataset_id)
+            ref = self.client[f"bigquery_{project_gcp}"].get_dataset(
+                ref_dataset_id
+            )
         except Exception:
             ref = None
         return bool(ref)
 
     def create(
         self,
-        mode: str = "all",
+        project_gcp: str = "staging",
         if_exists: str = "raise",
         dataset_is_public: bool = True,
         location: Optional[str] = None,
@@ -172,13 +178,11 @@ class Dataset(Base):
 
         It can create two datasets:
 
-        * `<dataset_id>` (mode = `prod`)
-        * `<dataset_id>_staging` (mode = `staging`)
-
-        If `mode` is `all`, it creates both.
+        * `<dataset_id>` (project_gcp = `prod`)
+        * `<dataset_id>_staging` (project_gcp = `staging`)
 
         Args:
-            mode: Which dataset to create [`prod`|`staging`|`all`].
+            project_gcp: Which dataset to create [`prod`|`staging`].
             if_exists: What to do if dataset exists
                 * `raise`: Raises Conflict exception
                 * `replace`: Drop all tables and replace dataset
@@ -195,35 +199,38 @@ class Dataset(Base):
         """
 
         # Set dataset_id to the ID of the dataset to create.
-        for m in self._loop_modes(mode):
+        for m in self._loop_modes(project_gcp):
             if if_exists == "replace":
-                self.delete(mode=m["mode"])
+                self.delete(project_gcp=m["mode"])
             elif if_exists == "update":
-                self.update(mode=m["mode"])
+                self.update(project_gcp=m["mode"])
                 continue
 
             # Send the dataset to the API for creation, with an explicit timeout.
             # Raises google.api_core.exceptions.Conflict if the Dataset already
             # exists within the project.
             try:
-                if not self.exists(mode=m["mode"]):
+                if not self.exists(project_gcp=m["mode"]):
                     # Construct a full Dataset object to send to the API.
                     dataset_obj = self._setup_dataset_object(
-                        dataset_id=m["id"], location=location, mode=m["mode"]
+                        dataset_id=m["id"],
+                        location=location,
+                        project_gcp=m["mode"],
                     )
                     m["client"].create_dataset(
                         dataset_obj
                     )  # Make an API request.
                     logger.success(
-                        " {object} {object_id}_{mode} was {action}!",
+                        " {object} {object_id}_{project_gcp} was {action}!",
                         object_id=self.dataset_id,
-                        mode=m["mode"],
+                        project_gcp=m["mode"],
                         object="Dataset",
                         action="created",
                     )
                     # Make prod dataset public
                     self.publicize(
-                        dataset_is_public=dataset_is_public, mode=m["mode"]
+                        dataset_is_public=dataset_is_public,
+                        project_gcp=m["mode"],
                     )
             except Conflict as e:
                 if if_exists == "pass":
@@ -232,55 +239,55 @@ class Dataset(Base):
                     f"Dataset {self.dataset_id} already exists"
                 ) from e
 
-    def delete(self, mode: str = "all") -> None:
+    def delete(self, project_gcp: str = "staging") -> None:
         """
         Deletes dataset in BigQuery. Toggle mode to choose which dataset to
         delete.
 
         Args:
-            mode: Which dataset to delete [`prod`|`staging`|`all`]
+            project_gcp: Which dataset to delete [`prod`|`staging`]
         """
 
-        for m in self._loop_modes(mode):
+        for m in self._loop_modes(project_gcp):
             m["client"].delete_dataset(
                 m["id"], delete_contents=True, not_found_ok=True
             )
             logger.info(
-                " {object} {object_id}_{mode} was {action}!",
+                " {object} {object_id}_{project_gcp} was {action}!",
                 object_id=self.dataset_id,
-                mode=m["mode"],
+                project_gcp=m["mode"],
                 object="Dataset",
                 action="deleted",
             )
 
     def update(
-        self, mode: str = "all", location: Optional[str] = None
+        self, project_gcp: str = "staging", location: Optional[str] = None
     ) -> None:
         """
         Update dataset description. Toggle mode to choose which dataset to
         update.
 
         Args:
-            mode: Which dataset to update [`prod`|`staging`|`all`]
+            project_gcp: Which dataset to update [`prod`|`staging`]
             location: Location of dataset data. List of possible region names:
                 [BigQuery locations](https://cloud.google.com/bigquery/docs/locations)
         """
 
-        for m in self._loop_modes(mode):
+        for m in self._loop_modes(project_gcp):
             # Send the dataset to the API to update, with an explicit timeout.
             # Raises google.api_core.exceptions.Conflict if the Dataset already
             # exists within the project.
             m["client"].update_dataset(
                 self._setup_dataset_object(
-                    m["id"], location=location, mode=m["mode"]
+                    m["id"], location=location, project_gcp=m["mode"]
                 ),
                 fields=["description"],
             )  # Make an API request.
 
             logger.success(
-                " {object} {object_id}_{mode} was {action}!",
+                " {object} {object_id}_{project_gcp} was {action}!",
                 object_id=self.dataset_id,
-                mode=m["mode"],
+                project_gcp=m["mode"],
                 object="Dataset",
                 action="updated",
             )

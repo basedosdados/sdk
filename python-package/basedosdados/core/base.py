@@ -35,6 +35,7 @@ class Base:
         bucket_name=None,
         billing_project_id=None,
         overwrite_cli_config=False,
+        folder="staging",
     ):
         """
         Initialize the class
@@ -55,7 +56,7 @@ class Base:
             billing_project_id
             or self.config["gcloud-projects"]["staging"]["name"]
         )
-        self.uri = f"gs://{self.bucket_name}" + "/staging/{dataset}/{table}/*"
+        self.uri = f"gs://{self.bucket_name}" + "/{folder}/{dataset}/{table}/*"
         self._backend = Backend(self.config.get("api", {}).get("url", None))
 
     @property
@@ -377,43 +378,34 @@ class Base:
         )
 
     @staticmethod
-    def _check_mode(mode):
+    def _check_folder(folder: str = "staging"):
         """
-        Checks if the mode is valid
+        Checks if the folder is valid
         """
-        ACCEPTED_MODES = [
-            "all",
-            "staging",
-            "prod",
-            "raw",
-            "header",
-            "auxiliary_files",
-            "architecture",
-        ]
-        if mode in ACCEPTED_MODES:
-            return True
+        if folder is not None and isinstance(folder, str):
+            return
 
         raise Exception(
-            f"Argument {mode} not supported. "
-            f"Enter one of the following: "
-            f"{','.join(ACCEPTED_MODES)}"
+            "This folder does not accept values ​​equal to None and different from string."
+            "We recommend the following names for the folder:"
+            "'staging', 'raw', 'header', 'auxiliary_files', 'architecture' or organization_name"
         )
 
-    def _get_project_id(self, mode: str) -> str:
+    def _get_project_id(self, project_gcp: str) -> str:
         """
         Get the project ID.
         """
-        return self.config["gcloud-projects"][mode]["name"]
+        return self.config["gcloud-projects"][project_gcp]["name"]
 
-    def _get_project_number(self, mode: str) -> str:
+    def _get_project_number(self, project_gcp: str) -> str:
         """
         Get the project number from project ID.
         """
-        credentials = self._load_credentials(mode)
+        credentials = self._load_credentials(project_gcp)
         crm_service = googleapiclient.discovery.build(
             "cloudresourcemanager", "v1", credentials=credentials
         )
-        project_id = self._get_project_id(mode)
+        project_id = self._get_project_id(project_gcp)
 
         return (
             crm_service.projects()
@@ -422,19 +414,19 @@ class Base:
         )
 
     def _get_project_iam_policy(
-        self, mode: str
+        self, project_gcp: str
     ) -> Dict[str, Union[str, int, List[Dict[str, Union[str, List[str]]]]]]:
         """
         Get the project IAM policy.
         """
-        credentials = self._load_credentials(mode)
+        credentials = self._load_credentials(project_gcp)
         service = googleapiclient.discovery.build(
             "cloudresourcemanager", "v1", credentials=credentials
         )
         policy = (
             service.projects()
             .getIamPolicy(
-                resource=self._get_project_id(mode),
+                resource=self._get_project_id(project_gcp),
                 body={"options": {"requestedPolicyVersion": 1}},
             )
             .execute()
@@ -446,24 +438,24 @@ class Base:
         policy: Dict[
             str, Union[str, int, List[Dict[str, Union[str, List[str]]]]]
         ],
-        mode: str,
+        project_gcp: str,
     ):
         """
         Set the project IAM policy.
         """
-        credentials = self._load_credentials(mode)
+        credentials = self._load_credentials(project_gcp)
         service = googleapiclient.discovery.build(
             "cloudresourcemanager", "v1", credentials=credentials
         )
         service.projects().setIamPolicy(
-            resource=self._get_project_id(mode), body={"policy": policy}
+            resource=self._get_project_id(project_gcp), body={"policy": policy}
         ).execute()
 
-    def _grant_role(self, role: str, member: str, mode: str):
+    def _grant_role(self, role: str, member: str, project_gcp: str):
         """
         Grant a role to a member.
         """
-        policy = self._get_project_iam_policy(mode)
+        policy = self._get_project_iam_policy(project_gcp)
         try:
             binding = next(b for b in policy["bindings"] if b["role"] == role)
         except StopIteration:
@@ -471,13 +463,13 @@ class Base:
             policy["bindings"].append(binding)
         if member not in binding["members"]:
             binding["members"].append(member)
-        self._set_project_iam_policy(policy, mode)
+        self._set_project_iam_policy(policy, project_gcp)
 
-    def _revoke_role(self, role: str, member: str, mode: str):
+    def _revoke_role(self, role: str, member: str, project_gcp: str):
         """
         Revoke a role from a member.
         """
-        policy = self._get_project_iam_policy(mode)
+        policy = self._get_project_iam_policy(project_gcp)
         try:
             binding = next(b for b in policy["bindings"] if b["role"] == role)
         except StopIteration:
@@ -485,4 +477,4 @@ class Base:
         else:
             if member in binding["members"]:
                 binding["members"].remove(member)
-        self._set_project_iam_policy(policy, mode)
+        self._set_project_iam_policy(policy, project_gcp)

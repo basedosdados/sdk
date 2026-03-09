@@ -58,10 +58,9 @@ def test_loop_modes():
     """
     dataset = Dataset(dataset_id=dataset_id)
 
-    assert len(list(dataset._loop_modes(mode="all"))) == 2
-    assert len(list(dataset._loop_modes(mode="staging"))) == 1
-    assert "staging" in next(dataset._loop_modes(mode="staging"))["id"]
-    assert len(list(dataset._loop_modes(mode="prod"))) == 1
+    assert len(list(dataset._loop_modes(project_gcp="staging"))) == 1
+    assert "staging" in next(dataset._loop_modes(project_gcp="staging"))["id"]
+    assert len(list(dataset._loop_modes(project_gcp="prod"))) == 1
 
 
 @pytest.mark.order5
