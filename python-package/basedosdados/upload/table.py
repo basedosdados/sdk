@@ -150,10 +150,10 @@ class Table(Base):
         """Load schema from table config
 
         Args:
-            mode: Which dataset to create [`prod`|`staging`].
+            project_gcp: Which dataset to create [`prod`|`staging`].
 
         """
-        table_columns = self._get_columns_from_bq()
+        table_columns = self._get_columns_from_bq(project_gcp=project_gcp)
         columns = table_columns.get("partition_columns") + table_columns.get(
             "columns"
         )

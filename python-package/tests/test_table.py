@@ -211,7 +211,6 @@ def test_get_columns_from_data():
     out2 = table._get_columns_from_data(
         data_sample_path="tests/sample_data/table",
         source_format="csv",
-        mode="staging",
     )
 
     assert isinstance(out, dict)
