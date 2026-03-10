@@ -30,6 +30,15 @@ dataset_search <- function(search_term) {
       page_size = 100)) ->
     search
 
+  if (is.null(search) || is.null(search$datasets) || length(search$datasets) == 0) {
+    return(tibble::tibble(
+      dataset_name = character(0),
+      dataset_tables = list(),
+      url = character(0),
+      title = character(0)
+    ))
+  }
+
   tibble::tibble(
     dataset_name = purrr::map_chr(
       .x = search$datasets,
@@ -60,7 +69,7 @@ dataset_search <- function(search_term) {
 
 list_dataset_tables <- function(dataset_id) {
 
-    bd_request(
+    basedosdados::bd_request(
       endpoint = "bdm_dataset_show",
       query = list(
         dataset_id = dataset_id)) ->
@@ -80,7 +89,7 @@ list_dataset_tables <- function(dataset_id) {
       purrr::pluck("resources") %>%
       purrr::keep(~ .x$resource_type == "bdm_table") %>%
       purrr::map(fetch_function) %>%
-      purrr::reduce(dplyr::bind_rows)
+      purrr::reduce(dplyr::bind_rows, .init = tibble::tibble(name = character(0), description = character(0)))
 
   }
 
@@ -102,14 +111,23 @@ get_table_columns <- function(
   dataset_id,
   table_id) {
 
-  bd_request(
+  result <- basedosdados::bd_request(
     endpoint = "bdm_table_show",
     query = list(
       table_id = table_id,
-      dataset_id = dataset_id)) %>%
+      dataset_id = dataset_id))
+
+  if (is.null(result) || is.null(result$columns) || length(result$columns) == 0) {
+    return(tibble::tibble(
+      name = character(0),
+      description = character(0)
+    ))
+  }
+
+  result %>%
     purrr::pluck("columns") %>%
     purrr::map(tibble::as_tibble) %>%
-    purrr::reduce(dplyr::bind_rows) %>%
+    purrr::reduce(dplyr::bind_rows, .init = tibble::tibble()) %>%
     dplyr::select(- c(.data$is_in_staging, .data$is_partition))
 
   }
@@ -129,17 +147,25 @@ get_table_columns <- function(
 
 get_dataset_description <- function(dataset_id) {
 
-  bd_request(
+  result <- basedosdados::bd_request(
     endpoint = "bdm_dataset_show",
     query = list(
-      dataset_id = dataset_id)) ->
-    result
+      dataset_id = dataset_id))
+
+  if (is.null(result)) {
+    return(tibble::tibble(
+      name = NA_character_,
+      title = NA_character_,
+      tables = list(tibble::tibble(name = character(0), description = character(0))),
+      notes = NA_character_
+    ))
+  }
 
   tibble::tibble(
-    name = result$name,
-    title = result$title,
+    name = if (is.null(result$name)) NA_character_ else result$name,
+    title = if (is.null(result$title)) NA_character_ else result$title,
     tables = list(list_dataset_tables(dataset_id)),
-    notes = result$notes)
+    notes = if (is.null(result$notes)) NA_character_ else result$notes)
 
 }
 
@@ -156,24 +182,37 @@ get_dataset_description <- function(dataset_id) {
 #'
 
 get_table_description <- function(
-  dataset_id = ? typed::Character(1),
-  table_id = ? typed::Character(1)) {
+  dataset_id,
+  table_id) {
 
-  bd_request(
+  result <- basedosdados::bd_request(
     endpoint = "bdm_table_show",
     query = list(
       dataset_id = dataset_id,
-      table_id = table_id)) ->
-    result
+      table_id = table_id))
+
+  if (is.null(result)) {
+    return(tibble::tibble(
+      dataset_id = dataset_id,
+      table_id = table_id,
+      description = NA_character_,
+      columns = list(tibble::tibble())
+    ))
+  }
+
+  columns_data <- if (is.null(result$columns) || length(result$columns) == 0) {
+    tibble::tibble()
+  } else {
+    result %>%
+      purrr::pluck("columns") %>%
+      purrr::map(tibble::as_tibble) %>%
+      purrr::reduce(dplyr::bind_rows, .init = tibble::tibble())
+  }
 
   tibble::tibble(
     dataset_id = dataset_id,
     table_id = table_id,
-    description = result$description,
-    columns = result %>%
-      purrr::pluck("columns") %>%
-      purrr::map(tibble::as_tibble) %>%
-      purrr::reduce(dplyr::bind_rows) %>%
-      list())
+    description = if (is.null(result$description)) NA_character_ else result$description,
+    columns = list(columns_data))
 
 }

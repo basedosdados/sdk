@@ -4,10 +4,7 @@
 \alias{get_table_description}
 \title{Describe a table within a dataset}
 \usage{
-get_table_description(
-  dataset_id = `?`(typed::Character(1)),
-  table_id = `?`(typed::Character(1))
-)
+get_table_description(dataset_id, table_id)
 }
 \arguments{
 \item{dataset_id}{a dataset name e.g. if addressing table "br_sp_alesp.deputado" then table_id is \code{br_sp_alesp}}
