@@ -129,12 +129,12 @@ def test_copy_table():
     """
 
     new_table_id = f"{table_id}_copy_table"
-
     # Create copy from folder on storage
     storage.copy_table(
-        source_bucket_name="basedosdados-dev",
-        destination_bucket_name="basedosdados-dev",
+        source_bucket_name="basedosdados-consultoria",
+        destination_bucket_name="basedosdados-consultoria",
         new_table_id=new_table_id,
+        folder="staging",
     )
 
     savepath = SAVEPATH / "storage_test_copy_table"
@@ -182,4 +182,6 @@ def test_delete_table():
         storage.delete_table()
 
 
-test_upload_with_errors()
+# test_upload_with_errors()
+
+# test_copy_table()

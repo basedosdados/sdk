@@ -588,7 +588,7 @@ class Table(Base):
             Project: Sets Project in gcloud. Default = `staging`
                 Staging = basedosdados-dev
                 Prod = basedosdados
-            Folder: Bucket folder name. Default `<bucket_name>/staging/<dataset_id>/<table_id>/*`
+            Folder: Bucket folder name. Default `<bucket_name>/<folder>/<dataset_id>/<table_id>/*`
                 If you want to upload data to the ´basedosdados-consultoria´ bucket, we advise you to follow the following standardization: `<bucket_name>/<name_organization>/<dataset_id>/<table_id>/*`
             set_biglake_connection_permissions: If set to `True`, attempts to
                 grant the BigLake connection service account access to the
@@ -602,7 +602,6 @@ class Table(Base):
                 self.bucket_name,
                 prefix=f"{folder}/{self.dataset_id}/{self.table_id}",
             )
-
             # Raise: Cannot create table without external data
             if not data:
                 raise BaseDosDadosException(
@@ -667,6 +666,7 @@ class Table(Base):
             csv_allow_jagged_rows=csv_allow_jagged_rows,
             bucket_name=self.bucket_name,
             project_gcp=project_gcp,
+            folder=folder,
             partitioned=self._is_partitioned(
                 data_sample_path=path,
                 source_format=source_format,
@@ -734,6 +734,8 @@ class Table(Base):
             action="created",
         )
         # return None
+
+        breakpoint()
 
     def update(
         self,

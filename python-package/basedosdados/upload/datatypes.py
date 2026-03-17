@@ -47,7 +47,7 @@ class Datatype:
         self.folder = folder
         self.project = project_gcp
         self.uri = (
-            f"gs://{bucket_name}/{self.folder}/{self.dataset_id}/{table_id}/*"
+            f"gs://{bucket_name}/{folder}/{self.dataset_id}/{table_id}/*"
         )
         self.partitioned = partitioned
         self.biglake_connection_id = biglake_connection_id
@@ -103,9 +103,6 @@ class Datatype:
             _external_config.autodetect = False
             _external_config.schema = self.schema
             _external_config.options.field_delimiter = self.csv_delimiter
-            _external_config.options.allow_jagged_rows = (
-                self.csv_allow_jagged_rows
-            )
         elif self.source_format == "avro":
             _external_config = bigquery.ExternalConfig("AVRO")
         elif self.source_format == "parquet":
@@ -115,6 +112,8 @@ class Datatype:
                 "Base dos Dados just supports csv and parquet files"
             )
         _external_config.source_uris = self.uri
+
+        breakpoint()
         if self.partitioned:
             _external_config.hive_partitioning = self.partition()
 

@@ -52,11 +52,12 @@ class Base:
         self.config = self._load_config()
         self._config_log(config.verbose)
         self.bucket_name = bucket_name or self.config["bucket_name"]
+        self.folder = folder
         self.billing_project_id = (
             billing_project_id
             or self.config["gcloud-projects"]["staging"]["name"]
         )
-        self.uri = f"gs://{self.bucket_name}" + "/{folder}/{dataset}/{table}/*"
+        self.uri = f"gs://{self.bucket_name}/{folder}" + "/{dataset}/{table}/*"
         self._backend = Backend(self.config.get("api", {}).get("url", None))
 
     @property

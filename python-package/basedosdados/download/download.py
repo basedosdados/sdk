@@ -370,6 +370,7 @@ def _download_blob_from_bucket(
     client: _GoogleClient,
     bucket_name: str,
     savepath: Path,
+    user_project: str = "basedosdados-dev",
 ) -> None:
     """
     Download a blob from a bucket to the path specified.
@@ -382,13 +383,17 @@ def _download_blob_from_bucket(
     Returns:
         None
     """
-    bucket = client["storage"].bucket(bucket_name)
+    bucket = client["storage"].bucket(bucket_name, user_project=user_project)
     for blob in bucket.list_blobs():
         filepath = savepath / (blob.name.split("-")[-1] + ".csv.gz")
         blob.download_to_filename(filepath)
 
 
-def _create_bucket(client: _GoogleClient, bucket_name: str) -> None:
+def _create_bucket(
+    client: _GoogleClient,
+    bucket_name: str,
+    user_project: str = "basedosdados-dev",
+) -> None:
     """
     Create a new bucket in a specific location with standard storage class.
 
@@ -400,16 +405,22 @@ def _create_bucket(client: _GoogleClient, bucket_name: str) -> None:
         None
     """
     storage_client = client["storage"]
-    bucket = storage_client.bucket(bucket_name)
+    bucket = storage_client.bucket(bucket_name, user_project=user_project)
 
     # standard storage class are adequate for data
     # stored for only brief periods of time
     bucket.storage_class = "STANDARD"
 
-    storage_client.create_bucket(bucket, location="US")
+    storage_client.create_bucket(
+        bucket, location="US", user_project=user_project
+    )
 
 
-def _delete_bucket(client: _GoogleClient, bucket_name: str) -> None:
+def _delete_bucket(
+    client: _GoogleClient,
+    bucket_name: str,
+    user_project: str = "basedosdados-dev",
+) -> None:
     """Forceably deletes a bucket.
 
     This method deletes all blobs from a bucket.
@@ -424,7 +435,7 @@ def _delete_bucket(client: _GoogleClient, bucket_name: str) -> None:
     MAX_BLOBS = 256
 
     storage_client = client["storage"]
-    bucket = storage_client.get_bucket(bucket_name)
+    bucket = storage_client.get_bucket(bucket_name, user_project=user_project)
 
     # NOTE: force=True implementation will not delete
     # the temporary bucket if n_blobs >= 256

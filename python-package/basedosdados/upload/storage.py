@@ -87,7 +87,6 @@ class Storage(Base):
 
         # table folder
         blob_name = f"{folder}/{self.dataset_id}/{self.table_id}/"
-
         # add partition folder
         if partitions is not None:
             blob_name += self._resolve_partitions(partitions)
@@ -457,10 +456,10 @@ class Storage(Base):
 
         source_table_ref = list(
             self.client["storage_staging"]
-            .bucket(source_bucket_name)
+            .bucket(source_bucket_name, user_project=self.billing_project_id)
             .list_blobs(prefix=f"{folder}/{self.dataset_id}/{self.table_id}/")
         )
-
+        breakpoint()
         if not source_table_ref:
             raise FileNotFoundError(
                 f"Could not find the requested table {self.dataset_id}.{self.table_id}"

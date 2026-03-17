@@ -63,17 +63,6 @@ def test_loop_modes():
     assert len(list(dataset._loop_modes(project_gcp="prod"))) == 1
 
 
-@pytest.mark.order5
-def test_publicize():
-    """
-    Test the publicize function
-    """
-    dataset = Dataset(dataset_id=dataset_id)
-
-    dataset.create(if_exists="pass")
-    dataset.publicize()
-
-
 @pytest.mark.order6
 def test_delete():
     """

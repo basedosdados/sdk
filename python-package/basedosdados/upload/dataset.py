@@ -91,7 +91,7 @@ class Dataset(Base):
         return dataset
 
     def publicize(
-        self, project_gcp: str = "all", dataset_is_public: bool = True
+        self, project_gcp: str = "staging", dataset_is_public: bool = True
     ) -> None:
         """
         Changes IAM configuration to turn BigQuery dataset public.
@@ -104,7 +104,9 @@ class Dataset(Base):
         """
 
         for m in self._loop_modes(project_gcp):
+            breakpoint()
             dataset = m["client"].get_dataset(m["id"])
+            breakpoint()
             entries = dataset.access_entries
             # TODO https://github.com/basedosdados/sdk/pull/1020
             # TODO if staging dataset is private, the prod view can't acess it: if dataset_is_public and "staging" not in dataset.dataset_id:
@@ -209,6 +211,7 @@ class Dataset(Base):
             # Send the dataset to the API for creation, with an explicit timeout.
             # Raises google.api_core.exceptions.Conflict if the Dataset already
             # exists within the project.
+            breakpoint()
             try:
                 if not self.exists(project_gcp=m["mode"]):
                     # Construct a full Dataset object to send to the API.
@@ -232,6 +235,7 @@ class Dataset(Base):
                         dataset_is_public=dataset_is_public,
                         project_gcp=m["mode"],
                     )
+                    breakpoint()
             except Conflict as e:
                 if if_exists == "pass":
                     continue
