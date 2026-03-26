@@ -104,7 +104,6 @@ class Dataset(Base):
         """
 
         for m in self._loop_modes(project_gcp):
-
             dataset = m["client"].get_dataset(m["id"])
 
             entries = dataset.access_entries

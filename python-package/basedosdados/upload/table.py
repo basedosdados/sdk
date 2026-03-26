@@ -735,7 +735,6 @@ class Table(Base):
         )
         # return None
 
-
     def update(
         self,
         project_gcp: str = "prod",
