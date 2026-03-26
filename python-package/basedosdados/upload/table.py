@@ -735,7 +735,6 @@ class Table(Base):
         )
         # return None
 
-        breakpoint()
 
     def update(
         self,

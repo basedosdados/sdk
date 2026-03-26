@@ -435,7 +435,7 @@ def _delete_bucket(
     MAX_BLOBS = 256
 
     storage_client = client["storage"]
-    bucket = storage_client.get_bucket(bucket_name, user_project=user_project)
+    bucket = storage_client.get_bucket(bucket_name)
 
     # NOTE: force=True implementation will not delete
     # the temporary bucket if n_blobs >= 256

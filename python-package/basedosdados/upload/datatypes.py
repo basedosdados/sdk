@@ -113,7 +113,7 @@ class Datatype:
             )
         _external_config.source_uris = self.uri
 
-        breakpoint()
+        # breakpoint()
         if self.partitioned:
             _external_config.hive_partitioning = self.partition()
 
