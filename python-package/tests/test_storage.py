@@ -131,8 +131,8 @@ def test_copy_table():
     new_table_id = f"{table_id}_copy_table"
     # Create copy from folder on storage
     storage.copy_table(
-        source_bucket_name="basedosdados-consultoria",
-        destination_bucket_name="basedosdados-consultoria",
+        source_bucket_name="basedosdados-dev",
+        destination_bucket_name="basedosdados-dev",
         new_table_id=new_table_id,
         folder="staging",
     )
