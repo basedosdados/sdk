@@ -32,8 +32,7 @@ class Datatype:
         csv_skip_leading_rows=1,
         csv_delimiter=",",
         csv_allow_jagged_rows=False,
-        project_gcp="staging",
-        folder="staging",
+        mode="staging",
         bucket_name=None,
         partitioned=False,
         biglake_connection_id=None,
@@ -44,10 +43,9 @@ class Datatype:
         self.csv_delimiter = csv_delimiter
         self.csv_skip_leading_rows = csv_skip_leading_rows
         self.csv_allow_jagged_rows = csv_allow_jagged_rows
-        self.folder = folder
-        self.project = project_gcp
+        self.mode = mode
         self.uri = (
-            f"gs://{bucket_name}/{folder}/{self.dataset_id}/{table_id}/*"
+            f"gs://{bucket_name}/{self.mode}/{self.dataset_id}/{table_id}/*"
         )
         self.partitioned = partitioned
         self.biglake_connection_id = biglake_connection_id
@@ -112,8 +110,6 @@ class Datatype:
                 "Base dos Dados just supports csv and parquet files"
             )
         _external_config.source_uris = self.uri
-
-        # breakpoint()
         if self.partitioned:
             _external_config.hive_partitioning = self.partition()
 

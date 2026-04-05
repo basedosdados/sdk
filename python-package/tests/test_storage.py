@@ -20,28 +20,28 @@ def test_upload_with_errors():
     """
     Test the upload method raise errors
     """
-    storage.delete_file(csv_path, folder="staging", not_found_ok=True)
-    storage.upload(csv_path, folder="staging", if_exists="pass")
+    storage.delete_file(csv_path, mode="staging", not_found_ok=True)
+    storage.upload(csv_path, mode="staging", if_exists="pass")
 
     with pytest.raises(Exception):
-        storage.upload(csv_path, folder="staging")
-    storage.upload(csv_path, folder="staging", if_exists="replace")
+        storage.upload(csv_path, mode="staging")
+    storage.upload(csv_path, mode="staging", if_exists="replace")
     storage.upload(
         csv_path,
-        folder="staging",
+        mode="staging",
         if_exists="replace",
         partitions="key1=value1/key2=value2",
     )
     storage.upload(
         csv_path,
-        folder="staging",
+        mode="staging",
         if_exists="replace",
         partitions={"key1": "value1", "key2": "value1"},
     )
     with pytest.raises(Exception):
         storage.upload(
             csv_path,
-            folder="staging",
+            mode="staging",
             if_exists="replace",
             partitions=["key1", "value1", "key2", "value1"],
         )
@@ -63,7 +63,7 @@ def test_download_filename():
     """
 
     storage.download(
-        filename="municipio.csv", savepath=SAVEPATH, folder="staging"
+        filename="municipio.csv", savepath=SAVEPATH, mode="staging"
     )
     assert (
         Path(SAVEPATH) / "staging" / dataset_id / table_id / "municipio.csv"
@@ -78,7 +78,7 @@ def test_download_partitions():
 
     storage.download(
         savepath=SAVEPATH,
-        folder="staging",
+        mode="staging",
         partitions="key1=value1/key2=value1/",
     )
 
@@ -94,7 +94,7 @@ def test_download_partitions():
 
     storage.download(
         savepath=SAVEPATH,
-        folder="staging",
+        mode="staging",
         partitions={"key1": "value1", "key2": "value2"},
     )
 
@@ -112,10 +112,10 @@ def test_download_partitions():
 @pytest.mark.order2
 def test_download_default():
     """
-    Test the download method with the default folder
+    Test the download method with the default mode
     """
 
-    storage.download(savepath=SAVEPATH, folder="staging")
+    storage.download(savepath=SAVEPATH, mode="staging")
 
     assert (
         Path(SAVEPATH) / "staging" / dataset_id / table_id / "municipio.csv"
@@ -134,7 +134,7 @@ def test_copy_table():
         source_bucket_name="basedosdados-dev",
         destination_bucket_name="basedosdados-dev",
         new_table_id=new_table_id,
-        folder="staging",
+        mode="staging",
     )
 
     savepath = SAVEPATH / "storage_test_copy_table"
@@ -180,8 +180,3 @@ def test_delete_table():
 
     with pytest.raises(FileNotFoundError):
         storage.delete_table()
-
-
-# test_upload_with_errors()
-
-# test_copy_table()

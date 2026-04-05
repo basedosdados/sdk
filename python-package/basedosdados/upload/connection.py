@@ -27,7 +27,7 @@ class Connection(Base):
         self,
         name: str,
         location: str = None,
-        project_gcp: str = "staging",
+        mode: str = "staging",
         friendly_name: str = None,
         description: str = None,
         **kwargs,
@@ -35,9 +35,10 @@ class Connection(Base):
         super().__init__(**kwargs)
         self._name = name
         self._location = location or "US"
+        self._mode = mode
         self._friendly_name = friendly_name
         self._description = description
-        self._project = self.config["gcloud-projects"][project_gcp]["name"]
+        self._project = self.config["gcloud-projects"][self._mode]["name"]
         self._parent = f"projects/{self._project}/locations/{self._location}"
 
     @property
@@ -54,7 +55,7 @@ class Connection(Base):
         """
         Returns connection object.
         """
-        client = self.client[f"bigquery_connection_{self._project}"]
+        client = self.client[f"bigquery_connection_{self._mode}"]
         request = GetConnectionRequest(
             name=f"{self._parent}/connections/{self._name}"
         )
