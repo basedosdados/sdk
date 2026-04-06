@@ -276,7 +276,7 @@ class Table(Base):
             self.client["storage_staging"]
             .bucket(self.bucket_name, user_project=self.billing_project_id)
             .list_blobs(
-                prefix=f"staging/{self.dataset_id}/{self.table_id}/",
+                prefix=f"{self.mode}/{self.dataset_id}/{self.table_id}/",
             )
         )
         partitions_dict = {}
@@ -526,7 +526,7 @@ class Table(Base):
         BigQuery.
 
         Data can be found in Storage at
-        `<bucket_name>/staging/<dataset_id>/<table_id>/*` and is used to build
+        `<bucket_name>/<mode>/<dataset_id>/<table_id>/*` and is used to build
         the table.
 
         The following data types are supported:
