@@ -39,11 +39,11 @@ class Base:
 
     def __init__(
         self,
-        config_path=".basedosdados",
-        bucket_name=None,
-        billing_project_id=None,
-        overwrite_cli_config=False,
-        mode="staging",
+        config_path: str = ".basedosdados",
+        bucket_name: Optional[str] = None,
+        billing_project_id: Optional[str] = None,
+        overwrite_cli_config: bool = False,
+        mode: str = "staging",
     ):
         """
         Initialize the class
