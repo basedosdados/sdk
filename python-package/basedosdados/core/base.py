@@ -7,10 +7,10 @@ import json
 import shutil
 import sys
 import warnings
-from functools import lru_cache
+from functools import cached_property
 from os import getenv
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List, Literal, Optional, TypedDict, Union
 
 import googleapiclient.discovery
 import tomlkit
@@ -24,6 +24,14 @@ from basedosdados.constants import config, constants
 warnings.filterwarnings("ignore")
 
 
+class Client(TypedDict):
+    bigquery_prod: bigquery.Client
+    bigquery_connection_prod: bigquery_connection_v1.ConnectionServiceClient
+    bigquery_staging: bigquery.Client
+    bigquery_connection_staging: bigquery_connection_v1.ConnectionServiceClient
+    storage_staging: storage.Client
+
+
 class Base:
     """
     Base class for all datasets
@@ -31,10 +39,11 @@ class Base:
 
     def __init__(
         self,
-        config_path=".basedosdados",
-        bucket_name=None,
-        billing_project_id=None,
-        overwrite_cli_config=False,
+        config_path: str = ".basedosdados",
+        bucket_name: Optional[str] = None,
+        billing_project_id: Optional[str] = None,
+        overwrite_cli_config: bool = False,
+        mode: str = "staging",
     ):
         """
         Initialize the class
@@ -51,11 +60,14 @@ class Base:
         self.config = self._load_config()
         self._config_log(config.verbose)
         self.bucket_name = bucket_name or self.config["bucket_name"]
+        self.mode = mode
         self.billing_project_id = (
             billing_project_id
             or self.config["gcloud-projects"]["staging"]["name"]
         )
-        self.uri = f"gs://{self.bucket_name}" + "/staging/{dataset}/{table}/*"
+        self.uri = (
+            f"gs://{self.bucket_name}/{self.mode}" + "/{dataset}/{table}/*"
+        )
         self._backend = Backend(self.config.get("api", {}).get("url", None))
 
     @property
@@ -101,33 +113,32 @@ class Base:
             ],
         )
 
-    @property
-    @lru_cache(256)
-    def client(self):
+    @cached_property
+    def client(self) -> Client:
         """
         Client for BigQuery
         """
 
-        return dict(
-            bigquery_prod=bigquery.Client(
+        return {
+            "bigquery_prod": bigquery.Client(
                 credentials=self._load_credentials("prod"),
                 project=self.config["gcloud-projects"]["prod"]["name"],
             ),
-            bigquery_connection_prod=bigquery_connection_v1.ConnectionServiceClient(
+            "bigquery_connection_prod": bigquery_connection_v1.ConnectionServiceClient(
                 credentials=self._load_credentials("prod")
             ),
-            bigquery_staging=bigquery.Client(
+            "bigquery_staging": bigquery.Client(
                 credentials=self._load_credentials("staging"),
                 project=self.config["gcloud-projects"]["staging"]["name"],
             ),
-            bigquery_connection_staging=bigquery_connection_v1.ConnectionServiceClient(
+            "bigquery_connection_staging": bigquery_connection_v1.ConnectionServiceClient(
                 credentials=self._load_credentials("staging")
             ),
-            storage_staging=storage.Client(
+            "storage_staging": storage.Client(
                 credentials=self._load_credentials("staging"),
                 project=self.config["gcloud-projects"]["staging"]["name"],
             ),
-        )
+        }
 
     @staticmethod
     def _input_validator(context, default="", with_lower=True):
@@ -377,27 +388,15 @@ class Base:
         )
 
     @staticmethod
-    def _check_mode(mode):
+    def _check_mode(mode: str) -> Optional[Literal[True]]:
         """
         Checks if the mode is valid
         """
-        ACCEPTED_MODES = [
-            "all",
-            "staging",
-            "prod",
-            "raw",
-            "header",
-            "auxiliary_files",
-            "architecture",
-        ]
-        if mode in ACCEPTED_MODES:
+        if isinstance(mode, str) and len(mode.strip()) > 0:
             return True
 
-        raise Exception(
-            f"Argument {mode} not supported. "
-            f"Enter one of the following: "
-            f"{','.join(ACCEPTED_MODES)}"
-        )
+        msg = f"Mode {mode} is not supported. We recommend the following names for the folder: 'staging', 'raw', 'header', 'auxiliary_files', 'architecture' or organization_name"
+        raise Exception(msg)
 
     def _get_project_id(self, mode: str) -> str:
         """

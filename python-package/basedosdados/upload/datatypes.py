@@ -44,7 +44,9 @@ class Datatype:
         self.csv_skip_leading_rows = csv_skip_leading_rows
         self.csv_allow_jagged_rows = csv_allow_jagged_rows
         self.mode = mode
-        self.uri = f"gs://{bucket_name}/staging/{self.dataset_id}/{table_id}/*"
+        self.uri = (
+            f"gs://{bucket_name}/{self.mode}/{self.dataset_id}/{table_id}/*"
+        )
         self.partitioned = partitioned
         self.biglake_connection_id = biglake_connection_id
 
@@ -99,9 +101,6 @@ class Datatype:
             _external_config.autodetect = False
             _external_config.schema = self.schema
             _external_config.options.field_delimiter = self.csv_delimiter
-            _external_config.options.allow_jagged_rows = (
-                self.csv_allow_jagged_rows
-            )
         elif self.source_format == "avro":
             _external_config = bigquery.ExternalConfig("AVRO")
         elif self.source_format == "parquet":
