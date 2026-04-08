@@ -267,9 +267,6 @@ def test_table_create_with_parquet_source_format():
     assert table.table_exists("staging")
 
 
-@pytest.mark.skip(
-    reason="pandavro is currently not supported due to a limitation"
-)
 def test_table_create_with_avro_source_format(capsys):
     """
     Test create when source format is avro
