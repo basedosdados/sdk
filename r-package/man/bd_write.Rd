@@ -6,22 +6,11 @@
 \alias{bd_write_csv}
 \title{Writes the result of operations with \code{\link[=bdplyr]{bdplyr()}} to disk}
 \usage{
-bd_write(
-  .lazy_tbl,
-  .write_fn = `?`(typed::Function()),
-  path = `?`(typed::Character(length = 1)),
-  overwrite = `?`(FALSE, typed::Logical(1)),
-  ...
-)
+bd_write(.lazy_tbl, .write_fn, path, overwrite = FALSE, ...)
 
 bd_write_rds(.lazy_tbl, path, overwrite = FALSE, compress = "none", ...)
 
-bd_write_csv(
-  .lazy_tbl,
-  path = `?`(typed::Character(1)),
-  overwrite = `?`(FALSE, typed::Logical(1)),
-  ...
-)
+bd_write_csv(.lazy_tbl, path, overwrite = FALSE, ...)
 }
 \arguments{
 \item{.lazy_tbl}{A lazy tibble, tipically the output of \code{\link[=bdplyr]{bdplyr()}}.}
@@ -49,7 +38,7 @@ ut also the longer the time to load the data. See also: \code{\link[readr:read_r
 String containing the path to the created file.
 }
 \description{
-Writes a remote table to disk that was called via {bdplyr}.
+Writes a remote table to disk that was called via \{bdplyr\}.
 It will collect the data and write to disk in the chosen format.
 You will only need this function if you have not yet collected the data
 using the \code{\link[=bd_collect]{bd_collect()}}.
@@ -60,7 +49,7 @@ writing a tibble to disk.
 
 As helpers, the \code{\link[=bd_write_rds]{bd_write_rds()}} and \code{\link[=bd_write_csv]{bd_write_csv()}} functions make it
 easier to write in these formats, more common in everyday life, calling
-writing functions from \code{{readr}} package.
+writing functions from \code{\{readr\}} package.
 }
 \examples{
 \dontrun{
