@@ -1,3 +1,4 @@
+import pandas as pd
 import pytest
 
 from basedosdados.exceptions import BaseDosDadosException
@@ -281,6 +282,101 @@ def test_table_create_with_avro_source_format(capsys):
     )
     _, out = capsys.readouterr()
     assert "File municipio.avro_staging was uploaded!" in out
+
+
+@pytest.mark.order2
+def test_create_from_pandas():
+    """
+    Test create_from_pandas creates a staging table from a DataFrame
+    """
+
+    df = pd.read_csv(csv_path)
+
+    table.create_from_pandas(
+        df=df,
+        if_table_exists="replace",
+        if_storage_data_exists="replace",
+        if_dataset_exists="replace",
+    )
+
+    assert table.table_exists("staging")
+
+
+@pytest.mark.order2
+def test_create_from_pandas_partitioned():
+    """
+    Test create_from_pandas with partition columns
+    """
+
+    df = pd.read_csv(csv_path)
+
+    table.create_from_pandas(
+        df=df,
+        partition_columns=["ano"],
+        if_table_exists="replace",
+        if_storage_data_exists="replace",
+        if_dataset_exists="replace",
+    )
+
+    assert table.table_exists("staging")
+
+    # Check the table is partitioned using the BigQuery python API
+    bq_table = table._get_table_obj("staging")
+    hive_partitioning = bq_table.external_data_configuration.hive_partitioning
+
+    assert hive_partitioning is not None
+    assert hive_partitioning.mode == "STRINGS"
+
+
+@pytest.mark.order2
+def test_create_from_pandas_parquet():
+    """
+    Test create_from_pandas when source format is parquet
+    """
+
+    df = pd.read_csv(csv_path)
+
+    table.create_from_pandas(
+        df=df,
+        source_format="parquet",
+        if_table_exists="replace",
+        if_storage_data_exists="replace",
+        if_dataset_exists="replace",
+    )
+
+    assert table.table_exists("staging")
+
+
+def test_create_from_pandas_invalid_df():
+    """
+    Test create_from_pandas raises when df is not a DataFrame
+    """
+
+    with pytest.raises(BaseDosDadosException):
+        table.create_from_pandas(df="not a dataframe")
+
+
+def test_create_from_pandas_invalid_source_format():
+    """
+    Test create_from_pandas raises for an unsupported source format
+    """
+
+    with pytest.raises(BaseDosDadosException):
+        table.create_from_pandas(
+            df=pd.DataFrame({"a": [1]}), source_format="json"
+        )
+
+
+def test_create_from_pandas_missing_partition_column():
+    """
+    Test create_from_pandas raises when a partition column is not in the df
+    """
+
+    with pytest.raises(BaseDosDadosException):
+        table.create_from_pandas(
+            df=pd.DataFrame({"a": [1]}),
+            partition_columns=["does_not_exist"],
+        )
 
 
 @pytest.mark.order2
