@@ -509,6 +509,7 @@ class Table(Base):
         self,
         df: pd.DataFrame,
         partition_columns: Optional[list[str]] = None,
+        file_name: str = "data",
         source_format: str = "csv",
         **kwargs,
     ) -> None:
@@ -532,6 +533,7 @@ class Table(Base):
             partition_columns: A list of column names to partition the data by.
                 These columns are removed from the data files and encoded in the
                 storage path following the Hive partitioning scheme.
+            file_name: Name of file without extension. Defaults to `data`.
             source_format: The format used to save the data. Only 'csv',
                 'parquet' and 'avro' are supported. Defaults to 'csv'.
             **kwargs: Additional keyword arguments forwarded to `Table.create`
@@ -559,7 +561,7 @@ class Table(Base):
         missing_columns = [
             col for col in partition_columns if col not in df.columns
         ]
-        if missing_columns:
+        if len(missing_columns) > 0:
             raise BaseDosDadosException(
                 f"Partition columns not found in the DataFrame: {missing_columns}"
             )
@@ -572,16 +574,17 @@ class Table(Base):
                 tmpdir=tmpdir,
             )
 
-            if partition_columns:
+            if len(partition_columns) > 0:
                 to_partitions(
                     data=df,
                     partition_columns=partition_columns,
                     savepath=tmppath,
+                    file_name=file_name,
                     file_format=source_format,
                 )
                 path = tmppath
             else:
-                path = tmppath / f"data.{source_format}"
+                path = tmppath / f"{file_name}.{source_format}"
                 if source_format == "csv":
                     df.to_csv(path, index=False)
                 elif source_format == "parquet":

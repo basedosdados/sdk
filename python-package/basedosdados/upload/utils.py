@@ -13,6 +13,7 @@ def to_partitions(
     data: pd.DataFrame,
     partition_columns: List[str],
     savepath: str,
+    file_name: str = "data",
     file_format: str = "csv",
 ):
     """Save data in to hive patitions schema, given a dataframe and a list of partition columns.
@@ -20,6 +21,7 @@ def to_partitions(
         data (pandas.core.frame.DataFrame): Dataframe to be partitioned.
         partition_columns (list): List of columns to be used as partitions.
         savepath (str, pathlib.PosixPath): folder path to save the partitions
+        file_name: Name of file without extension.
         file_format (str): The file format to save the partitioned data in.
             Only 'csv', 'parquet' and 'avro' are supported. Defaults to 'csv'.
     Exemple:
@@ -66,16 +68,17 @@ def to_partitions(
             filter_save_path.mkdir(parents=True, exist_ok=True)
 
             if file_format == "csv":
-                file_filter_save_path = Path(filter_save_path) / "data.csv"
-                # append data to csv
+                file_filter_save_path = (
+                    Path(filter_save_path) / f"{file_name}.csv"
+                )
                 df_filter.to_csv(
                     file_filter_save_path,
                     index=False,
-                    mode="a",
-                    header=not file_filter_save_path.exists(),
                 )
             elif file_format == "parquet":
-                file_filter_save_path = Path(filter_save_path) / "data.parquet"
+                file_filter_save_path = (
+                    Path(filter_save_path) / f"{file_name}.parquet"
+                )
                 df_filter.to_parquet(file_filter_save_path, index=False)
             elif file_format == "avro":
                 try:
@@ -85,7 +88,9 @@ def to_partitions(
                         "Optional dependencies for handling AVRO files are not installed. "
                         'Please install basedosdados with the "avro" extra'
                     ) from exc
-                file_filter_save_path = Path(filter_save_path) / "data.avro"
+                file_filter_save_path = (
+                    Path(filter_save_path) / f"{file_name}.avro"
+                )
                 pandavro.to_avro(str(file_filter_save_path), df_filter)
             else:
                 raise NotImplementedError(
