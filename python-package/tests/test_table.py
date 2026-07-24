@@ -320,6 +320,13 @@ def test_create_from_pandas_partitioned():
 
     assert table.table_exists("staging")
 
+    # Check the table is partitioned using the BigQuery python API
+    bq_table = table._get_table_obj("staging")
+    hive_partitioning = bq_table.external_data_configuration.hive_partitioning
+
+    assert hive_partitioning is not None
+    assert hive_partitioning.mode == "STRINGS"
+
 
 @pytest.mark.order2
 def test_create_from_pandas_parquet():
