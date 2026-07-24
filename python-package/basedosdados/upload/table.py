@@ -4,6 +4,7 @@ Class for manage tables in Storage and BigQuery.
 
 import contextlib
 import inspect
+import tempfile
 import textwrap
 from copy import deepcopy
 from functools import lru_cache
@@ -11,16 +12,21 @@ from pathlib import Path
 from typing import Any, Optional, Union
 
 import google.api_core.exceptions
+import pandas as pd
 from google.cloud import bigquery
 from google.cloud.bigquery import SchemaField
 from loguru import logger
 
 from basedosdados.core.base import Base
-from basedosdados.exceptions import BaseDosDadosException
+from basedosdados.exceptions import (
+    BaseDosDadosException,
+    BaseDosDadosMissingDependencyException,
+)
 from basedosdados.upload.connection import Connection
 from basedosdados.upload.dataset import Dataset
 from basedosdados.upload.datatypes import Datatype
 from basedosdados.upload.storage import Storage
+from basedosdados.upload.utils import to_partitions
 
 
 class Table(Base):
@@ -498,6 +504,98 @@ class Table(Base):
                 description = "description not available in the API."
 
         return description
+
+    def create_from_pandas(
+        self,
+        df: pd.DataFrame,
+        partition_columns: Optional[list[str]] = None,
+        source_format: str = "csv",
+        **kwargs,
+    ) -> None:
+        """
+        Creates a BigQuery staging table directly from a pandas DataFrame.
+
+        This is a convenience wrapper around `Table.create` that saves the
+        DataFrame to a temporary location and uploads it, so you don't have to
+        manage files or partition folders yourself. When `partition_columns` is
+        provided, the data is written following the Hive partitioning scheme
+        (`<key1>=<value1>/<key2>=<value2>`) before being uploaded.
+
+        The following data formats are supported:
+
+        - Comma-Delimited CSV
+        - Apache Parquet
+        - Apache Avro
+
+        Args:
+            df: The pandas DataFrame to upload and create the table from.
+            partition_columns: A list of column names to partition the data by.
+                These columns are removed from the data files and encoded in the
+                storage path following the Hive partitioning scheme.
+            source_format: The format used to save the data. Only 'csv',
+                'parquet' and 'avro' are supported. Defaults to 'csv'.
+            **kwargs: Additional keyword arguments forwarded to `Table.create`
+                (e.g. `if_table_exists`, `if_storage_data_exists`,
+                `if_dataset_exists`, `biglake_table`, `location`, etc.).
+        """
+        if not isinstance(df, pd.DataFrame):
+            raise BaseDosDadosException("`df` must be a pandas DataFrame.")
+
+        if source_format not in ("csv", "parquet", "avro"):
+            raise BaseDosDadosException(
+                "`source_format` must be one of 'csv', 'parquet' or 'avro'."
+            )
+
+        if source_format == "avro":
+            try:
+                import pandavro  # noqa: F401
+            except ImportError as exc:
+                raise BaseDosDadosMissingDependencyException(
+                    "Optional dependencies for handling AVRO files are not installed. "
+                    'Please install basedosdados with the "avro" extra'
+                ) from exc
+
+        partition_columns = partition_columns or []
+        missing_columns = [
+            col for col in partition_columns if col not in df.columns
+        ]
+        if missing_columns:
+            raise BaseDosDadosException(
+                f"Partition columns not found in the DataFrame: {missing_columns}"
+            )
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmppath = Path(tmpdir)
+
+            logger.info(
+                "Saving DataFrame to temporary directory: {tmpdir}",
+                tmpdir=tmpdir,
+            )
+
+            if partition_columns:
+                to_partitions(
+                    data=df,
+                    partition_columns=partition_columns,
+                    savepath=tmppath,
+                    file_format=source_format,
+                )
+                path = tmppath
+            else:
+                path = tmppath / f"data.{source_format}"
+                if source_format == "csv":
+                    df.to_csv(path, index=False)
+                elif source_format == "parquet":
+                    df.to_parquet(path, index=False)
+                else:
+                    import pandavro
+
+                    pandavro.to_avro(str(path), df)
+
+            self.create(
+                path=path,
+                source_format=source_format,
+                **kwargs,
+            )
 
     def create(
         self,

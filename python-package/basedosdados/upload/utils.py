@@ -6,15 +6,22 @@ from typing import List
 
 import pandas as pd
 
+from basedosdados.exceptions import BaseDosDadosMissingDependencyException
+
 
 def to_partitions(
-    data: pd.DataFrame, partition_columns: List[str], savepath: str
+    data: pd.DataFrame,
+    partition_columns: List[str],
+    savepath: str,
+    file_format: str = "csv",
 ):
     """Save data in to hive patitions schema, given a dataframe and a list of partition columns.
     Args:
         data (pandas.core.frame.DataFrame): Dataframe to be partitioned.
         partition_columns (list): List of columns to be used as partitions.
         savepath (str, pathlib.PosixPath): folder path to save the partitions
+        file_format (str): The file format to save the partitioned data in.
+            Only 'csv', 'parquet' and 'avro' are supported. Defaults to 'csv'.
     Exemple:
         data = {
             "ano": [2020, 2021, 2020, 2021, 2020, 2021, 2021,2025],
@@ -57,15 +64,33 @@ def to_partitions(
             # create folder tree
             filter_save_path = Path(savepath / "/".join(patitions_values))
             filter_save_path.mkdir(parents=True, exist_ok=True)
-            file_filter_save_path = Path(filter_save_path) / "data.csv"
 
-            # append data to csv
-            df_filter.to_csv(
-                file_filter_save_path,
-                index=False,
-                mode="a",
-                header=not file_filter_save_path.exists(),
-            )
+            if file_format == "csv":
+                file_filter_save_path = Path(filter_save_path) / "data.csv"
+                # append data to csv
+                df_filter.to_csv(
+                    file_filter_save_path,
+                    index=False,
+                    mode="a",
+                    header=not file_filter_save_path.exists(),
+                )
+            elif file_format == "parquet":
+                file_filter_save_path = Path(filter_save_path) / "data.parquet"
+                df_filter.to_parquet(file_filter_save_path, index=False)
+            elif file_format == "avro":
+                try:
+                    import pandavro
+                except ImportError as exc:
+                    raise BaseDosDadosMissingDependencyException(
+                        "Optional dependencies for handling AVRO files are not installed. "
+                        'Please install basedosdados with the "avro" extra'
+                    ) from exc
+                file_filter_save_path = Path(filter_save_path) / "data.avro"
+                pandavro.to_avro(str(file_filter_save_path), df_filter)
+            else:
+                raise NotImplementedError(
+                    "Base dos Dados just supports csv, parquet and avro files"
+                )
     else:
         raise BaseException("Data need to be a pandas DataFrame")
 
