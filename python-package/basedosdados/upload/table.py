@@ -351,6 +351,60 @@ class Table(Base):
 
         return bq_columns
 
+    def _validate_columns_against_staging(
+        self,
+        data_sample_path: Union[str, Path],
+        source_format: str = "csv",
+        csv_delimiter: str = ",",
+    ) -> None:
+        """
+        Ensure an incoming data file matches the existing staging table.
+
+        When adding data to a table that already exists (e.g. uploading a new
+        partition), the file must have the exact same columns, in the same
+        number and order, as the current staging table. Otherwise the external
+        table reads inconsistent files and breaks.
+
+        Args:
+            data_sample_path: Path to the file (or partitioned folder) to be
+                uploaded.
+            source_format: The format of the data source. Only 'csv', 'avro',
+                and 'parquet' are supported. Defaults to 'csv'.
+            csv_delimiter: The separator for fields in a CSV file. Defaults to
+                ','.
+
+        Raises:
+            BaseDosDadosException: If the number or the order of the columns
+                does not match the existing staging table.
+        """
+        columns_from_new_data = [
+            col.get("name")
+            for col in self._get_columns_from_data(
+                data_sample_path=data_sample_path,
+                source_format=source_format,
+                csv_delimiter=csv_delimiter,
+                mode="staging",
+            ).get("columns", [])
+        ]
+
+        columns_from_bq = [
+            col.get("name")
+            for col in self._get_columns_from_bq(mode="staging").get(
+                "columns", []
+            )
+        ]
+
+        if columns_from_new_data != columns_from_bq:
+            raise BaseDosDadosException(
+                "The columns of the file you are trying to upload do not match "
+                f"the existing table `{self.dataset_id}.{self.table_id}` in staging.\n"
+                f"Existing columns ({len(columns_from_bq)}): {columns_from_bq}\n"
+                f"New file columns ({len(columns_from_new_data)}): {columns_from_new_data}\n"
+                "The number of columns and their order must be identical to "
+                "avoid breaking the table. If you intend to change the schema, "
+                "delete the table first with `Table.delete()` and recreate it."
+            )
+
     def _make_publish_sql(self) -> str:
         """
         Create `publish.sql` with columns and bigquery_type.
@@ -611,6 +665,19 @@ class Table(Base):
                 Path,
             ),
         ):
+            # Security check: the incoming file must keep the same columns
+            # (number and order) as the current staging table. This holds even
+            # when updating a single partition (e.g. year=2010): the external
+            # table reads every file under the prefix with one schema, so a
+            # mismatched file breaks it. The upload runs before the table is
+            # (re)created, regardless of if_table_exists, so validate first.
+            if self.table_exists(mode="staging"):
+                self._validate_columns_against_staging(
+                    data_sample_path=path,
+                    source_format=source_format,
+                    csv_delimiter=csv_delimiter,
+                )
+
             Storage(
                 dataset_id=self.dataset_id,
                 table_id=self.table_id,
