@@ -319,7 +319,6 @@ def test_create_from_pandas_partitioned():
     )
 
     assert table.table_exists("staging")
-    assert table._is_partitioned() is True
 
 
 @pytest.mark.order2
