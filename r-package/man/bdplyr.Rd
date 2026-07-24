@@ -2,7 +2,7 @@
 % Please edit documentation in R/bdplyr.R
 \name{bdplyr}
 \alias{bdplyr}
-\title{Compatibility with {dplyr} verbs without using SQL language}
+\title{Compatibility with \{dplyr\} verbs without using SQL language}
 \usage{
 bdplyr(
   table,
@@ -36,7 +36,7 @@ as traditionally done as local bases. See also: \link[bigrquery:src_bigquery]{bi
 Therefore, it is possible (without using \code{SQL}) to perform, for example,
 column selection with \code{\link[dplyr:select]{dplyr::select()}}, filter rows with \code{\link[dplyr:filter]{dplyr::filter()}},
 operations with \code{\link[dplyr:mutate]{dplyr::mutate()}}, joins with \code{\link[dplyr:mutate-joins]{dplyr::left_join()}} and
-other vebs from \code{{dplyr}} package.
+other vebs from \code{\{dplyr\}} package.
 
 The data will be automatically be downloaded from Google BigQuery in the
 background as it if necessary, but wille not be loaded into your virtual
@@ -65,7 +65,7 @@ municipios <- bdplyr("br_bd_diretorios_brasil.municipio")
 base_sim \%>\%
   dplyr::glimpse()
 
-# use normal `{dplyr}` operations
+# use normal `\{dplyr\}` operations
 municipios \%>\%
   head()
 

@@ -422,9 +422,9 @@ bd_collect <- function(
 
 bd_write <- function(
   .lazy_tbl,
-  .write_fn = ? typed::Function(),
-  path = ? typed::Character(length = 1),
-  overwrite = FALSE ? typed::Logical(1),
+  .write_fn,
+  path,
+  overwrite = FALSE,
   ...) {
 
   # check if the path already exists
@@ -538,8 +538,8 @@ bd_write_rds <- function(
 #' @export
 bd_write_csv <- function(
   .lazy_tbl,
-  path = ? typed::Character(1),
-  overwrite = FALSE ? typed::Logical(1),
+  path,
+  overwrite = FALSE,
   ...) {
 
   # check if the path already exists

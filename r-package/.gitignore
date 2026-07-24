@@ -1,2 +1,6 @@
 .Rproj.user
 inst/doc
+..Rcheck/
+*.tar.gz
+.Rhistory
+.Rprofile
