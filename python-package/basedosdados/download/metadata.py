@@ -126,6 +126,7 @@ def search(
 
     items = []
     for item in backend.search(q, page, page_size).get("results", []):
+        org = item.get("organizations")
         items.append(
             {
                 "slug": item.get("slug"),
@@ -135,8 +136,12 @@ def search(
                 "n_raw_data_sources": item.get("n_raw_data_sources"),
                 "n_information_requests": item.get("n_information_requests"),
                 "organization": {
-                    "slug": item.get("organizations", [{}])[0].get("slug"),
-                    "name": item.get("organizations", [{}])[0].get("name"),
+                    "slug": org[0].get("slug")
+                    if org is not None and len(org) > 0
+                    else None,
+                    "name": org[0].get("name")
+                    if org is not None and len(org) > 0
+                    else None,
                 },
             }
         )
