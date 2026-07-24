@@ -62,8 +62,7 @@ class Datatype:
             if not _avro_dependencies:
                 raise BaseDosDadosMissingDependencyException(
                     "Optional dependencies for handling AVRO files are not installed. "
-                    'Please install basedosdados with the "avro" extra, such as:'
-                    "\n\npip install basedosdados[avro]"
+                    'Please install basedosdados with the "avro" extra'
                 )
             dataframe = pandavro.read_avro(str(data_sample_path))
             return list(dataframe.columns.values)
