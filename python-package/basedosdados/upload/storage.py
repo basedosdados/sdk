@@ -38,7 +38,9 @@ class Storage(Base):
         """
         super().__init__(**kwargs)
 
-        self.bucket = self.client["storage_staging"].bucket(self.bucket_name)
+        self.bucket = self.client["storage_staging"].bucket(
+            self.bucket_name, user_project=self.billing_project_id
+        )
         self.dataset_id = dataset_id.replace("-", "_")
         self.table_id = table_id.replace("-", "_")
 
@@ -124,7 +126,9 @@ class Storage(Base):
                 )
             self.bucket.delete(force=True)
 
-        self.client["storage_staging"].create_bucket(self.bucket)
+        self.client["storage_staging"].create_bucket(
+            self.bucket, user_project=self.billing_project_id
+        )
 
         for folder in ["staging/", "raw/"]:
             self.bucket.blob(folder).upload_from_string("")
@@ -161,11 +165,12 @@ class Storage(Base):
         * `auxiliary_files`: auxiliary files from each table
         * `architecture`: architecture sheet of the tables
         * `all`: if no treatment is needed, use `all`.
+        * `organization_name`: Name of organization
 
         Args:
             path: Where to find the file or folder to upload to storage.
             mode: Folder of which dataset to update
-                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`all`]
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`all`|`organization_name`]
             partitions: If adding a single file, use this to add it to a
                 specific partition. Can be a string or dict.
             if_exists: What to do if data exists.
@@ -263,6 +268,7 @@ class Storage(Base):
         * `header`: header of the tables
         * `auxiliary_files`: auxiliary files from each table
         * `architecture`: architecture sheet of the tables
+        * `organization_name`: Name of organization
 
         You can use the `partitions` argument to choose files from a partition.
 
@@ -274,7 +280,7 @@ class Storage(Base):
             partitions: If downloading a single file, use this to specify the
                 partition path from which to download. Can be a string `<key>=<value>/<key2>=<value2>` or dict `dict(key=value, key2=value2)`.
             mode: Folder of which dataset to update.
-                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`]
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`organization_name`]
             if_not_exists: What to do if data not found.
                 * `raise`: Raises FileNotFoundError.
                 * `pass`: Do nothing and exit the function.
@@ -342,7 +348,7 @@ class Storage(Base):
         Args:
             filename: Name of the file to be deleted.
             mode: Folder of which dataset to update
-                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`all`]
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`all`|`organization_name`]
             partitions: Hive structured partition as a string `<key>=<value>/<key2>=<value2>` or dict `dict(key=value, key2=value2)`.
             not_found_ok: What to do if file not found.
         """
@@ -384,7 +390,7 @@ class Storage(Base):
 
         Args:
             mode: Folder of which dataset to update
-                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`]
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`organization_name`]
             bucket_name: The bucket name from which to delete the table. If
                 None, defaults to the bucket initialized when instantiating the
                 Storage object.
@@ -399,7 +405,7 @@ class Storage(Base):
         if bucket_name is not None:
             table_blobs = list(
                 self.client["storage_staging"]
-                .bucket(f"{bucket_name}")
+                .bucket(bucket_name, user_project=self.billing_project_id)
                 .list_blobs(prefix=prefix)
             )
 
@@ -462,14 +468,14 @@ class Storage(Base):
                 instantiating the Storage object. You can check it with the
                 `Storage().bucket` property.
             mode: Folder of which dataset to update
-                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`]
+                [`raw`|`staging`|`header`|`auxiliary_files`|`architecture`|`organization_name`]
             new_table_id: New table id to be copied to. If None, defaults to the
                 table id initialized when instantiating the Storage object.
         """
 
         source_table_ref = list(
             self.client["storage_staging"]
-            .bucket(source_bucket_name)
+            .bucket(source_bucket_name, user_project=self.billing_project_id)
             .list_blobs(prefix=f"{mode}/{self.dataset_id}/{self.table_id}/")
         )
 
@@ -483,7 +489,7 @@ class Storage(Base):
 
         else:
             destination_bucket = self.client["storage_staging"].bucket(
-                destination_bucket_name
+                destination_bucket_name, user_project=self.billing_project_id
             )
 
         # Divides source_table_ref list for maximum batch request size
@@ -519,10 +525,21 @@ class Storage(Base):
                     time.sleep(5)
                     traceback.print_exc(file=sys.stderr)
         logger.success(
-            " {object} {object_id}_{mode} was {action} to {new_object_id}_{mode}!",
-            object_id=self.table_id,
-            new_object_id=new_table_id if new_table_id else self.table_id,
-            mode=mode,
-            object="Table",
-            action="copied",
+        " {object} {object_id}_{mode} was {action} to {new_object_id}_{mode}!",
+        object_id=self.table_id,
+        new_object_id=new_table_id if new_table_id else self.table_id,
+        mode=mode,
+        object="Table",
+        action="copied",
+            )
+
+        target_table = new_table_id if new_table_id else self.table_id
+        dest_bucket_name = destination_bucket_name if destination_bucket_name else self.bucket_name
+
+        console_url = (
+            f"https://console.cloud.google.com/storage/browser/"
+            f"{dest_bucket_name}/{mode}/{self.dataset_id}/{target_table}"
         )
+
+        logger.success(f"Checkout at: {console_url}")
+

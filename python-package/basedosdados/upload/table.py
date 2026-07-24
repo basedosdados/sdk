@@ -274,8 +274,10 @@ class Table(Base):
             return
         blobs = (
             self.client["storage_staging"]
-            .bucket(self.bucket_name)
-            .list_blobs(prefix=f"staging/{self.dataset_id}/{self.table_id}/")
+            .bucket(self.bucket_name, user_project=self.billing_project_id)
+            .list_blobs(
+                prefix=f"{self.mode}/{self.dataset_id}/{self.table_id}/",
+            )
         )
         partitions_dict = {}
         # only needs the first bloob
@@ -524,7 +526,7 @@ class Table(Base):
         BigQuery.
 
         Data can be found in Storage at
-        `<bucket_name>/staging/<dataset_id>/<table_id>/*` and is used to build
+        `<bucket_name>/<mode>/<dataset_id>/<table_id>/*` and is used to build
         the table.
 
         The following data types are supported:
@@ -558,12 +560,12 @@ class Table(Base):
                 exists on your bucket:
                 * `raise`: Raises a Conflict exception
                 * `replace`: Replaces the table
-                * `pass`: Does nothing
+                * `pass`: Do nothing
             if_dataset_exists: Determines what to do if the dataset already
                 exists:
                 * `raise`: Raises a Conflict exception
                 * `replace`: Replaces the dataset
-                * `pass`: Does nothing
+                * `pass`: Do nothing
             dataset_is_public: Controls if the prod dataset is public or not. By
                 default, staging datasets like `dataset_id_staging` are not
                 public.
@@ -587,9 +589,12 @@ class Table(Base):
 
         if path is None:
             # Look if table data already exists at Storage
-            data = self.client["storage_staging"].list_blobs(
-                self.bucket_name,
-                prefix=f"staging/{self.dataset_id}/{self.table_id}",
+            data = (
+                self.client["storage_staging"]
+                .bucket(self.bucket_name, user_project=self.billing_project_id)
+                .list_blobs(
+                    prefix=f"{self.mode}/{self.dataset_id}/{self.table_id}",
+                )
             )
 
             # Raise: Cannot create table without external data
@@ -613,7 +618,7 @@ class Table(Base):
                 bucket_name=self.bucket_name,
             ).upload(
                 path=path,
-                mode="staging",
+                mode=self.mode,
                 if_exists=if_storage_data_exists,
                 chunk_size=chunk_size,
             )
@@ -654,7 +659,7 @@ class Table(Base):
             csv_skip_leading_rows=csv_skip_leading_rows,
             csv_delimiter=csv_delimiter,
             csv_allow_jagged_rows=csv_allow_jagged_rows,
-            mode="staging",
+            mode=self.mode,
             bucket_name=self.bucket_name,
             partitioned=self._is_partitioned(
                 data_sample_path=path,
@@ -716,7 +721,7 @@ class Table(Base):
         logger.success(
             "{object} {object_id} was {action} in {mode}!",
             object_id=self.table_id,
-            mode="staging",
+            mode=self.mode,
             object="Table",
             action="created",
         )

@@ -382,13 +382,18 @@ def _download_blob_from_bucket(
     Returns:
         None
     """
-    bucket = client["storage"].bucket(bucket_name)
+    bucket = client["storage"].bucket(
+        bucket_name, user_project=client["storage"].project
+    )
     for blob in bucket.list_blobs():
         filepath = savepath / (blob.name.split("-")[-1] + ".csv.gz")
         blob.download_to_filename(filepath)
 
 
-def _create_bucket(client: _GoogleClient, bucket_name: str) -> None:
+def _create_bucket(
+    client: _GoogleClient,
+    bucket_name: str,
+) -> None:
     """
     Create a new bucket in a specific location with standard storage class.
 
@@ -400,16 +405,23 @@ def _create_bucket(client: _GoogleClient, bucket_name: str) -> None:
         None
     """
     storage_client = client["storage"]
-    bucket = storage_client.bucket(bucket_name)
+    bucket = storage_client.bucket(
+        bucket_name, user_project=client["storage"].project
+    )
 
     # standard storage class are adequate for data
     # stored for only brief periods of time
     bucket.storage_class = "STANDARD"
 
-    storage_client.create_bucket(bucket, location="US")
+    storage_client.create_bucket(
+        bucket, location="US", user_project=client["storage"].project
+    )
 
 
-def _delete_bucket(client: _GoogleClient, bucket_name: str) -> None:
+def _delete_bucket(
+    client: _GoogleClient,
+    bucket_name: str,
+) -> None:
     """Forceably deletes a bucket.
 
     This method deletes all blobs from a bucket.
