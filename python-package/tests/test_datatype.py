@@ -1,4 +1,3 @@
-import pytest
 from google.cloud.bigquery.external_config import (
     ExternalConfig,
     HivePartitioningOptions,
@@ -11,9 +10,6 @@ avro_path = "tests/sample_data/table/municipio.avro"
 parquet_path = "tests/sample_data/table/municipio.parquet"
 
 
-@pytest.mark.skip(
-    reason="pandavro is currently not supported due to a limitation"
-)
 def test_header_avro():
     """
     Test if header is returned for avro format

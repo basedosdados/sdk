@@ -91,7 +91,7 @@ requires-dist = [
     { name = "loguru", specifier = ">=0.7.0" },
     { name = "pandas", specifier = ">=2.0" },
     { name = "pandas-gbq", specifier = ">=0.19" },
-    { name = "pandavro", specifier = ">=1.7" },
+    { name = "pandavro", specifier = ">=1.9.0" },
     { name = "pandavro", marker = "extra == 'all'" },
     { name = "pandavro", marker = "extra == 'avro'" },
     { name = "pydata-google-auth", specifier = ">=1.8" },
@@ -1417,7 +1417,7 @@ wheels = [
 
 [[package]]
 name = "pandavro"
-version = "1.8.0"
+version = "1.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fastavro" },
@@ -1426,9 +1426,9 @@ dependencies = [
     { name = "numpy", version = "2.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pandas" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f3/46/28b8c7f82c16fc54d7f31157df2392a8c1628a5c09c154e6f64c9b6f4426/pandavro-1.8.0.tar.gz", hash = "sha256:d99102e93b45f9a2d52a284fb4c1055ad6c32ba1569cb21a71c02eceb8a7393b", size = 8951, upload-time = "2023-11-22T10:01:00.084Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6f/07/acbf0f0b4940159f09357218358d3b151443a85a0e3411da9d1fb29d4958/pandavro-1.9.0.tar.gz", hash = "sha256:00398a19d5274c7d805c2782ba69dabaa383a8fd5c4f9699100765475df8ec5a", size = 9195, upload-time = "2025-08-27T03:38:53.474Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3b/74/13b8900ee2c617e5c782b1f2524122addf508030abe28cbe9106e3540110/pandavro-1.8.0-py3-none-any.whl", hash = "sha256:0e4e29520b63484ae1f1bc3021857929d446180b52f986500ee916a08b8e28a2", size = 8835, upload-time = "2023-11-22T10:00:51.111Z" },
+    { url = "https://files.pythonhosted.org/packages/73/83/dde0fe9619dfa0ae16f0a5d10d43e7f448eedbfcd60f1905a1a261bb8feb/pandavro-1.9.0-py3-none-any.whl", hash = "sha256:cd07e518b6e3bfa9290dca7c57badf2f0c5ca7f75bf2e1543623ace8b071d508", size = 9036, upload-time = "2025-08-27T03:38:52.293Z" },
 ]
 
 [[package]]
